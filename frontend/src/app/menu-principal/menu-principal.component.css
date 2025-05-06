@@ -177,51 +177,56 @@ aside img {
  flex-shrink: 0;
  object-fit: contain;
 }
+
 /* Header */
 header {
- height: 48px;
- background-color: #8ec1ff;
- border-bottom: 1px solid #2563eb;
- display: flex;
- justify-content: space-between;
- align-items: center;
- padding: 0 16px;
- color: white;
- font-weight: 700;
- font-size: 16px;
- user-select: none;
+  background-color: #8ec1ff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 0;
+  height: 56px;
 }
 header .left {
- display: flex;
- align-items: center;
- gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 18px;
+  color: white;
+  line-height: 1;
+  height: 100%;
 }
 header .left img {
- width: 28px;
- height: 28px;
- object-fit: contain;
- filter: drop-shadow(0 0 1px rgba(0,0,0,0.3));
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.3));
+  align-self: center;
 }
 header .right button {
- background: transparent;
- border: none;
- padding: 0;
- cursor: pointer;
- display: flex;
- align-items: center;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 header .right button img {
- width: 32px;
- height: 32px;
- object-fit: contain;
- border-radius: 50%;
- border: 2px solid white;
- box-shadow: 0 0 6px rgb(255 255 255 / 0.7);
- transition: filter 0.2s ease;
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 0 6px rgb(255 255 255 / 0.7);
+  transition: filter 0.2s ease;
+  align-self: center;
 }
 header .right button:hover img,
 header .right button:focus img {
- filter: brightness(0.85);
+  filter: brightness(0.85);
 }
 /* Main content */
 main {
@@ -373,4 +378,5 @@ tbody tr:hover {
    font-size: 9px;
    padding: 5px 8px;
  }
+ 
 }

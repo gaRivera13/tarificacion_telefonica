@@ -1,1 +1,114 @@
-<p>gestion-unidades works!</p>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <title>Administrador</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+  />
+</head>
+<body>
+  <div class="container" role="main">
+    <header>
+      <div class="left">
+        <button
+          aria-label="Volver a la página anterior"
+          type="button"
+          class="btn-volver"
+          title="Volver"
+          onclick="history.back()"
+        ></button>
+        <img
+          alt="Icono pequeño cuadrado con fondo azul y símbolo blanco"
+          height="28"
+          src="https://storage.googleapis.com/a1aa/image/60054b82-944f-446f-f6cb-aaeb8a7164d8.jpg"
+          width="28"
+        />
+        <span>Administrador</span>
+      </div>
+      <div class="right">
+        <button aria-label="Perfil de usuario - ir a página de perfil" type="button" style="height:32px; width:32px; display:flex; align-items:center; justify-content:center;">
+          <img
+            alt="Icono de usuario cuadrado con fondo azul y silueta blanca"
+            height="32"
+            src="https://storage.googleapis.com/a1aa/image/60da4d8f-f031-4c4e-3af8-02f83b828ecb.jpg"
+            width="32"
+          />
+        </button>
+      </div>
+    </header>
+    <main aria-label="Contenido principal">
+      <section>
+        <div class="title" role="heading" aria-level="2">Gestión de unidades de la facultad</div>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 40%;">Nombre Unidad</th>
+              <th style="width: 20%;">Siglas departamento</th>
+              <th style="width: 40%;">Facultad</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Arquitectura Residencial</td>
+              <td>ARQ</td>
+              <td class="action-buttons">
+                <span>Arquitectura</span>
+                <button aria-label="Editar Arquitectura" type="button" title="Editar">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button aria-label="Eliminar Arquitectura" type="button" title="Eliminar">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>Derecho procesal</td>
+              <td>DER</td>
+              <td class="action-buttons">
+                <span>Derecho</span>
+                <button aria-label="Editar Derecho" type="button" title="Editar">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button aria-label="Eliminar Derecho" type="button" title="Eliminar">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>Ciencias de la computación</td>
+              <td>CIN</td>
+              <td class="action-buttons">
+                <span>Ciencias</span>
+                <button aria-label="Editar Ciencias" type="button" title="Editar">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button aria-label="Eliminar Ciencias" type="button" title="Eliminar">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <footer>
+          <button class="add-btn" type="button">Agregar</button>
+          <div class="pagination" role="navigation" aria-label="Paginación">
+            <label for="page-select" class="sr-only">Seleccionar página</label>
+            <select id="page-select" aria-controls="table" aria-label="Seleccionar página">
+              <option>1</option>
+            </select>
+            <span aria-live="polite" aria-atomic="true">1 de 10</span>
+            <button aria-label="Página anterior" type="button" title="Página anterior">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <button aria-label="Página siguiente" type="button" title="Página siguiente">
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </footer>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
