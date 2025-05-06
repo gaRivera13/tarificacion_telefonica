@@ -1,9 +1,9 @@
 from django.db import models
 
 class Facultad(models.Model):
-    # Asumiendo que existe una tabla Facultad
+    id_facultad = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=100)
-
+    siglas_facultad = models.CharField(max_length=10)
     def __str__(self):
         return self.nombre
 
@@ -65,7 +65,7 @@ class Anexo(models.Model):
         return self.nombre_anexo
 
 
-class RegistroLlamadas(models.Model):
+class RegistroLlamadas(models.Model): 
     id = models.AutoField(primary_key=True)
     id_anexo = models.ForeignKey(Anexo, on_delete=models.CASCADE)
     id_facultad = models.ForeignKey(Facultad, on_delete=models.CASCADE)
@@ -76,7 +76,7 @@ class RegistroLlamadas(models.Model):
     hora_llamada = models.TimeField()
     tipo_respuesta = models.CharField(max_length=50)
     siglas_facultad = models.CharField(max_length=10)
-    siglas_unidad = models.CharField(max_length=10)
+    siglas_depto = models.CharField(max_length=10)
     nombre_destinatario = models.CharField(max_length=100)
 
     def __str__(self):

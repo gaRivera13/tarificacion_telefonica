@@ -11,10 +11,7 @@ export class AuthService {
     password: '1234'
   };
 
-  constructor() { }
-
   login(email: string, password: string): Observable<{success: boolean, message?: string, token?: string}> {
-    // Simula una llamada a un backend con retraso
     if(email === this.testUser.email && password === this.testUser.password) {
       return of({ success: true, token: 'fake-jwt-token' }).pipe(delay(1000));
     } else {
