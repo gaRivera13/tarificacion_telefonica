@@ -81,12 +81,23 @@ class CalculaMensual(models.Model):
 
 
 class Profile(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
-    address = models.CharField(max_length=200)
+    ROLES = (
+        ('admin', 'Administrador'),
+        ('encargado', 'Encargado de Unidad'),
+    )
+
+    nombre = models.CharField(max_length=50)
+    s_nombre = models.CharField(max_length=50)
+    apellido_p = models.CharField(max_length=50)
+    apellido_m = models.CharField(max_length=50)
+    rut = models.CharField(max_length=12, unique=True)
+    correo = models.EmailField(unique=True)
+    direccion = models.CharField(max_length=200)
+    telefono = models.CharField(max_length=20)
+    rol = models.CharField(max_length=20, choices=ROLES)
 
     class Meta:
-        db_table = 'profiles'
+        db_table = 'usuarios'
 
     def __str__(self):
-        return str(self.name)
+        return self.nombre

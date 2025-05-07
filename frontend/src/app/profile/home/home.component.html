@@ -1,75 +1,121 @@
-<div class="profile-container" style="width: 778px; margin-left: 30px; margin-top: 20px;">
-    <h5>Aplicacion angular, django y mySQL</h5>
-    <mat-form-field style="width: 175px; height: 63px; margin-left: 15px;">
-        <input matInput type="text" name="name" id="name" placeholder="ingrese nombre" [(ngModel)]="profile.name">
+<html lang="es">
+  <head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <title>Administrador</title>
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="container" role="main">
+      <header>
+        <div class="left">
+          <button
+            aria-label="Volver a la página anterior"
+            type="button"
+            class="btn-volver"
+            title="Volver"
+            onclick="history.back()"
+          ></button>
+          <img
+            alt="Icono pequeño cuadrado con fondo azul y símbolo blanco"
+            height="28"
+            src="https://storage.googleapis.com/a1aa/image/60054b82-944f-446f-f6cb-aaeb8a7164d8.jpg"
+            width="28"
+          />
+          <span>Administrador</span>
+        </div>
+        <div class="right">
+          <button aria-label="Perfil de usuario - ir a página de perfil" type="button" style="height:32px; width:32px; display:flex; align-items:center; justify-content:center;">
+            <img
+              alt="Icono de usuario cuadrado con fondo azul y silueta blanca"
+              height="32"
+              src="https://storage.googleapis.com/a1aa/image/60da4d8f-f031-4c4e-3af8-02f83b828ecb.jpg"
+              width="32"
+            />
+          </button>
+        </div>
+      </header>
+      <main aria-label="Contenido principal">
+        <h5>Gestión de usuarios</h5>
         <mat-icon fontIcon="person" matSuffix></mat-icon>
-    </mat-form-field>
-    <mat-form-field style="width: 175px; height: 63px; margin-left: 15px;">
-        <input matInput type="text" name="email" id="email" placeholder="ingrese correo" [(ngModel)]="profile.email">
+        <label for="nombreUsuario"></label>
+        <input style="width: 175px; height: 63px; margin-left: 15px;" matInput type="text" name="name" id="name" placeholder="ingrese nombre" [(ngModel)]="profile.name">
+        
         <mat-icon fontIcon="email" matSuffix></mat-icon>
-    </mat-form-field>
-    <mat-form-field style="width: 175px; height: 63px; margin-left: 15px;">
-        <input matInput type="text" name="address" id="address" placeholder="ingrese direccion" [(ngModel)]="profile.address">
+        <label for="correoeUsuario"></label>
+        <input style="width: 175px; height: 63px; margin-left: 15px;" matInput type="text" name="email" id="email" placeholder="ingrese correo" [(ngModel)]="profile.email">
+        
         <mat-icon fontIcon="address" matSuffix></mat-icon>
-    </mat-form-field>
-    <button mat-flat-button style="background-color: blue; margin-left: 25px;" (click)="addUpProfile(profile)">Añadir</button>
-    <button mat-flat-button style="background-color: red; margin-left: 10px;">Cancelar</button>
-    <br>
-    <mat-form-field style="width: 175px; height: 63px; ">
-        <input matInput type="text" name="searchinput" id="searchinput" (input)="searchProfile(filter.value)" placeholder="buscar perfil" #filter>
-        <mat-icon fontIcon="search" matSuffix></mat-icon>
-    </mat-form-field>
+        <label for="direccionUsuaurio"></label>
+        <input style="width: 175px; height: 63px; margin-left: 15px;" matInput type="text" name="address" id="address" placeholder="ingrese direccion" [(ngModel)]="profile.address">
+  
+
+        <div>
+          <button mat-flat-button style="background-color: rgb(60, 60, 175); margin-left: 25px;" (click)="addUpProfile(profile)">Añadir</button>
+          <button mat-flat-button style="background-color: red; margin-left: 10px;">Cancelar</button>
+        </div>
+        <br>
+        <mat-form-field style="width: 175px; height: 63px; ">
+            <input matInput type="text" name="searchinput" id="searchinput" (input)="searchProfile(filter.value)" placeholder="buscar perfil" #filter>
+            <mat-icon fontIcon="search" matSuffix></mat-icon>
+        </mat-form-field>
+        
+        
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+    
+            <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+          
+            <!-- Position Column -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Profile ID </th>
+              <td mat-cell *matCellDef="let profile"> {{profile.id}} </td>
+            </ng-container>
+          
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+              <td mat-cell *matCellDef="let profile"> {{profile.name}} </td>
+            </ng-container>
+          
+            <!-- Weight Column -->
+            <ng-container matColumnDef="email">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+              <td mat-cell *matCellDef="let profile"> {{profile.email}} </td>
+            </ng-container>
+          
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="address">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Direccion </th>
+              <td mat-cell *matCellDef="let profile"> {{profile.address}} </td>
+            </ng-container>
     
     
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
-
-        <!--- Note that these columns can be defined in any order.
-              The actual rendered columns are set as a property on the row definition" -->
-      
-        <!-- Position Column -->
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Profile ID </th>
-          <td mat-cell *matCellDef="let profile"> {{profile.id}} </td>
-        </ng-container>
-      
-        <!-- Name Column -->
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
-          <td mat-cell *matCellDef="let profile"> {{profile.name}} </td>
-        </ng-container>
-      
-        <!-- Weight Column -->
-        <ng-container matColumnDef="email">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
-          <td mat-cell *matCellDef="let profile"> {{profile.email}} </td>
-        </ng-container>
-      
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="address">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Direccion </th>
-          <td mat-cell *matCellDef="let profile"> {{profile.address}} </td>
-        </ng-container>
-
-
-        <ng-container matColumnDef="edit">
-            <th mat-header-cell *matHeaderCellDef> Editar </th>
-            <td mat-cell *matCellDef="let profile"><button mat-flat-button style="height:  27px; width: auto; background-color: blue;"
-                (click)="setProfile(profile)"> Edit</button> </td>
-        </ng-container>
-        <ng-container matColumnDef="delete">
-            <th mat-header-cell *matHeaderCellDef> Eliminar </th>
-            <td mat-cell *matCellDef="let profile"><button mat-flat-button style="height:  27px; width: auto; background-color: blue;"
-                (click)="deleteProfile(profile.id)"> Delete</button> </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let profiles; columns: displayedColumns;"></tr>
-      </table>
-      <br>
-      <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-      showFirstLastButtons
-      aria-label="Select page of periodic elements">
-    </mat-paginator>
+            <ng-container matColumnDef="edit">
+                <th mat-header-cell *matHeaderCellDef> Editar </th>
+                <td mat-cell *matCellDef="let profile"><button mat-flat-button style="height:  27px; width: auto; background-color: blue;"
+                    (click)="setProfile(profile)"> Edit</button> </td>
+            </ng-container>
+            <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef> Eliminar </th>
+                <td mat-cell *matCellDef="let profile"><button mat-flat-button style="height:  27px; width: auto; background-color: blue;"
+                    (click)="deleteProfile(profile.id)"> Delete</button> </td>
+            </ng-container>
     
-</div>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let profiles; columns: displayedColumns;"></tr>
+          </table>
+          <br>
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+          showFirstLastButtons
+          aria-label="Select page of periodic elements">
+        </mat-paginator>
+
+      </main>
+    </div>
+  </body>
+</html>
 
