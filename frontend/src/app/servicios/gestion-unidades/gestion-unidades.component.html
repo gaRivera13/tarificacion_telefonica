@@ -1,0 +1,150 @@
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <title>Administrador</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+  />
+</head>
+<body>
+  <div class="container" role="main">
+    <header>
+      <div class="left">
+        <button
+          aria-label="Volver a la página anterior"
+          type="button"
+          class="btn-volver"
+          title="Volver"
+          onclick="history.back()"
+        ></button>
+        <img
+          alt="Icono pequeño cuadrado con fondo azul y símbolo blanco"
+          height="28"
+          src="https://storage.googleapis.com/a1aa/image/60054b82-944f-446f-f6cb-aaeb8a7164d8.jpg"
+          width="28"
+        />
+        <span>Administrador</span>
+      </div>
+      <div class="right">
+        <button aria-label="Perfil de usuario - ir a página de perfil" type="button" style="height:32px; width:32px; display:flex; align-items:center; justify-content:center;">
+          <img
+            alt="Icono de usuario cuadrado con fondo azul y silueta blanca"
+            height="32"
+            src="https://storage.googleapis.com/a1aa/image/60da4d8f-f031-4c4e-3af8-02f83b828ecb.jpg"
+            width="32"
+          />
+        </button>
+      </div>
+    </header>
+    <main aria-label="Contenido principal">
+      <section>
+        <div class="title" role="heading" aria-level="2">Gestión de unidades de la facultad</div>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 40%;">Nombre Unidad</th>
+              <th style="width: 20%;">Siglas departamento</th>
+              <th style="width: 40%;">Facultad</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let depto of departamentos">
+              <td>
+                <ng-container *ngIf="editarId === depto.id_unidad; else nombreDepto">
+                  <input [(ngModel)]="editNombre" />
+                </ng-container>
+                <ng-template #nombreDepto>{{ depto.nombre_depto }}</ng-template>
+              </td>
+              <td>
+                <ng-container *ngIf="editarId === depto.id_unidad; else siglasDepto">
+                  <input [(ngModel)]="editSiglas" />
+                </ng-container>
+                <ng-template #siglasDepto>{{ depto.siglas_depto }}</ng-template>
+              </td>
+              <td class="action-buttons">
+                <ng-container *ngIf="editarId === depto.id_unidad; else verModo">
+                  <!-- Aquí se agrega el select para elegir la facultad -->
+                  <select [(ngModel)]="editFacultadId">
+                    <option *ngFor="let fac of facultades" [value]="fac.id_facultad">
+                      {{ fac.nombre_facultad }}
+                    </option>
+                  </select>
+                  <button (click)="guardarCambios(depto.id_unidad)" title="Guardar">
+                    <i class="fas fa-save"></i>
+                  </button>
+                  <button (click)="cancelarEdicion()" title="Cancelar">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </ng-container>
+                <ng-template #verModo>
+                  <span>{{ depto.id_facultad.nombre_facultad }}</span>
+                  <button (click)="editarDepartamento(depto)" title="Editar">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button (click)="eliminarDepartamento(depto.id_unidad)" title="Eliminar">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </ng-template>
+              </td>
+            </tr>
+            
+            <tr *ngIf="departamentos.length === 0">
+              <td colspan="3">No hay departamentos registrados.</td>
+            </tr>
+          </tbody>
+        </table>
+        <footer>
+          <button class="add-btn" (click)="abrirModalAgregar()">Agregar</button>
+          <div class="pagination" role="navigation" aria-label="Paginación">
+            <label for="page-select" class="sr-only">Seleccionar página</label>
+            <select id="page-select" aria-controls="table" aria-label="Seleccionar página">
+              <option>1</option>
+            </select>
+            <span aria-live="polite" aria-atomic="true">1 de 10</span>
+            <button aria-label="Página anterior" type="button" title="Página anterior">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <button aria-label="Página siguiente" type="button" title="Página siguiente">
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </footer>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
+
+<!-- Modal para agregar nuevo departamento -->
+<div class="container">
+  <div class="modal" *ngIf="mostrarModalAgregar" style="display: flex;">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <h2 id="modal-title">Agregar Departamento</h2>
+      <!-- Nombre del Departamento -->
+      <label for="nombre">Nombre:</label>
+      <input id="nombre" type="text" [(ngModel)]="nuevoNombre" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*" inputmode="text" />
+
+      <!-- Siglas del Departamento -->
+      <label for="siglas" class="mt-4">Siglas:</label>
+      <input id="siglas" type="text" [(ngModel)]="nuevasSiglas" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*" inputmode="text" />
+
+      <!-- Selección de Facultad -->
+      <label for="facultad" class="mt-4">Facultad:</label>
+      <select id="facultad" [(ngModel)]="nuevaFacultadId">
+        <option *ngFor="let facultad of facultades" [value]="facultad.id_facultad">
+          {{ facultad.nombre_facultad }}
+        </option>
+      </select>
+
+      <!-- Botones para guardar o cancelar -->
+      <div class="modal-buttons">
+        <button type="button" class="add-btn" (click)="confirmarAgregar()">Guardar</button>
+        <button type="button" class="add-btn cancel" (click)="cerrarModalAgregar()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

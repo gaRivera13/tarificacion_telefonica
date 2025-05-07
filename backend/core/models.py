@@ -6,7 +6,7 @@ class Facultad(models.Model):
     siglas_facultad = models.CharField(max_length=10)
 
     def __str__(self):
-        return self.nombre_facultad
+        return str(self.nombre_facultad)
 
 
 class Departamento(models.Model):
@@ -16,7 +16,7 @@ class Departamento(models.Model):
     id_facultad = models.ForeignKey(Facultad, on_delete=models.CASCADE, db_column='id_facultad')
 
     def __str__(self):
-        return self.nombre_depto
+        return str(self.nombre_depto)
 
 
 class ProveedorTelefono(models.Model):
@@ -27,7 +27,7 @@ class ProveedorTelefono(models.Model):
     costo_seg_idi = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return self.nombre_proveedor
+        return str(self.nombre_proveedor)
 
 
 class CuentaPresupuestaria(models.Model):
@@ -36,7 +36,7 @@ class CuentaPresupuestaria(models.Model):
     id_proveedor = models.ForeignKey(ProveedorTelefono, on_delete=models.CASCADE, db_column='id_proveedor')
 
     def __str__(self):
-        return f'Cuenta de {self.id_facultad.nombre_facultad} con {self.id_proveedor.nombre_proveedor}'
+        return str(f'Cuenta de {self.id_facultad.nombre_facultad if self.id_facultad else "N/A"} con {self.id_proveedor.nombre_proveedor if self.id_proveedor else "N/A"}')
 
 
 class Anexo(models.Model):
@@ -47,7 +47,7 @@ class Anexo(models.Model):
     fecha_creacion = models.DateField()
 
     def __str__(self):
-        return self.nombre_anexo
+        return str(self.nombre_anexo)
 
 
 class RegistroLlamadas(models.Model):
@@ -63,7 +63,7 @@ class RegistroLlamadas(models.Model):
     nombre_destinatario = models.CharField(max_length=100)
 
     def __str__(self):
-        return f'Llamada {self.id_registro}'
+        return str(f'Llamada {self.id_registro}')
 
 
 class CalculaMensual(models.Model):
@@ -77,7 +77,7 @@ class CalculaMensual(models.Model):
     fecha = models.DateField()
 
     def __str__(self):
-        return f'CalculoMensual {self.id_calculo}'
+        return str(f'CalculoMensual {self.id_calculo}')
 
 
 class Profile(models.Model):
@@ -89,4 +89,4 @@ class Profile(models.Model):
         db_table = 'profiles'
 
     def __str__(self):
-        return self.name
+        return str(self.name)

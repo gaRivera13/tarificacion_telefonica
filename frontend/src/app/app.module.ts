@@ -11,12 +11,12 @@ import { LoginComponent } from './login/login.component';
   declarations: [
   ],
   imports: [
-    BrowserModule,
     RouterModule.forRoot(routes),
     ReactiveFormsModule,  // Asegúrate de que ReactiveFormsModule esté aquí
     HttpClientModule,
     LoginComponent,
-    AppComponent
+    AppComponent,
+    BrowserModule
   ],
   providers: [],
   // Removed bootstrap array as AppComponent is a standalone component
