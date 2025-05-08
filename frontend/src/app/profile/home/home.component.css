@@ -1,3 +1,4 @@
+
 * {
   box-sizing: border-box;
 }
@@ -346,8 +347,8 @@ footer .pagination button:hover {
   background-color: white;
   padding: 20px;
   border-radius: 8px;
-  width: 300px;
-  max-width: 100%;
+  width: 800px;
+  max-width: 95%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -417,4 +418,23 @@ select:focus {
 
 .modal-buttons button.cancel:hover {
   background-color: #c7c7c7;
+}
+.form-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  width: calc(50% - 16px); /* Dos columnas por fila */
+  min-width: 240px;
+}
+
+@media (max-width: 600px) {
+  .form-group {
+    width: 100%; /* En pantallas pequeñas, una columna */
+  }
 }

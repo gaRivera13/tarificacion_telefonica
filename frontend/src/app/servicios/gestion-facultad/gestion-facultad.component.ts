@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class GestionFacultadComponent implements OnInit {
 
+
   facultades: Facultad[] = [];
   editarFacultadId: number | null = null;
   editNombreFacultad = '';

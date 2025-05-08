@@ -90,10 +90,11 @@ class Profile(models.Model):
     s_nombre = models.CharField(max_length=50)
     apellido_p = models.CharField(max_length=50)
     apellido_m = models.CharField(max_length=50)
-    rut = models.CharField(max_length=12, unique=True)
     correo = models.EmailField(unique=True)
-    direccion = models.CharField(max_length=200)
-    telefono = models.CharField(max_length=20)
+    id_facultad = models.ForeignKey(Facultad, on_delete=models.CASCADE, db_column='id_facultad')
+    id_unidad = models.ForeignKey(Departamento, on_delete=models.CASCADE, db_column='id_unidad')
+    username = models.CharField(max_length=30)
+    password = models.CharField(max_length=30)
     rol = models.CharField(max_length=20, choices=ROLES)
 
     class Meta:
