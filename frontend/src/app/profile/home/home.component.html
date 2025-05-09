@@ -10,8 +10,38 @@
   </head>
   <body>
     <div class="container" role="main">
-      <app-menu></app-menu>
-      
+      <header>
+        <div class="left">
+          <button
+            aria-label="Volver a la página anterior"
+            type="button"
+            class="btn-volver"
+            title="Volver"
+            onclick="history.back()"
+          ></button>
+          <img
+            alt="Icono pequeño cuadrado con fondo azul y símbolo blanco"
+            height="28"
+            src="https://storage.googleapis.com/a1aa/image/60054b82-944f-446f-f6cb-aaeb8a7164d8.jpg"
+            width="28"
+          />
+          <span>Administrador</span>
+        </div>
+        <div class="right">
+          <button
+            aria-label="Perfil de usuario - ir a página de perfil"
+            type="button"
+            class="user-profile-button"
+          >
+            <img
+              alt="Icono de usuario cuadrado con fondo azul y silueta blanca"
+              height="32"
+              src="https://storage.googleapis.com/a1aa/image/60da4d8f-f031-4c4e-3af8-02f83b828ecb.jpg"
+              width="32"
+            />
+          </button>
+        </div>
+      </header>
       <main aria-label="Contenido principal">
         <section>
           <h5>Gestión de usuarios</h5>

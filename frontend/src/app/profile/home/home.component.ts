@@ -11,12 +11,11 @@ import { CommonModule } from '@angular/common';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { DepartamentoService,Facultad,Departamento,} from '../../servicios/departamento.service';
-import { MenuComponent } from "../../compartido/menu/menu.component";
 
 @Component({
   selector: 'app-home', // Asegúrate de que este selector se use en perfil.component.html
   standalone: true,     // Verifica si es standalone o no
-  imports: [
+  imports: [            // Si es standalone, verifica que estén todas las importaciones
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
@@ -26,8 +25,7 @@ import { MenuComponent } from "../../compartido/menu/menu.component";
     CommonModule,
     MatSortModule,
     MatPaginatorModule,
-    MenuComponent
-],
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
@@ -162,7 +160,7 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
   setProfile(profile: Profile) {
     this.profile = { ...profile };
-  }
+}
 
   searchProfile(input: string) {
     this.filteredProfiles = this.profiles.filter(
