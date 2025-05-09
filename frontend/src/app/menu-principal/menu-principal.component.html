@@ -8,58 +8,52 @@
  </head>
  <body>
   <div class="container" role="main">
-   <aside aria-label="Menú lateral de navegación">
-    <div class="top-icon">
-     <img alt="Icono pequeño cuadrado con fondo blanco y símbolo abstracto azul" height="32" src="https://storage.googleapis.com/a1aa/image/be98b67e-23ab-41c1-c7ca-c97dfcbfb67c.jpg" width="32"/>
-    </div>
-    <div aria-label="Sección Unidades" class="title">
-     UNIDADES
-    </div>
-    <button type="button" [routerLink]="['/gestion-unidades']">
-      <img alt="Icono de teléfono clásico" height="22" src="https://img.icons8.com/ios-filled/50/000000/report-card.png" width="22"/>
-      <strong>Gestión de unidades de la facultad</strong>
-    </button>
-    <button type="button" [routerLink]="['/gestion-facultad']">
-      <img alt="Icono de teléfono clásico" height="22" src="https://img.icons8.com/ios-filled/50/000000/report-card.png" width="22"/>
-      <strong>Gestión de facultad</strong>
-    </button>
-    <div aria-label="Sección Proveedores" class="title" style="margin-top:4px;">
-     PROVEEDORES
-    </div>
-    <button type="button" [routerLink]="['/gestion-proveedores']">
-        <img alt="Icono de teléfono clásico" height="22" src="https://img.icons8.com/ios-filled/50/000000/phone.png" width="22"/>
+    <aside aria-label="Menú lateral de navegación">
+      <div class="top-icon">
+        <img alt="Logo" height="32" src="https://storage.googleapis.com/a1aa/image/be98b67e-23ab-41c1-c7ca-c97dfcbfb67c.jpg" width="32" />
+      </div>
+
+      <div *ngIf="rol === 'admin'" class="title">UNIDADES</div>
+      <button *ngIf="rol === 'admin'" type="button" [routerLink]="['/gestion-unidades']">
+        <img height="22" src="https://img.icons8.com/ios-filled/50/000000/report-card.png" />
+        <strong>Gestión de unidades de la facultad</strong>
+      </button>
+
+      <button *ngIf="rol === 'admin'" type="button" [routerLink]="['/gestion-facultad']">
+        <img height="22" src="https://img.icons8.com/ios-filled/50/000000/report-card.png" />
+        <strong>Gestión de facultad</strong>
+      </button>
+
+      <div *ngIf="rol === 'admin'" class="title">PROVEEDORES</div>
+      <button *ngIf="rol === 'admin'" type="button" [routerLink]="['/gestion-proveedores']">
+        <img height="22" src="https://img.icons8.com/ios-filled/50/000000/phone.png" />
         <strong>Proveedores de telefonía</strong>
-    </button>
-      
-    <div aria-label="Sección Tarificación" class="title" style="margin-top:4px;">
-     TARIFICACION
-    </div>
-    <button type="button">
-     <img alt="Icono de documento con fondo blanco y líneas azules" height="22" src="https://img.icons8.com/ios-filled/50/000000/document--v1.png" width="22"/>
-     Consultar tarificación
-    </button>
-    <div aria-label="Sección Cuenta" class="title" style="margin-top:4px;">
-     CUENTA
-    </div>
-    <button class="pink-text" type="button">
-     <img alt="Icono de usuario con fondo blanco color rosa pastel" height="22" src="https://storage.googleapis.com/a1aa/image/ebb96f9f-d668-44f2-04d3-dd680511f0e9.jpg" width="22"/>
-     Cuenta presupuestaria
-    </button>
-    <div aria-label="Sección Anexos" class="title" style="margin-top:4px;">
-     ANEXOS
-    </div>
-    <button type="button">
-     <img alt="Icono de carpeta con fondo blanco y borde azul" height="22" src="https://storage.googleapis.com/a1aa/image/6d2d52b3-10fd-4288-2d1b-21ded70a64ac.jpg" width="22"/>
-     Documentos Anexos
-    </button>
-    <div aria-label="Sección Usuarios" class="title" style="margin-top:4px;">
-     Usuarios
-    </div>
-    <button type="button" [routerLink]="['/profile/home']">
-     <img alt="Icono de usuario con fondo blanco y silueta azul" height="22" src="https://storage.googleapis.com/a1aa/image/fd339202-4f26-4507-0152-82dafbc72d97.jpg" width="22"/>
-     Gestión de Usuarios
-    </button>
-   </aside>
+      </button>
+
+      <div class="title">TARIFICACION</div>
+      <button type="button">
+        <img height="22" src="https://img.icons8.com/ios-filled/50/000000/document--v1.png" />
+        Consultar tarificación
+      </button>
+
+      <div *ngIf="rol === 'admin'" class="title">CUENTA</div>
+      <button *ngIf="rol === 'admin'" class="pink-text" type="button">
+        <img height="22" src="https://storage.googleapis.com/a1aa/image/ebb96f9f-d668-44f2-04d3-dd680511f0e9.jpg" />
+        Cuenta presupuestaria
+      </button>
+
+      <div class="title">ANEXOS</div>
+      <button type="button">
+        <img height="22" src="https://storage.googleapis.com/a1aa/image/6d2d52b3-10fd-4288-2d1b-21ded70a64ac.jpg" />
+        Documentos Anexos
+      </button>
+
+      <div *ngIf="rol === 'admin'" class="title">Usuarios</div>
+      <button *ngIf="rol === 'admin'" type="button" [routerLink]="['/profile/home']">
+        <img height="22" src="https://storage.googleapis.com/a1aa/image/fd339202-4f26-4507-0152-82dafbc72d97.jpg" />
+        Gestión de Usuarios
+      </button>
+    </aside>
    <main aria-label="Contenido principal" >
     <header>
       <div class="left">
@@ -69,10 +63,14 @@
           src="https://storage.googleapis.com/a1aa/image/60054b82-944f-446f-f6cb-aaeb8a7164d8.jpg"
           width="28"
         />
-        <span>Administrador</span>
+        <span>{{ rol === 'admin' ? 'Administrador' : 'Encargado' }}</span> <!-- Cambio dinámico del texto -->
       </div>
       <div class="right">
-        <button aria-label="Perfil de usuario - ir a página de perfil" type="button" style="height:32px; width:32px; display:flex; align-items:center; justify-content:center;">
+        <button 
+          aria-label="Perfil de usuario - ir a página de perfil" 
+          type="button" 
+          style="height:32px; width:32px; display:flex; align-items:center; justify-content:center;" 
+          (click)="toggleLogoutMenu()">
           <img
             alt="Icono de usuario cuadrado con fondo azul y silueta blanca"
             height="32"
@@ -299,3 +297,12 @@
   </script>
  </body>
 </html>
+
+<!-- Pestaña de logout -->
+<div class="logout-menu" [ngClass]="{'show': showLogoutMenu}">
+  <div class="logout-menu-content">
+    <p>¿Seguro que deseas cerrar sesión?</p>
+    <button (click)="logout()">Cerrar sesión</button>
+    <button (click)="toggleLogoutMenu()">Cancelar</button>
+  </div>
+</div>

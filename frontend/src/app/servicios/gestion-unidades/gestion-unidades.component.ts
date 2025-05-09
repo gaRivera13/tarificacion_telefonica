@@ -1,15 +1,15 @@
-// src/app/gestion-unidades/gestion-unidades.component.ts
 import { Component, OnInit } from '@angular/core';
 import { DepartamentoService, Departamento, Facultad } from '../departamento.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MenuComponent } from "../../compartido/menu/menu.component";
 
 @Component({
   selector: 'app-gestion-unidades',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MenuComponent],
   templateUrl: './gestion-unidades.component.html',
-  styleUrl: './gestion-unidades.component.css'
+  styleUrls: ['./gestion-unidades.component.css']
 })
 export class GestionUnidadesComponent implements OnInit {
 
@@ -17,7 +17,6 @@ export class GestionUnidadesComponent implements OnInit {
   nuevoNombre: string = '';
   nuevasSiglas: string = '';
   nuevaFacultadId: number = 0;
-
 
   editarId: number | null = null;
   editNombre: string = '';
@@ -31,7 +30,7 @@ export class GestionUnidadesComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarDepartamentos();
-    this.cargarFacultades(); // 👈 nuevo
+    this.cargarFacultades();
   }
 
   abrirModalAgregar() {
@@ -46,37 +45,29 @@ export class GestionUnidadesComponent implements OnInit {
   }
 
   confirmarAgregar() {
-    // Validación de campos vacíos
     if (!this.nuevoNombre.trim() || !this.nuevasSiglas.trim()) {
       alert('Todos los campos son obligatorios.');
       return;
     }
-  
-    // Validación solo letras (con espacios permitidos)
+
     const soloLetrasRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
-  
+
     if (!soloLetrasRegex.test(this.nuevoNombre)) {
       alert('El nombre solo puede contener letras y espacios.');
       return;
     }
-  
+
     if (!soloLetrasRegex.test(this.nuevasSiglas)) {
       alert('Las siglas solo pueden contener letras.');
       return;
     }
-  
-    const facultadSeleccionada = this.facultades.find(f => f.id_facultad === this.nuevaFacultadId);
-    if (!facultadSeleccionada) {
-      alert('Debe seleccionar una facultad válida.');
-      return;
-    }
-  
+
     const nuevoDepto: Partial<Departamento> = {
       nombre_depto: this.nuevoNombre.trim(),
       siglas_depto: this.nuevasSiglas.trim(),
-      id_facultad: facultadSeleccionada
+      id_facultad: this.nuevaFacultadId  // ✅ ID numérico
     };
-  
+
     this.deptoService.agregarDepartamento(nuevoDepto).subscribe(() => {
       this.cargarDepartamentos();
       this.cerrarModalAgregar();
@@ -85,30 +76,6 @@ export class GestionUnidadesComponent implements OnInit {
       alert('Ocurrió un error al agregar el departamento.');
     });
   }
-  
-  agregarDepartamento() {
-    const facultadSeleccionada = this.facultades.find(f => f.id_facultad === this.nuevaFacultadId);
-  
-    if (!facultadSeleccionada) {
-      console.error('Facultad no encontrada para el nuevo departamento');
-      return;
-    }
-  
-    const nuevoDepto: Partial<Departamento> = {
-      nombre_depto: this.nuevoNombre,
-      siglas_depto: this.nuevasSiglas,
-      id_facultad: facultadSeleccionada
-    };
-  
-    this.deptoService.agregarDepartamento(nuevoDepto).subscribe(() => {
-      this.cargarDepartamentos();  // recarga la lista
-      // limpiar formulario
-      this.nuevoNombre = '';
-      this.nuevasSiglas = '';
-      this.nuevaFacultadId = 0;
-    });
-  }
-  
 
   cargarFacultades() {
     this.deptoService.obtenerFacultades().subscribe(data => {
@@ -116,44 +83,39 @@ export class GestionUnidadesComponent implements OnInit {
     });
   }
 
+  cargarDepartamentos() {
+    this.deptoService.obtenerDepartamentos().subscribe(data => {
+      this.departamentos = data;
+    });
+  }
+
   editarDepartamento(depto: Departamento) {
     this.editarId = depto.id_unidad;
     this.editNombre = depto.nombre_depto;
     this.editSiglas = depto.siglas_depto;
-    this.editFacultadId = depto.id_facultad.id_facultad;
+    this.editFacultadId = depto.id_facultad;  // ✅ Asumimos que es un ID numérico (según API modificada)
   }
-  
+
   guardarCambios(id: number) {
-    const facultadSeleccionada = this.facultades.find(f => f.id_facultad === this.editFacultadId);
-  
-    if (!facultadSeleccionada) {
-      console.error('Facultad no encontrada');
-      return;
-    }
-  
     const deptoEditado: Partial<Departamento> = {
       nombre_depto: this.editNombre,
       siglas_depto: this.editSiglas,
-      id_facultad: facultadSeleccionada  // 👈 se envía como objeto
+      id_facultad: this.editFacultadId  // ✅ Enviamos solo el número
     };
-  
+
     this.deptoService.editarDepartamento(id, deptoEditado).subscribe(() => {
       this.cargarDepartamentos();
       this.cancelarEdicion();
+    }, error => {
+      console.error('Error al editar departamento:', error);
     });
   }
-  
+
   cancelarEdicion() {
     this.editarId = null;
     this.editNombre = '';
     this.editSiglas = '';
     this.editFacultadId = 0;
-  }
-
-  cargarDepartamentos() {
-    this.deptoService.obtenerDepartamentos().subscribe(data => {
-      this.departamentos = data;
-    });
   }
 
   eliminarDepartamento(id: number) {

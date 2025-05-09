@@ -10,34 +10,7 @@
 </head>
 <body>
   <div class="container" role="main">
-    <header>
-      <div class="left">
-        <button
-          aria-label="Volver a la página anterior"
-          type="button"
-          class="btn-volver"
-          title="Volver"
-          onclick="history.back()"
-        ></button>
-        <img
-          alt="Icono pequeño cuadrado con fondo azul y símbolo blanco"
-          height="28"
-          src="https://storage.googleapis.com/a1aa/image/60054b82-944f-446f-f6cb-aaeb8a7164d8.jpg"
-          width="28"
-        />
-        <span>Administrador</span>
-      </div>
-      <div class="right">
-        <button aria-label="Perfil de usuario - ir a página de perfil" type="button" style="height:32px; width:32px; display:flex; align-items:center; justify-content:center;">
-          <img
-            alt="Icono de usuario cuadrado con fondo azul y silueta blanca"
-            height="32"
-            src="https://storage.googleapis.com/a1aa/image/60da4d8f-f031-4c4e-3af8-02f83b828ecb.jpg"
-            width="32"
-          />
-        </button>
-      </div>
-    </header>
+    <app-menu></app-menu>
     <main aria-label="Contenido principal">
       <section>
         <div class="title" role="heading" aria-level="2">Gestión de unidades de la facultad</div>
@@ -71,7 +44,7 @@
                       {{ fac.nombre_facultad }}
                     </option>
                   </select>
-                  <button (click)="guardarCambios(depto.id_unidad)" title="Guardar">
+                  <button (click)="guardarCambios(depto.id_unidad)" title="Guardar cambios">
                     <i class="fas fa-save"></i>
                   </button>
                   <button (click)="cancelarEdicion()" title="Cancelar">
@@ -79,7 +52,7 @@
                   </button>
                 </ng-container>
                 <ng-template #verModo>
-                  <span>{{ depto.id_facultad.nombre_facultad }}</span>
+                  <span>{{ depto.facultad_detalle.nombre_facultad }}</span> <!-- Aquí se muestra el nombre de la facultad -->
                   <button (click)="editarDepartamento(depto)" title="Editar">
                     <i class="fas fa-edit"></i>
                   </button>

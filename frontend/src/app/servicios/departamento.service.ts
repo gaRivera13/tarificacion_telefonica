@@ -1,4 +1,3 @@
-// src/app/servicios/departamento.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -14,7 +13,8 @@ export interface Departamento {
   id_unidad: number;
   nombre_depto: string;
   siglas_depto: string;
-  id_facultad: Facultad;
+  id_facultad: number;               // ✅ número (FK)
+  facultad_detalle: Facultad;        // ✅ objeto solo para lectura
 }
 
 @Injectable({
@@ -33,18 +33,12 @@ export class DepartamentoService {
   }
 
   agregarDepartamento(depto: Partial<Departamento>): Observable<Departamento> {
-    // Asegúrate de que id_facultad esté definido antes de acceder a su propiedad id_facultad
-    const deptoData = {
-      ...depto,
-      id_facultad: depto.id_facultad ? depto.id_facultad.id_facultad : null  // Si id_facultad está definido, toma su id; si no, ponlo como null
-    };
-  
-    return this.http.post<Departamento>(`${environment.coreurl}${this.deptoBaseUrl}/`, deptoData);
+    // ✅ Ya asumimos que id_facultad es un número, así que no hacemos nada especial
+    return this.http.post<Departamento>(`${environment.coreurl}${this.deptoBaseUrl}/`, depto);
   }
-  
-  
 
   editarDepartamento(id: number, depto: Partial<Departamento>): Observable<Departamento> {
+    // ✅ Eliminamos la lógica innecesaria de conversión
     return this.http.put<Departamento>(`${environment.coreurl}${this.deptoBaseUrl}/${id}/`, depto);
   }
 
@@ -67,6 +61,10 @@ export class DepartamentoService {
 
   eliminarFacultad(id: number): Observable<any> {
     return this.http.delete(`${environment.coreurl}${this.facuBaseUrl}/${id}/`);
+  }
+
+  obtenerDepartamentosPorFacultad(idFacultad: number): Observable<Departamento[]> {
+    return this.http.get<Departamento[]>(`${environment.coreurl}${this.deptoBaseUrl}/?id_facultad=${idFacultad}`);
   }
 
 }

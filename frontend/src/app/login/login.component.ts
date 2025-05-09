@@ -29,10 +29,8 @@ export class LoginComponent implements OnInit {
   onSubmit(): void {
     this.errorMessage = '';
     this.successMessage = '';
-  
-    // Volver a hacer mensajes de errores
+
     if (this.loginForm.invalid) {
-      // Mostramos un mensaje si los campos están vacíos
       if (this.loginForm.get('email')?.hasError('required')) {
         this.errorMessage = 'El correo es requerido.';
       }
@@ -41,26 +39,24 @@ export class LoginComponent implements OnInit {
       }
       return;
     }
-  
-    // Si el formulario es válido
+
     const { email, password } = this.loginForm.value;
-    this.authService.login(email, password).pipe(
-      tap(response => {
-        if (response.success) {
-          setTimeout(() => {
-            this.router.navigate(['/menu-principal']);
-          }, 1000);
+
+    this.authService.login(email, password).subscribe({
+      next: (user) => {
+        if (user?.rol === 'admin' || user?.rol === 'encargado') {
+          this.router.navigate(['/menu-principal']);
         } else {
-          this.errorMessage = response.message || 'Credenciales incorrectas';
+          this.errorMessage = 'Rol no reconocido.';
         }
-      })
-    ).subscribe({
+      },
       error: () => {
-        this.errorMessage = 'Error en el servidor. Intente nuevamente más tarde.';
+        this.errorMessage = 'Correo o contraseña incorrectos.';
       }
     });
   }
-  
+
+
 
   irARecuperar() {
     this.router.navigate(['/recuperar']);

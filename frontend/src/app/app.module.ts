@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';  // Asegúrate de importar Route
 import { routes } from './app.routes';  // Si estás usando un archivo de rutas
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
+import { MenuComponent } from './compartido/menu/menu.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { LoginComponent } from './login/login.component';
     ReactiveFormsModule,  // Asegúrate de que ReactiveFormsModule esté aquí
     HttpClientModule,
     LoginComponent,
+    MenuComponent,
     AppComponent,
     BrowserModule
   ],

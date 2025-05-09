@@ -422,3 +422,34 @@ tbody tr:hover {
   background-color: #ff4500; /* Color al pasar el cursor */
 }
 
+.btn-volver {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+}
+.btn-volver:hover,
+.btn-volver:focus {
+  background-color: #e0e7ff;
+  outline: none;
+  box-shadow: 0 0 0 2px #3b82f6;
+}
+.btn-volver::before {
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-top: 2.5px solid #2563eb;
+  border-left: 2.5px solid #2563eb;
+  transform: rotate(-45deg);
+  margin-left: 2px;
+}
