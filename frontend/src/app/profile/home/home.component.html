@@ -127,18 +127,18 @@
           
         </div>
 
-        <mat-form-field style="width: 175px; height: 63px">
-          <input
-            matInput
-            type="text"
-            name="searchinput"
-            id="searchinput"
-            (input)="searchProfile(filter.value)"
-            placeholder="buscar perfil"
-            #filter
-          />
-          <mat-icon fontIcon="search" matSuffix></mat-icon>
-        </mat-form-field>
+<mat-form-field appearance="outline" class="custom-search">
+  <mat-label>Buscar perfil</mat-label>
+  <input
+    matInput
+    type="text"
+    placeholder="Ej: Juan Pérez"
+    (input)="searchProfile(filter.value)"
+    #filter
+  />
+  <mat-icon matSuffix>search</mat-icon>
+</mat-form-field>
+
 
         <table
           mat-table

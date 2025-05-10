@@ -3,7 +3,6 @@
   box-sizing: border-box;
 }
 body {
-  margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #7db9f5;
   min-height: 100vh;
@@ -437,4 +436,32 @@ select:focus {
   .form-group {
     width: 100%; /* En pantallas pequeñas, una columna */
   }
+}
+
+.custom-search {
+  width: 100%;
+  max-width: 320px;
+  margin: 16px 0;
+}
+
+.custom-search.mat-form-field {
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.custom-search .mat-form-field-outline {
+  border-color: #cbd5e0;
+}
+
+.custom-search .mat-form-field-outline-thick {
+  border-width: 1px;
+}
+
+.custom-search .mat-form-field-infix {
+  padding: 12px;
+}
+
+.custom-search .mat-icon {
+  color: #3b82f6;
 }
