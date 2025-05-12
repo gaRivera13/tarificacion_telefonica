@@ -7,6 +7,7 @@ import { routes } from './app.routes';  // Si estás usando un archivo de rutas
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { MenuComponent } from './compartido/menu/menu.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { MenuComponent } from './compartido/menu/menu.component';
     LoginComponent,
     MenuComponent,
     AppComponent,
-    BrowserModule
+    BrowserModule,
+    FormsModule
   ],
   providers: [],
   // Removed bootstrap array as AppComponent is a standalone component

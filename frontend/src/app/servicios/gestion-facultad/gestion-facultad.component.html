@@ -1,27 +1,4 @@
-<html lang="es">
-<head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width, initial-scale=1" name="viewport" />
-  <title>Administrador</title>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-  />
-  <style>
-    .action-buttons {
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px; /* Espaciado entre los botones */
-    }
-    .siglas-container {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-    }
-  </style>
-</head>
-<body>
-  <div class="container" role="main">
+<div class="container" role="main">
     <app-menu></app-menu>
     <main aria-label="Contenido principal">
         <section>
@@ -37,7 +14,14 @@
                 <tr *ngFor="let fac of facultades">
                   <td>
                     <ng-container *ngIf="editarFacultadId === fac.id_facultad; else nombreFacultad">
-                      <input [(ngModel)]="editNombreFacultad" />
+                      <input 
+                      id="siglasFacultad"
+                      type="text"
+                      [(ngModel)]="editNombreFacultad" 
+                      pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*" 
+                      inputmode="text" 
+                      required
+                      />
                     </ng-container>
                     <ng-template #nombreFacultad>{{ fac.nombre_facultad }}</ng-template>
                   </td>
@@ -45,7 +29,14 @@
                     <div class="siglas-y-botones">
                       <div class="siglas-texto">
                         <ng-container *ngIf="editarFacultadId === fac.id_facultad; else siglasFacultad">
-                          <input [(ngModel)]="editSiglasFacultad" />
+                          <input 
+                          id="siglasFacultad"
+                          type="text"
+                          [(ngModel)]="editSiglasFacultad"
+                          pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*" 
+                          inputmode="text" 
+                          required 
+                          />
                         </ng-container>
                         <ng-template #siglasFacultad>{{ fac.siglas_facultad }}</ng-template>
                       </div>
@@ -73,10 +64,7 @@
             </footer>
         </section>  
     </main>
-  </div>
-</body>
-</html>
-
+</div>
 <!-- Modal para agregar nueva facultad -->
 <div class="modal" *ngIf="mostrarModalAgregarFacultad" style="display: flex;">
     <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title-facultad">

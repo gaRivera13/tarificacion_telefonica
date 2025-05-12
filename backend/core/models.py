@@ -21,6 +21,7 @@ class Departamento(models.Model):
 
 class ProveedorTelefono(models.Model):
     id_proveedor = models.AutoField(primary_key=True)
+    siglas_proveedor = models.CharField(max_length=10)
     nombre_proveedor = models.CharField(max_length=100)
     costo_seg_cel = models.DecimalField(max_digits=10, decimal_places=2)
     costo_seg_sim = models.DecimalField(max_digits=10, decimal_places=2)

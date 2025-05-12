@@ -1,0 +1,125 @@
+<div class="container" role="main">
+  <app-menu></app-menu>
+  <main aria-label="Contenido principal">
+    <section>
+      <div class="title" role="heading" aria-level="2">Gestión de Proveedores Telefónicos</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre Proveedor</th>
+            <th>Siglas</th>
+            <th>Costo Cel</th>
+            <th>Costo SIM</th>
+            <th>Costo IDI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let proveedor of proveedores">
+            <td>
+              <ng-container *ngIf="editarId === proveedor.id_proveedor; else verNombre">
+                <input 
+                  type="text" 
+                  [(ngModel)]="proveedorEditando.nombre_proveedor"
+                  pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*" 
+                  inputmode="text" 
+                  required 
+                />
+              </ng-container>
+              <ng-template #verNombre>{{ proveedor.nombre_proveedor }}</ng-template>
+            </td>
+            <td>
+              <ng-container *ngIf="editarId === proveedor.id_proveedor; else verSiglas">
+                <input 
+                  type="text" 
+                  [(ngModel)]="proveedorEditando.siglas_proveedor"
+                  pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*" 
+                  inputmode="text" 
+                  required 
+                />
+              </ng-container>
+              <ng-template #verSiglas>{{ proveedor.siglas_proveedor }}</ng-template>
+            </td>
+            <td>
+              <ng-container *ngIf="editarId === proveedor.id_proveedor; else verCel">
+                <input type="number" [(ngModel)]="proveedorEditando.costo_seg_cel" />
+              </ng-container>
+              <ng-template #verCel>{{ formatCurrency(proveedor.costo_seg_cel) }}</ng-template>
+            </td>
+            <td>
+              <ng-container *ngIf="editarId === proveedor.id_proveedor; else verSim">
+                <input type="number" [(ngModel)]="proveedorEditando.costo_seg_sim" />
+              </ng-container>
+              <ng-template #verSim>{{ formatCurrency(proveedor.costo_seg_sim) }}</ng-template>
+            </td>
+            <td>
+              <div class="siglas-y-botones">
+                <div class="siglas-texto">
+                  <ng-container *ngIf="editarId === proveedor.id_proveedor; else verIdi">
+                    <input type="number" [(ngModel)]="proveedorEditando.costo_seg_idi" />
+                  </ng-container>
+                  <ng-template #verIdi>{{ formatCurrency(proveedor.costo_seg_idi) }}</ng-template>
+                </div>
+                <div class="action-buttons">
+                  <ng-container *ngIf="editarId === proveedor.id_proveedor; else botonesNormal">
+                    <button (click)="guardarCambios(proveedor.id_proveedor)"><i class="fas fa-save"></i></button>
+                    <button (click)="cancelarEdicion()"><i class="fas fa-times"></i></button>
+                  </ng-container>
+                  <ng-template #botonesNormal>
+                    <button (click)="editarProveedor(proveedor)" title="Editar">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button (click)="eliminarProveedor(proveedor.id_proveedor)" title="Eliminar">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </ng-template>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="proveedores.length === 0">
+            <td colspan="6">No hay proveedores registrados.</td>
+          </tr>
+        </tbody>
+      </table>
+      <footer>
+        <button class="add-btn" (click)="abrirModalAgregar()">Agregar</button>
+      </footer>
+    </section>
+  </main>
+</div>
+
+<!-- Modal para agregar nuevo proveedor -->
+<div class="container">
+  <div class="modal" *ngIf="mostrarModalAgregar" style="display: flex;">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-proveedor-title">
+      <h2 id="modal-proveedor-title">Agregar Proveedor</h2>
+
+      <!-- Nombre del proveedor -->
+      <label for="nombreProveedor">Nombre:</label>
+      <input id="nombreProveedor" type="text" [(ngModel)]="nuevo.nombre_proveedor" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*" inputmode="text" />
+
+      <!-- Siglas del proveedor -->
+      <label for="siglasProveedor" class="mt-4">Siglas:</label>
+      <input id="siglasProveedor" type="text" [(ngModel)]="nuevo.siglas_proveedor" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*" inputmode="text" />
+
+      <!-- Costo por segundo celular -->
+      <label for="costoCel" class="mt-4">Costo por segundo celular:</label>
+      <input id="costoCel" type="number" [(ngModel)]="nuevo.costo_seg_cel" inputmode="decimal" />
+
+      <!-- Costo por segundo SIM -->
+      <label for="costoSim" class="mt-4">Costo por segundo SIM:</label>
+      <input id="costoSim" type="number" [(ngModel)]="nuevo.costo_seg_sim" inputmode="decimal" />
+
+      <!-- Costo por segundo IDI -->
+      <label for="costoIdi" class="mt-4">Costo por segundo IDI:</label>
+      <input id="costoIdi" type="number" [(ngModel)]="nuevo.costo_seg_idi" inputmode="decimal" />
+
+      <!-- Botones para guardar o cancelar -->
+      <div class="modal-buttons">
+        <button type="button" class="add-btn" (click)="confirmarAgregar()">Guardar</button>
+        <button type="button" class="add-btn cancel" (click)="cerrarModalAgregar()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+

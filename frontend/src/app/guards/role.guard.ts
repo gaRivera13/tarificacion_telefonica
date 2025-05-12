@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
 
 @Injectable({
@@ -8,19 +7,23 @@ import { AuthService } from '../auth.service';
 })
 export class RoleGuard implements CanActivate {
 
-  constructor(private router: Router, private authService: AuthService,) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
-  
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-      const userRole = this.authService.getUserRole(); // Obtener el rol del usuario desde el localStorage
-
-      // Si el rol del usuario no es el adecuado, redirigir a otra página
-      if (route.data['roles'] && !route.data['roles'].includes(userRole)) {
-        this.router.navigate(['/menu-principal']); // Redirigir a la página principal o alguna página de acceso denegado
-        return false;
-      }
-
-      return true; // Permitir el acceso si el rol coincide
+    if (!this.authService.isLoggedIn()) {
+      // No ha iniciado sesión, redirigir a login
+      this.router.navigate(['/']);
+      return false;
     }
-    
+
+    const userRole = this.authService.getUserRole();
+
+    if (route.data['roles'] && !route.data['roles'].includes(userRole)) {
+      // Tiene sesión pero no tiene el rol adecuado
+      this.router.navigate(['/menu-principal']);
+      return false;
+    }
+
+    return true; // Usuario autenticado y con el rol adecuado
+  }
 }
