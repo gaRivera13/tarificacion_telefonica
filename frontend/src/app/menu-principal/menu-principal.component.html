@@ -14,9 +14,9 @@
       </div>
 
       <div *ngIf="rol === 'admin'" class="title">GESTIONES</div>
-      <button *ngIf="rol === 'admin'" type="button" [routerLink]="['/gestion-facultad']">
+      <button *ngIf="rol === 'admin'" type="button"  [routerLink]="['/gestion-facultad']">
         <img height="22" src="https://img.icons8.com/ios-filled/50/000000/report-card.png" />
-        <strong> Facultades</strong>
+        <strong> Cuentas presupuestarias</strong>
       </button>
       
       <button *ngIf="rol === 'admin'" type="button" [routerLink]="['/gestion-unidades']">
@@ -33,13 +33,8 @@
         <img height="22" src="https://img.icons8.com/ios-filled/50/000000/phone.png" />
         <strong>Proveedores de telefonía</strong>
       </button>
-
-      <button *ngIf="rol === 'admin'" class="pink-text" type="button">
-        <img height="22" src="https://storage.googleapis.com/a1aa/image/ebb96f9f-d668-44f2-04d3-dd680511f0e9.jpg" />
-        Cuentas presupuestarias
-      </button>
       
-      <button type="button">
+      <button *ngIf="rol === 'admin'" type="button" [routerLink]="['/gestion-anexos']">
         <img height="22" src="https://storage.googleapis.com/a1aa/image/6d2d52b3-10fd-4288-2d1b-21ded70a64ac.jpg" />
         Anexos
       </button>

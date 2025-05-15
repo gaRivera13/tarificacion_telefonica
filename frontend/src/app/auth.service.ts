@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8000/login/'; // Asegúrate de que sea tu URL real
+  private apiUrl = '/core/login/'; // Asegúrate de que sea tu URL real
   private userData: any = null;
 
   constructor(private http: HttpClient, private router: Router) {}

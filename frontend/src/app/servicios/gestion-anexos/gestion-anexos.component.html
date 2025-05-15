@@ -1,0 +1,89 @@
+<div class="gestion-anexos-container">
+  <h2>Gestión de Anexos</h2>
+
+  <!-- Formulario para agregar un anexo -->
+  <form (ngSubmit)="subirAnexo()" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="nombreAnexo">Nombre del Anexo</label>
+      <input
+        type="text"
+        id="nombreAnexo"
+        class="form-control"
+        [(ngModel)]="nombreAnexo"
+        name="nombreAnexo"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="fechaCreacion">Fecha de Creación</label>
+      <input
+        type="date"
+        id="fechaCreacion"
+        class="form-control"
+        [(ngModel)]="fechaCreacion"
+        name="fechaCreacion"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="idFacultad">Facultad</label>
+      <select
+        id="idFacultad"
+        class="form-control"
+        [(ngModel)]="idFacultad"
+        name="idFacultad"
+        required
+      >
+        <option *ngFor="let facultad of facultades" [value]="facultad.id_facultad">
+          {{ facultad.nombre_facultad }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="idUnidad">Unidad</label>
+      <select
+        id="idUnidad"
+        class="form-control"
+        [(ngModel)]="idUnidad"
+        name="idUnidad"
+        required
+      >
+        <option *ngFor="let unidad of unidades" [value]="unidad.id_unidad">
+          {{ unidad.nombre_depto }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="file">Subir archivo</label>
+      <input
+        type="file"
+        id="file"
+        class="form-control"
+        (change)="onFileSelected($event)"
+        required
+      />
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="!selectedFile">
+      Guardar Anexo
+    </button>
+  </form>
+
+  <!-- Lista de anexos -->
+  <h3>Lista de Anexos</h3>
+  <div *ngIf="anexos.length > 0">
+    <ul>
+      <li *ngFor="let anexo of anexos">
+        <span>{{ anexo.nombre_anexo }} - {{ anexo.fecha_creacion }}</span>
+        <button (click)="onDelete(anexo.id_anexo)" class="btn btn-danger">Eliminar</button>
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="anexos.length === 0">
+    <p>No hay anexos disponibles.</p>
+  </div>
+</div>

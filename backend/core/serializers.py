@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Profile
+from .models import Profile, Anexo
 from .models import Departamento, Facultad, ProveedorTelefono
 
 
@@ -43,4 +43,9 @@ class ProfileSerializer(serializers.ModelSerializer):
 class ProveedorTelefonoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProveedorTelefono
+        fields = '__all__'
+
+class AnexoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Anexo
         fields = '__all__'

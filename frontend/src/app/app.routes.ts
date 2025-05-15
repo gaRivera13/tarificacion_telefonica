@@ -6,6 +6,7 @@ import { MenuPrincipalComponent } from './menu-principal/menu-principal.componen
 import { GestionUnidadesComponent } from './servicios/gestion-unidades/gestion-unidades.component';
 import { ProveedoresComponent } from './proveedores/gestion-proveedores/gestion-proveedores.component';
 import { GestionFacultadComponent } from './servicios/gestion-facultad/gestion-facultad.component';
+import { GestionAnexosComponent } from './servicios/gestion-anexos/gestion-anexos.component';
 import { RoleGuard } from './guards/role.guard';
 
 export const routes: Routes = [
@@ -35,6 +36,12 @@ export const routes: Routes = [
     component: ProveedoresComponent,
     canActivate: [RoleGuard],
     data: { roles: ['admin'] }
+  },
+    {
+  path: 'gestion-anexos',
+  component: GestionAnexosComponent,
+  canActivate: [RoleGuard],
+  data: { roles: ['admin'] }
   },
   {
     path: 'profile/home',

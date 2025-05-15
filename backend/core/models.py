@@ -5,6 +5,7 @@ class Facultad(models.Model):
     nombre_facultad = models.CharField(max_length=100)
     siglas_facultad = models.CharField(max_length=10)
 
+
     def __str__(self):
         return str(self.nombre_facultad)
 
@@ -14,6 +15,9 @@ class Departamento(models.Model):
     nombre_depto = models.CharField(max_length=100)
     siglas_depto = models.CharField(max_length=10)
     id_facultad = models.ForeignKey(Facultad, on_delete=models.CASCADE, db_column='id_facultad')
+    
+    class Meta:
+        db_table = 'departamentos'
 
     def __str__(self):
         return str(self.nombre_depto)
@@ -26,6 +30,9 @@ class ProveedorTelefono(models.Model):
     costo_seg_cel = models.DecimalField(max_digits=10, decimal_places=2)
     costo_seg_sim = models.DecimalField(max_digits=10, decimal_places=2)
     costo_seg_idi = models.DecimalField(max_digits=10, decimal_places=2)
+    
+    class Meta:
+        db_table = 'proveedores'
 
     def __str__(self):
         return str(self.nombre_proveedor)
@@ -46,6 +53,10 @@ class Anexo(models.Model):
     id_unidad = models.ForeignKey(Departamento, on_delete=models.CASCADE, db_column='id_unidad')
     nombre_anexo = models.CharField(max_length=100)
     fecha_creacion = models.DateField()
+    archivo = models.FileField(upload_to='anexos/')
+    
+    class Meta:
+        db_table = 'anexos'
 
     def __str__(self):
         return str(self.nombre_anexo)
@@ -63,6 +74,9 @@ class RegistroLlamadas(models.Model):
     tipo_respuesta = models.CharField(max_length=50)
     nombre_destinatario = models.CharField(max_length=100)
 
+    class Meta:
+        db_table = 'registro_llamadas'
+
     def __str__(self):
         return str(f'Llamada {self.id_registro}')
 
@@ -76,6 +90,9 @@ class CalculaMensual(models.Model):
     tarif_cel = models.DecimalField(max_digits=10, decimal_places=2)
     tarif_idi = models.DecimalField(max_digits=10, decimal_places=2)
     fecha = models.DateField()
+    
+    class Meta:
+        db_table = 'calculo_mensual'
 
     def __str__(self):
         return str(f'CalculoMensual {self.id_calculo}')

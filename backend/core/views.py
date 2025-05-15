@@ -1,11 +1,11 @@
 from rest_framework import viewsets
-from .models import Profile, Departamento, Facultad, ProveedorTelefono
-from .serializers import LoginSerializer, ProfileSerializer, DepartamentoSerializer, FacultadSerializer, ProveedorTelefonoSerializer
+from .models import Profile, Departamento, Facultad, ProveedorTelefono, Anexo
+from .serializers import LoginSerializer, ProveedorTelefonoSerializer, AnexoSerializer
+from .serializers import ProfileSerializer, DepartamentoSerializer, FacultadSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import LoginSerializer
-
 
 
 class FacultadViewSet(viewsets.ModelViewSet):
@@ -26,6 +26,10 @@ class LoginView(APIView):
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset=Profile.objects.all()
     serializer_class=ProfileSerializer
+
+class AnexoViewSet(viewsets.ModelViewSet):
+    queryset = Anexo.objects.all().order_by('-fecha_creacion')
+    serializer_class = AnexoSerializer
 
 
 class ProveedorTelefonoViewSet(viewsets.ModelViewSet):
