@@ -1,4 +1,6 @@
 from django.db import models
+from django.core.exceptions import ValidationError
+import os
 
 class Facultad(models.Model):
     id_facultad = models.AutoField(primary_key=True)
@@ -46,14 +48,18 @@ class CuentaPresupuestaria(models.Model):
     def __str__(self):
         return str(f'Cuenta de {self.id_facultad.nombre_facultad if self.id_facultad else "N/A"} con {self.id_proveedor.nombre_proveedor if self.id_proveedor else "N/A"}')
 
+def validar_excel(archivo):
+    ext = os.path.splitext(archivo.name)[1].lower()
+    if ext not in ['.xls', 'xlsx']:
+        raise ValidationError('Solo se permiten archivos Excel (.xls, .xlsx)')
 
 class Anexo(models.Model):
     id_anexo = models.AutoField(primary_key=True)
     id_facultad = models.ForeignKey(Facultad, on_delete=models.CASCADE, db_column='id_facultad')
     id_unidad = models.ForeignKey(Departamento, on_delete=models.CASCADE, db_column='id_unidad')
     nombre_anexo = models.CharField(max_length=100)
-    fecha_creacion = models.DateField()
-    archivo = models.FileField(upload_to='anexos/')
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    archivo = models.FileField(upload_to='anexos/', validators=[validar_excel])
     
     class Meta:
         db_table = 'anexos'

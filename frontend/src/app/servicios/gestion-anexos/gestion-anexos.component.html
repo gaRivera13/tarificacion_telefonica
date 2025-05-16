@@ -1,89 +1,159 @@
-<div class="gestion-anexos-container">
-  <h2>Gestión de Anexos</h2>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>Gestión de Anexos</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="container" role="main">
+      <header>
+        <div class="left">
+          <button
+            aria-label="Volver a la página anterior"
+            type="button"
+            class="btn-volver"
+            title="Volver"
+            onclick="history.back()"
+          ></button>
+          <img
+            alt="Icono pequeño cuadrado con fondo azul y símbolo blanco"
+            height="28"
+            src="https://storage.googleapis.com/a1aa/image/60054b82-944f-446f-f6cb-aaeb8a7164d8.jpg"
+            width="28"
+          />
+          <span>Gestión de Anexos</span>
+        </div>
+      </header>
+      <main aria-label="Contenido principal">
+        <section class="form-section">
+          <h5>Agregar Nuevo Anexo</h5>
+          <form (ngSubmit)="subirAnexo()" enctype="multipart/form-data">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="nombreAnexo">Nombre de Anexo</label>
+                <input
+                  type="text"
+                  id="nombreAnexo"
+                  class="form-control"
+                  [(ngModel)]="nombreAnexo"
+                  name="nombreAnexo"
+                  required
+                />
+              </div>
 
-  <!-- Formulario para agregar un anexo -->
-  <form (ngSubmit)="subirAnexo()" enctype="multipart/form-data">
-    <div class="form-group">
-      <label for="nombreAnexo">Nombre del Anexo</label>
-      <input
-        type="text"
-        id="nombreAnexo"
-        class="form-control"
-        [(ngModel)]="nombreAnexo"
-        name="nombreAnexo"
-        required
-      />
+              <div class="form-group">
+                <label for="idFacultad">Facultad</label>
+                <select
+                  id="idFacultad"
+                  class="form-control"
+                  [(ngModel)]="idFacultad"
+                  name="idFacultad"
+                  required
+                >
+                  <option *ngFor="let facultad of facultades" [value]="facultad.id_facultad">
+                    {{ facultad.nombre_facultad }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="idUnidad">Unidad</label>
+                <select
+                  id="idUnidad"
+                  class="form-control"
+                  [(ngModel)]="idUnidad"
+                  name="idUnidad"
+                  required
+                >
+                  <option *ngFor="let unidad of unidades" [value]="unidad.id_unidad">
+                    {{ unidad.nombre_depto }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="file">Subir archivo (.xls, .xlsx)</label>
+                <input
+                  type="file"
+                  id="file"
+                  class="form-control"
+                  (change)="onFileSelected($event)"
+                  accept=".xls, .xlsx"
+                  required
+                />
+                <!-- Mensaje de error -->
+                <div *ngIf="fileError" class="alert alert-danger">
+                  {{ fileError }}
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary" [disabled]="!selectedFile || fileError">
+                Guardar Anexo
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Función de búsqueda -->
+        <section class="search-section">
+          <h5>Buscar por Unidad</h5>
+          <mat-form-field appearance="outline" class="custom-search">
+            <mat-label>Buscar Unidad</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Ej: Departamento de Ciencias"
+              [(ngModel)]="unidadBusqueda"
+              (input)="buscarAnexosPorUnidad()"
+            />
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+        </section>
+
+        <!-- Tabla de anexos -->
+        <section class="table-section">
+          <h5>Lista de Anexos</h5>
+          <div *ngIf="anexos.length > 0">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Facultad</th>
+                  <th>Unidad</th>
+                  <th>Fecha de Creación</th>
+                  <th>Editar</th>
+                  <th>Eliminar</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let anexo of anexos">
+                  <td>{{ anexo.nombre_anexo }}</td>
+                  <td>{{ anexo.id_facultad }}</td>
+                  <td>{{ anexo.id_unidad }}</td>
+                  <td>{{ anexo.fecha_creacion | date }}</td>
+                  <td>
+                    <button (click)="editarAnexo(anexo)" class="btn btn-warning btn-sm">
+                      Editar
+                    </button>
+                  </td>
+                  <td>
+                    <button (click)="eliminarAnexo(anexo.id_anexo)" class="btn btn-danger btn-sm">
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div *ngIf="anexos.length === 0">
+            <p>No hay anexos disponibles.</p>
+          </div>
+        </section>
+      </main>
     </div>
-
-    <div class="form-group">
-      <label for="fechaCreacion">Fecha de Creación</label>
-      <input
-        type="date"
-        id="fechaCreacion"
-        class="form-control"
-        [(ngModel)]="fechaCreacion"
-        name="fechaCreacion"
-        required
-      />
-    </div>
-
-    <div class="form-group">
-      <label for="idFacultad">Facultad</label>
-      <select
-        id="idFacultad"
-        class="form-control"
-        [(ngModel)]="idFacultad"
-        name="idFacultad"
-        required
-      >
-        <option *ngFor="let facultad of facultades" [value]="facultad.id_facultad">
-          {{ facultad.nombre_facultad }}
-        </option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="idUnidad">Unidad</label>
-      <select
-        id="idUnidad"
-        class="form-control"
-        [(ngModel)]="idUnidad"
-        name="idUnidad"
-        required
-      >
-        <option *ngFor="let unidad of unidades" [value]="unidad.id_unidad">
-          {{ unidad.nombre_depto }}
-        </option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="file">Subir archivo</label>
-      <input
-        type="file"
-        id="file"
-        class="form-control"
-        (change)="onFileSelected($event)"
-        required
-      />
-    </div>
-
-    <button type="submit" class="btn btn-primary" [disabled]="!selectedFile">
-      Guardar Anexo
-    </button>
-  </form>
-
-  <!-- Lista de anexos -->
-  <h3>Lista de Anexos</h3>
-  <div *ngIf="anexos.length > 0">
-    <ul>
-      <li *ngFor="let anexo of anexos">
-        <span>{{ anexo.nombre_anexo }} - {{ anexo.fecha_creacion }}</span>
-        <button (click)="onDelete(anexo.id_anexo)" class="btn btn-danger">Eliminar</button>
-      </li>
-    </ul>
-  </div>
-  <div *ngIf="anexos.length === 0">
-    <p>No hay anexos disponibles.</p>
-  </div>
-</div>
+  </body>
+</html>

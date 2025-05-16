@@ -49,3 +49,4 @@ class AnexoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Anexo
         fields = '__all__'
+        read_only_fields = ['fecha_creacion']
