@@ -12,7 +12,7 @@ router.register(r'proveedores', ProveedorTelefonoViewSet)
 router.register(r'anexos', AnexoViewSet)
 
 urlpatterns=[
-    path('core/',include(router.urls)),
+    path('',include(router.urls)),
     path('login/', LoginView.as_view(), name='login'),
     path('upload-anexo/', AnexoUploadView.as_view(), name='upload-anexo'),
 ]

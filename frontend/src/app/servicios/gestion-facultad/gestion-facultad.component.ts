@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DepartamentoService, Facultad } from '../departamento.service';
+import { DepartamentoService, Facultad, ProveedorTelefono } from '../departamento.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MenuComponent } from "../../compartido/menu/menu.component";
@@ -13,18 +13,22 @@ import { MenuComponent } from "../../compartido/menu/menu.component";
 })
 export class GestionFacultadComponent implements OnInit {
 
-
+  proveedores: ProveedorTelefono[] = [];
   facultades: Facultad[] = [];
+  
   editarFacultadId: number | null = null;
   editNombreFacultad = '';
   editSiglasFacultad = '';
+  editIdProveedor: number | null = null;
 
+  nuevoIdProveedor: number | null = null;
   nuevoNombreFacultad = '';
   nuevasSiglasFacultad = '';
   mostrarModalAgregarFacultad = false;
 
   ngOnInit(): void {
-    this.cargarFacultades(); // 👈 nuevo
+    this.cargarFacultades(); 
+    this.cargarProveedores();
   }
 
   constructor(private deptoService: DepartamentoService) {}
@@ -34,12 +38,20 @@ export class GestionFacultadComponent implements OnInit {
       this.facultades = data;
     });
   }
+
+  cargarProveedores() {
+  this.deptoService.obtenerProveedores().subscribe(data => {
+    this.proveedores = data;
+  });
+  }
   
   abrirModalAgregarFacultad() {
     this.nuevoNombreFacultad = '';
     this.nuevasSiglasFacultad = '';
+    this.nuevoIdProveedor = this.proveedores.length > 0 ? this.proveedores[0].id_proveedor : null;
     this.mostrarModalAgregarFacultad = true;
   }
+
   
   cerrarModalAgregarFacultad() {
     this.mostrarModalAgregarFacultad = false;
@@ -67,8 +79,10 @@ export class GestionFacultadComponent implements OnInit {
 
     const nuevaFacultad: Partial<Facultad> = {
       nombre_facultad: this.nuevoNombreFacultad.trim(),
-      siglas_facultad: this.nuevasSiglasFacultad.trim()
+      siglas_facultad: this.nuevasSiglasFacultad.trim(),
+      id_proveedor: this.nuevoIdProveedor !== null ? this.nuevoIdProveedor : undefined  // agregar proveedor
     };
+
 
     this.deptoService.agregarFacultad(nuevaFacultad).subscribe(() => {
       this.cargarFacultades();
@@ -76,11 +90,13 @@ export class GestionFacultadComponent implements OnInit {
     });
   }
   
-  editarFacultad(fac: Facultad) {
-    this.editarFacultadId = fac.id_facultad;
-    this.editNombreFacultad = fac.nombre_facultad;
-    this.editSiglasFacultad = fac.siglas_facultad;
-  }
+    editarFacultad(fac: Facultad) {
+      this.editarFacultadId = fac.id_facultad;
+      this.editNombreFacultad = fac.nombre_facultad;
+      this.editSiglasFacultad = fac.siglas_facultad;
+      this.editIdProveedor = fac.id_proveedor;
+    }
+
   
   guardarCambiosFacultad(id: number) {
     // Validación: campos vacíos
@@ -103,8 +119,10 @@ export class GestionFacultadComponent implements OnInit {
 
     const actualizada: Partial<Facultad> = {
       nombre_facultad: this.editNombreFacultad.trim(),
-      siglas_facultad: this.editSiglasFacultad.trim()
+      siglas_facultad: this.editSiglasFacultad.trim(),
+      id_proveedor: this.editIdProveedor !== null ? this.editIdProveedor : undefined
     };
+
 
     this.deptoService.editarFacultad(id, actualizada).subscribe(() => {
       this.editarFacultadId = null;
@@ -123,10 +141,8 @@ export class GestionFacultadComponent implements OnInit {
       }
   }
 
-
   cancelarEdicionFacultad() {
     this.editarFacultadId = null;
   }
-  
 
 }

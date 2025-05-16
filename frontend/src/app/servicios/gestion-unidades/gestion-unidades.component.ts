@@ -97,10 +97,27 @@ export class GestionUnidadesComponent implements OnInit {
   }
 
   guardarCambios(id: number) {
+    const soloLetrasRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+
+    if (!this.editNombre.trim() || !this.editSiglas.trim()) {
+      alert('Todos los campos son obligatorios.');
+      return;
+    }
+
+    if (!soloLetrasRegex.test(this.editNombre)) {
+      alert('El nombre solo puede contener letras y espacios.');
+      return;
+    }
+
+    if (!soloLetrasRegex.test(this.editSiglas)) {
+      alert('Las siglas solo pueden contener letras.');
+      return;
+    }
+
     const deptoEditado: Partial<Departamento> = {
-      nombre_depto: this.editNombre,
-      siglas_depto: this.editSiglas,
-      id_facultad: this.editFacultadId  // ✅ Enviamos solo el número
+      nombre_depto: this.editNombre.trim(),
+      siglas_depto: this.editSiglas.trim(),
+      id_facultad: this.editFacultadId
     };
 
     this.deptoService.editarDepartamento(id, deptoEditado).subscribe(() => {

@@ -1,55 +1,50 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, tap, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = '/core/login/'; // Asegúrate de que sea tu URL real
+
+  private apiUrl = '/core/login/';
   private userData: any = null;
+
+  private fakeUsers = [
+    { id: 1, correo: 'admin@example.com', password: '123456', nombre: 'Administrador', rol: 'admin' },
+    { id: 2, correo: 'encargado@example.com', password: '123456', nombre: 'Encargado', rol: 'encargado' }
+  ];
 
   constructor(private http: HttpClient, private router: Router) {}
 
   login(correo: string, password: string): Observable<any> {
-    const fakeUsers = [
-      {
-        nombre: 'Admin',
-        correo: 'admin@example.com',
-        rol: 'admin',
-        username: 'adminuser'
-      },
-      {
-        nombre: 'Encargado',
-        correo: 'encargado@example.com',
-        rol: 'encargado',
-        username: 'encargado'
-      }
-    ];
-
-    const user = fakeUsers.find(u => u.correo === correo);
-
-    if (user && password === '123456') {
-      this.userData = user;
-      localStorage.setItem('user', JSON.stringify(user));
-      return of(user); // observable simulado
-    } else {
-      return of(null);
-    }
-  }
-
-  // LOGIN PRINCIPAL, LO OTRO ES DE PRUEBA
-/*
-  login(correo: string, password: string): Observable<any> {
+    // Primero intento login con backend real
     return this.http.post<any>(this.apiUrl, { correo, password }).pipe(
       tap(user => {
+        // Verificamos que contenga los campos necesarios
+        if (!user || !user.rol || !user.correo) {
+          throw new Error('Respuesta del servidor inválida');
+        }
         this.userData = user;
-        localStorage.setItem('user', JSON.stringify(user));  // Guardamos el usuario localmente
+        localStorage.setItem('user', JSON.stringify(user));
+      }),
+      catchError(err => {
+        // Si falla el login real, intento con usuarios fake
+        const userFake = this.fakeUsers.find(u => u.correo === correo && u.password === password);
+        if (userFake) {
+          this.userData = userFake;
+          localStorage.setItem('user', JSON.stringify(userFake));
+          return of(userFake);
+        } else {
+          return throwError(() => new Error('Credenciales inválidas'));
+        }
       })
     );
   }
-*/
+
+
   logout(): void {
     this.userData = null;
     localStorage.removeItem('user');
@@ -69,7 +64,6 @@ export class AuthService {
   getUserRole(): string | null {
     return this.getUser()?.rol || null;
   }
-
 
   isLoggedIn(): boolean {
     return !!this.getUser();

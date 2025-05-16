@@ -7,6 +7,9 @@ from .serializers import LoginSerializer, ProveedorTelefonoSerializer, AnexoSeri
 from .serializers import ProfileSerializer, DepartamentoSerializer, FacultadSerializer
 from .serializers import LoginSerializer
 
+class ProveedorTelefonoViewSet(viewsets.ModelViewSet):
+    queryset = ProveedorTelefono.objects.all()
+    serializer_class = ProveedorTelefonoSerializer
 
 class FacultadViewSet(viewsets.ModelViewSet):
     queryset = Facultad.objects.all()
@@ -40,7 +43,3 @@ class AnexoUploadView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class ProveedorTelefonoViewSet(viewsets.ModelViewSet):
-    queryset = ProveedorTelefono.objects.all()
-    serializer_class = ProveedorTelefonoSerializer

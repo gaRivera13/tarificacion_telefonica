@@ -2,8 +2,14 @@ from rest_framework import serializers
 from .models import Profile, Anexo
 from .models import Departamento, Facultad, ProveedorTelefono
 
+class ProveedorTelefonoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProveedorTelefono
+        fields = '__all__'
 
 class FacultadSerializer(serializers.ModelSerializer):
+    id_proveedor= serializers.PrimaryKeyRelatedField(queryset=ProveedorTelefono.objects.all())
+    proveedor_detalle = ProveedorTelefonoSerializer(source='id_proveedor', read_only=True)
     class Meta:
         model = Facultad
         fields = '__all__'
@@ -38,11 +44,6 @@ class LoginSerializer(serializers.Serializer):
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = '__all__'
-
-class ProveedorTelefonoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProveedorTelefono
         fields = '__all__'
 
 class AnexoSerializer(serializers.ModelSerializer):

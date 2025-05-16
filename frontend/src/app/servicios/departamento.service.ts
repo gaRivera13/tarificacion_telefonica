@@ -3,10 +3,22 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 
+export interface ProveedorTelefono {
+  id_proveedor: number;
+  siglas_proveedor: string;
+  nombre_proveedor: string;
+  costo_seg_cel: number;
+  costo_seg_sim: number;
+  costo_seg_idi: number;
+}
+
+
 export interface Facultad {
   id_facultad: number;
   nombre_facultad: string;
   siglas_facultad: string;
+  id_proveedor: number;          // FK al proveedor, necesario para enviar al backend
+  proveedor_detalle: ProveedorTelefono;  // Objeto proveedor para mostrar nombre, etc.
 }
 
 export interface Departamento {
@@ -24,12 +36,17 @@ export class DepartamentoService {
 
   private deptoBaseUrl: string = '/core/departamentos';
   private facuBaseUrl: string = '/core/facultades';  
+  private provBaseUrl: string = '/core/proveedores'; 
 
   constructor(private http: HttpClient) {}
 
   // Departamentos
   obtenerDepartamentos(): Observable<Departamento[]> {
     return this.http.get<Departamento[]>(`${environment.coreurl}${this.deptoBaseUrl}/`);
+  }
+
+  obtenerProveedores(): Observable<ProveedorTelefono[]> {
+  return this.http.get<ProveedorTelefono[]>(`${environment.coreurl}${this.provBaseUrl}/`);
   }
 
   agregarDepartamento(depto: Partial<Departamento>): Observable<Departamento> {

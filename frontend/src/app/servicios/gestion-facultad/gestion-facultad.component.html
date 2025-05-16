@@ -1,84 +1,149 @@
 <div class="container" role="main">
-    <app-menu></app-menu>
-    <main aria-label="Contenido principal">
-        <section>
-            <div class="title" role="heading" aria-level="2">Gestión de Facultades</div>
-            <table>
-              <thead>
-                <tr>
-                  <th style="width: 40%;">Nombre Facultad</th>
-                  <th style="width: 30%;">Siglas</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let fac of facultades">
-                  <td>
-                    <ng-container *ngIf="editarFacultadId === fac.id_facultad; else nombreFacultad">
-                      <input 
+  <app-menu></app-menu>
+  <main aria-label="Contenido principal">
+    <section>
+      <div class="title" role="heading" aria-level="2">Gestión de Facultades</div>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 30%;">Nombre Facultad</th>
+            <th style="width: 20%;">Siglas</th>
+            <th style="width: 30%;">Proveedor</th>  <!-- Columna proveedor -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let fac of facultades">
+            <td>
+              <ng-container *ngIf="editarFacultadId === fac.id_facultad; else nombreFacultad">
+                <input
+                  id="nombreFacultad"
+                  type="text"
+                  [(ngModel)]="editNombreFacultad"
+                  pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*"
+                  inputmode="text"
+                  required
+                />
+              </ng-container>
+              <ng-template #nombreFacultad>{{ fac.nombre_facultad }}</ng-template>
+            </td>
+            <td>
+              <ng-container *ngIf="editarFacultadId === fac.id_facultad; else siglasFacultad">
+                <input
                       id="siglasFacultad"
                       type="text"
-                      [(ngModel)]="editNombreFacultad" 
-                      pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*" 
-                      inputmode="text" 
+                      [(ngModel)]="editSiglasFacultad"
+                      pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*"
+                      inputmode="text"
                       required
-                      />
-                    </ng-container>
-                    <ng-template #nombreFacultad>{{ fac.nombre_facultad }}</ng-template>
-                  </td>
-                  <td>
-                    <div class="siglas-y-botones">
-                      <div class="siglas-texto">
-                        <ng-container *ngIf="editarFacultadId === fac.id_facultad; else siglasFacultad">
-                          <input 
-                          id="siglasFacultad"
-                          type="text"
-                          [(ngModel)]="editSiglasFacultad"
-                          pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*" 
-                          inputmode="text" 
-                          required 
-                          />
-                        </ng-container>
-                        <ng-template #siglasFacultad>{{ fac.siglas_facultad }}</ng-template>
-                      </div>
-                      <div class="action-buttons">
-                        <ng-container *ngIf="editarFacultadId === fac.id_facultad; else verFacultad">
-                          <button (click)="guardarCambiosFacultad(fac.id_facultad)"><i class="fas fa-save"></i></button>
-                          <button (click)="cancelarEdicionFacultad()"><i class="fas fa-times"></i></button>
-                        </ng-container>
-                        <ng-template #verFacultad>
-                          <button (click)="editarFacultad(fac)"><i class="fas fa-edit"></i></button>
-                          <button (click)="eliminarFacultad(fac.id_facultad)"><i class="fas fa-trash-alt"></i></button>
-                        </ng-template>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                <tr *ngIf="facultades.length === 0">
-                  <td colspan="2">No hay facultades registradas.</td> <!-- Modificado el colspan a 2 -->
-                </tr>
-              </tbody>
-            </table>
-          
-            <footer>
-              <button class="add-btn" (click)="abrirModalAgregarFacultad()">Agregar</button>
-            </footer>
-        </section>  
-    </main>
+                    />
+              </ng-container>
+              <ng-template #siglasFacultad>{{ fac.siglas_facultad }}</ng-template>
+            </td>
+
+            <!-- Columna proveedor -->
+            <td>
+              <div class="siglas-y-botones">
+                <div class="siglas-texto">
+                <ng-container *ngIf="editarFacultadId === fac.id_facultad; else mostrarProveedor">
+                  <select [(ngModel)]="editIdProveedor" required>
+                    <option *ngFor="let prov of proveedores" [value]="prov.id_proveedor">
+                      {{ prov.nombre_proveedor }}
+                    </option>
+                  </select>
+                </ng-container>
+                <ng-template #mostrarProveedor>
+                  {{ fac.proveedor_detalle.nombre_proveedor || 'Sin proveedor' }}
+                </ng-template>
+                </div>
+                <!-- Botones de editar/guardar/cancelar/eliminar aquí -->
+                <div class="action-buttons">
+                  <ng-container *ngIf="editarFacultadId === fac.id_facultad; else verFacultad">
+                    <button (click)="guardarCambiosFacultad(fac.id_facultad)">
+                      <i class="fas fa-save"></i>
+                    </button>
+                    <button (click)="cancelarEdicionFacultad()">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </ng-container>
+                  <ng-template #verFacultad>
+                    <button (click)="editarFacultad(fac)">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button (click)="eliminarFacultad(fac.id_facultad)">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </ng-template>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="facultades.length === 0">
+            <td colspan="3">No hay facultades registradas.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <footer>
+        <button class="add-btn" (click)="abrirModalAgregarFacultad()">Agregar</button>
+      </footer>
+    </section>
+  </main>
 </div>
+
 <!-- Modal para agregar nueva facultad -->
 <div class="modal" *ngIf="mostrarModalAgregarFacultad" style="display: flex;">
-    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title-facultad">
-      <h2 id="modal-title-facultad">Agregar Facultad</h2>
-  
-      <label for="nombreFacultad">Nombre:</label>
-      <input id="nombreFacultad" type="text" [(ngModel)]="nuevoNombreFacultad" />
-  
-      <label for="siglasFacultad" class="mt-4">Siglas:</label>
-      <input id="siglasFacultad" type="text" [(ngModel)]="nuevasSiglasFacultad" />
-  
-      <div class="modal-buttons">
-        <button type="button" class="add-btn" (click)="confirmarAgregarFacultad()">Guardar</button>
-        <button type="button" class="add-btn cancel" (click)="cerrarModalAgregarFacultad()">Cancelar</button>
-      </div>
+  <div
+    class="modal-content"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title-facultad"
+  >
+    <h2 id="modal-title-facultad">Agregar Facultad</h2>
+
+    <label for="nombreFacultad">Nombre:</label>
+    <input
+      id="nombreFacultad"
+      type="text"
+      [(ngModel)]="nuevoNombreFacultad"
+      required
+      pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*"
+      inputmode="text"
+    />
+
+    <label for="siglasFacultad" class="mt-4">Siglas:</label>
+    <input
+      id="siglasFacultad"
+      type="text"
+      [(ngModel)]="nuevasSiglasFacultad"
+      required
+      pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*"
+      inputmode="text"
+    />
+
+    <!-- Select para elegir proveedor -->
+    <label for="selectProveedor" class="mt-4">Proveedor:</label>
+    <select
+      id="selectProveedor"
+      [(ngModel)]="nuevoIdProveedor"
+      required
+    >
+      <option *ngFor="let prov of proveedores" [value]="prov.id_proveedor">
+        {{ prov.nombre_proveedor }}
+      </option>
+    </select>
+
+    <div class="modal-buttons">
+      <button type="button" class="add-btn" (click)="confirmarAgregarFacultad()">
+        Guardar
+      </button>
+      <button
+        type="button"
+        class="add-btn cancel"
+        (click)="cerrarModalAgregarFacultad()"
+      >
+        Cancelar
+      </button>
     </div>
   </div>
+</div>

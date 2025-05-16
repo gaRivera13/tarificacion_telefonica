@@ -2,11 +2,27 @@ from django.db import models
 from django.core.exceptions import ValidationError
 import os
 
+
+class ProveedorTelefono(models.Model):
+    id_proveedor = models.AutoField(primary_key=True)
+    siglas_proveedor = models.CharField(max_length=10)
+    nombre_proveedor = models.CharField(max_length=100)
+    costo_seg_cel = models.DecimalField(max_digits=10, decimal_places=2)
+    costo_seg_sim = models.DecimalField(max_digits=10, decimal_places=2)
+    costo_seg_idi = models.DecimalField(max_digits=10, decimal_places=2)
+    
+    class Meta:
+        db_table = 'proveedores'
+
+    def __str__(self):
+        return str(self.nombre_proveedor)
+
+
 class Facultad(models.Model):
     id_facultad = models.AutoField(primary_key=True)
     nombre_facultad = models.CharField(max_length=100)
     siglas_facultad = models.CharField(max_length=10)
-
+    id_proveedor = models.ForeignKey(ProveedorTelefono, on_delete=models.CASCADE, db_column='id_proveedor')
 
     def __str__(self):
         return str(self.nombre_facultad)
@@ -25,28 +41,6 @@ class Departamento(models.Model):
         return str(self.nombre_depto)
 
 
-class ProveedorTelefono(models.Model):
-    id_proveedor = models.AutoField(primary_key=True)
-    siglas_proveedor = models.CharField(max_length=10)
-    nombre_proveedor = models.CharField(max_length=100)
-    costo_seg_cel = models.DecimalField(max_digits=10, decimal_places=2)
-    costo_seg_sim = models.DecimalField(max_digits=10, decimal_places=2)
-    costo_seg_idi = models.DecimalField(max_digits=10, decimal_places=2)
-    
-    class Meta:
-        db_table = 'proveedores'
-
-    def __str__(self):
-        return str(self.nombre_proveedor)
-
-
-class CuentaPresupuestaria(models.Model):
-    id_cuenta = models.AutoField(primary_key=True)
-    id_facultad = models.ForeignKey(Facultad, on_delete=models.CASCADE, db_column='id_facultad')
-    id_proveedor = models.ForeignKey(ProveedorTelefono, on_delete=models.CASCADE, db_column='id_proveedor')
-
-    def __str__(self):
-        return str(f'Cuenta de {self.id_facultad.nombre_facultad if self.id_facultad else "N/A"} con {self.id_proveedor.nombre_proveedor if self.id_proveedor else "N/A"}')
 
 def validar_excel(archivo):
     ext = os.path.splitext(archivo.name)[1].lower()
