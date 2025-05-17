@@ -2,12 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { DepartamentoService, Departamento, Facultad } from '../departamento.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MenuComponent } from "../../compartido/menu/menu.component";
 
 @Component({
   selector: 'app-gestion-unidades',
   standalone: true,
-  imports: [CommonModule, FormsModule, MenuComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './gestion-unidades.component.html',
   styleUrls: ['./gestion-unidades.component.css']
 })

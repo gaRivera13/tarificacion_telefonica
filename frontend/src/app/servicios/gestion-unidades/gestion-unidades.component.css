@@ -419,3 +419,20 @@ select:focus {
 .modal-buttons button.cancel:hover {
   background-color: #c7c7c7;
 }
+
+.siglas-y-botones {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .siglas-texto {
+    flex: 1;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 6px;
+  }
+  

@@ -2,12 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { DepartamentoService, Facultad, ProveedorTelefono } from '../departamento.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MenuComponent } from "../../compartido/menu/menu.component";
 
 @Component({
   selector: 'app-gestion-facultad',
   standalone: true,
-  imports: [CommonModule, FormsModule, MenuComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './gestion-facultad.component.html',
   styleUrl: './gestion-facultad.component.css'
 })

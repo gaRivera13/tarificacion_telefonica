@@ -1,21 +1,18 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
-import { OnInit } from '@angular/core';
-
+import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-menu-principal',
+  selector: 'app-menu',
   standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './menu-principal.component.html',
-  styleUrl: './menu-principal.component.css'
+  imports: [RouterModule, CommonModule],
+  templateUrl: './menu.component.html',
+  styleUrl: './menu.component.css'
 })
-
-export class MenuPrincipalComponent implements OnInit {
-  rol: string | null = '';
+export class MenuComponent implements OnInit {
+rol: string | null = '';
   showLogoutMenu = false;
 
   constructor(private authService: AuthService, private router: Router) {}
@@ -33,6 +30,4 @@ export class MenuPrincipalComponent implements OnInit {
     this.authService.logout();
     this.router.navigate(['/login']); // Redirige al login después de cerrar sesión
   }
-
-  
 }

@@ -1,5 +1,4 @@
-<div class="container" role="main">
-  <app-menu></app-menu>
+<div role="main">
   <main aria-label="Contenido principal">
     <section>
       <div class="title" role="heading" aria-level="2">Gestión de Facultades</div>
@@ -44,16 +43,16 @@
             <td>
               <div class="siglas-y-botones">
                 <div class="siglas-texto">
-                <ng-container *ngIf="editarFacultadId === fac.id_facultad; else mostrarProveedor">
-                  <select [(ngModel)]="editIdProveedor" required>
-                    <option *ngFor="let prov of proveedores" [value]="prov.id_proveedor">
-                      {{ prov.nombre_proveedor }}
-                    </option>
-                  </select>
-                </ng-container>
-                <ng-template #mostrarProveedor>
-                  {{ fac.proveedor_detalle.nombre_proveedor || 'Sin proveedor' }}
-                </ng-template>
+                  <ng-container *ngIf="editarFacultadId === fac.id_facultad; else mostrarProveedor">
+                    <select [(ngModel)]="editIdProveedor" required>
+                      <option *ngFor="let prov of proveedores" [value]="prov.id_proveedor">
+                        {{ prov.nombre_proveedor }}
+                      </option>
+                    </select>
+                  </ng-container>
+                  <ng-template #mostrarProveedor>
+                    {{ fac.proveedor_detalle.nombre_proveedor || 'Sin proveedor' }}
+                  </ng-template>
                 </div>
                 <!-- Botones de editar/guardar/cancelar/eliminar aquí -->
                 <div class="action-buttons">
@@ -82,10 +81,24 @@
             <td colspan="3">No hay facultades registradas.</td>
           </tr>
         </tbody>
+
       </table>
 
       <footer>
         <button class="add-btn" (click)="abrirModalAgregarFacultad()">Agregar</button>
+          <div class="pagination" role="navigation" aria-label="Paginación">
+            <label for="page-select" class="sr-only">Seleccionar página</label>
+            <select id="page-select" aria-controls="table" aria-label="Seleccionar página">
+              <option>1</option>
+            </select>
+            <span aria-live="polite" aria-atomic="true">1 de 10</span>
+            <button aria-label="Página anterior" type="button" title="Página anterior">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <button aria-label="Página siguiente" type="button" title="Página siguiente">
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
       </footer>
     </section>
   </main>

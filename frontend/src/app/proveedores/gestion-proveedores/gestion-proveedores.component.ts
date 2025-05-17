@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ProveedorService, ProveedorTelefono } from '../proveedor.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MenuComponent } from '../../compartido/menu/menu.component';
+
 
 @Component({
   selector: 'app-gestion-proveedores',
   standalone: true,
-  imports: [CommonModule, FormsModule, MenuComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './gestion-proveedores.component.html',
   styleUrl: './gestion-proveedores.component.css'
 })
