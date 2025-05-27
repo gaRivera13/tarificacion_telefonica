@@ -1,0 +1,53 @@
+<div class="calculo-reportes">
+  <h2>Cálculo de Reportes</h2>
+  
+  <!-- Selección de tipo (Unidad o Facultad) -->
+  <div>
+    <label for="tipo">Seleccione tipo:</label>
+    <select id="tipo" [(ngModel)]="selectedTipo" (change)="cargarAnexos()">
+      <option value="unidad">Unidad</option>
+      <option value="facultad">Facultad</option>
+    </select>
+  </div>
+
+  <!-- Selección de facultad -->
+  <div *ngIf="selectedTipo === 'facultad'">
+    <label for="facultad">Seleccione Facultad:</label>
+    <select id="facultad" [(ngModel)]="selectedFacultad" (change)="cargarAnexos()">
+      <option *ngFor="let facultad of facultades" [value]="facultad.id_facultad">{{ facultad.nombre_facultad }}</option>
+    </select>
+  </div>
+
+  <!-- Selección de unidad -->
+  <div *ngIf="selectedTipo === 'unidad'">
+    <label for="departamento">Seleccione Unidad:</label>
+    <select id="departamento" [(ngModel)]="selectedDepartamento" (change)="cargarAnexos()">
+      <option *ngFor="let depto of departamentos" [value]="depto.id_unidad">{{ depto.nombre_depto }}</option>
+    </select>
+  </div>
+
+  <!-- Selección de proveedor -->
+  <div>
+    <label for="proveedor">Seleccione Proveedor:</label>
+    <select id="proveedor" [(ngModel)]="selectedProveedor">
+      <option *ngFor="let proveedor of proveedores" [value]="proveedor.id_proveedor">{{ proveedor.nombre_proveedor }}</option>
+    </select>
+  </div>
+
+  <!-- Anexos disponibles -->
+  <div *ngIf="anexos.length > 0">
+    <label for="anexo">Seleccione Anexo:</label>
+    <select id="anexo" [(ngModel)]="selectedAnexo">
+      <option *ngFor="let anexo of anexos" [value]="anexo.id">{{ anexo.nombre }}</option>
+    </select>
+  </div>
+
+  <!-- Botón para generar el reporte -->
+  <button (click)="generarReporte()">Procesar</button>
+
+  <!-- Mostrar reporte generado -->
+  <div *ngIf="reporteGenerado">
+    <h3>Reporte Generado</h3>
+    <pre>{{ reporteGenerado | json }}</pre>
+  </div>
+</div>

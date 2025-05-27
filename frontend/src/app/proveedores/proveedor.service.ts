@@ -7,8 +7,8 @@ export interface ProveedorTelefono {
   siglas_proveedor: string;
   nombre_proveedor: string;
   costo_seg_cel: number;
-  costo_seg_sim: number;
-  costo_seg_idi: number;
+  costo_seg_slm: number;
+  costo_seg_ldi: number;
 }
 
 @Injectable({

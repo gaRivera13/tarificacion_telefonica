@@ -7,6 +7,7 @@ import { GestionUnidadesComponent } from './servicios/gestion-unidades/gestion-u
 import { ProveedoresComponent } from './proveedores/gestion-proveedores/gestion-proveedores.component';
 import { GestionFacultadComponent } from './servicios/gestion-facultad/gestion-facultad.component';
 import { GestionAnexosComponent } from './servicios/gestion-anexos/gestion-anexos.component';
+import { CalculoReportesComponent } from './reportes/calculo-reportes/calculo-reportes.component';
 import { RoleGuard } from './guards/role.guard';
 
 export const routes: Routes = [
@@ -44,12 +45,18 @@ export const routes: Routes = [
         data: { roles: ['admin'] }
       },
       {
-        path: 'profile/home',
+        path: 'calculo-reportes',
+        component: CalculoReportesComponent,
+        canActivate: [RoleGuard],
+        data: { roles: ['admin'] }
+      },
+      {
+        path: 'gestion-usuarios',
         component: HomeComponent,
         canActivate: [RoleGuard],
         data: { roles: ['admin'] }
       },
-      { path: '', redirectTo: 'profile/home', pathMatch: 'full' }
+      { path: '', redirectTo: 'gestion-usuarios', pathMatch: 'full' }
     ]
   },
 

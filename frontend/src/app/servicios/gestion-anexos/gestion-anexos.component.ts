@@ -16,7 +16,11 @@ import { MatInputModule } from '@angular/material/input';
   styleUrl: './gestion-anexos.component.css'
 })
 export class GestionAnexosComponent implements OnInit {
-
+  displayedColumns: string[] = [
+    'id_anexo', 
+    'nombre_anexo', 
+    'fecha_creacion', 
+    'archivo_url']; // Columnas que quieres mostrar en la tabla
   anexos: any[] = [];
   facultades: any[] = [];
   unidades: any[] = [];
@@ -26,6 +30,7 @@ export class GestionAnexosComponent implements OnInit {
   unidadBusqueda: string = '';
   idFacultad: number = 1;
   idUnidad: number = 1;
+
   selectedFile: File | null = null;
   fileError: string = '';
 
@@ -41,11 +46,15 @@ export class GestionAnexosComponent implements OnInit {
   }
 
   cargarAnexos(): void {
-    this.anexoService.getAnexos().subscribe({
-      next: (data) => this.anexos = data,
-      error: (err) => console.error('Error al obtener anexos', err),
-    });
-  }
+  this.anexoService.getAnexos().subscribe({
+    next: (data) => {
+      this.anexos = data; 
+    },
+    error: (err) => {
+      console.error('Error al obtener anexos', err);
+    },
+  });
+}
 
   obtenerFacultades(): void{
     this.deptoService.obtenerFacultades().subscribe((data) => {
@@ -60,37 +69,42 @@ export class GestionAnexosComponent implements OnInit {
   }
 
   onFileSelected(event: any): void {
-    const file: File = event.target.files[0];
-    const allowedExtensions = ['xls', 'xlsx'];
-    const fileExtension = file.name.split('.').pop()?.toLocaleLowerCase();
+  const file: File = event.target.files[0];
+  const ext = file.name.split('.').pop()?.toLowerCase();
 
-    if (file && allowedExtensions.includes(fileExtension || '')){
-      this.selectedFile = file;
-      this.fileError = '';
-    } else{
-      this.selectedFile = null;
-      this.fileError = 'Solo se permiten archivos Excel (.xls , .xlsx)';
-    }
+  if (ext !== 'xls' && ext !== 'xlsx') {
+    this.fileError = 'Formato no válido. Solo se aceptan archivos .xls y .xlsx';
+    this.selectedFile = null;
+  } else {
+    this.selectedFile = file;
+    this.fileError = '';
   }
+}
 
+
+  
   subirAnexo(): void {
     if (!this.selectedFile) return;
-
+    
     const formData = new FormData();
     formData.append('archivo', this.selectedFile);
     formData.append('nombre_anexo', this.nombreAnexo);
-    formData.append('fecha_creacion', new Date().toISOString());
     formData.append('id_facultad', this.idFacultad.toString());
     formData.append('id_unidad', this.idUnidad.toString());
-
-    this.anexoService.uploadAnexo(formData).subscribe({
+    
+    this.anexoService.subirAnexo(formData).subscribe({
       next: () => {
         this.cargarAnexos();
         this.nombreAnexo = '';
         this.selectedFile = null;
         this.fileError = '';
       },
-      error: (err) => console.error('Error al subir anexo:', err)
+      error: (err) => {
+        console.error('Error al subir anexo:', err);
+        if (err.error) {
+          this.fileError = err.error;
+        }
+      }
     });
   }
   

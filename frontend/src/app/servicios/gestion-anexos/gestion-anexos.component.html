@@ -68,6 +68,7 @@
                   accept=".xls, .xlsx"
                   required
                 />
+                <small *ngIf="selectedFile">{{ selectedFile.name }}</small>
                 <!-- Mensaje de error -->
                 <div *ngIf="fileError" class="alert alert-danger">
                   {{ fileError }}
@@ -103,30 +104,32 @@
           <div *ngIf="anexos.length > 0">
             <table class="table">
               <thead>
-                <tr>
+                <tr> 
                   <th>Nombre</th>
                   <th>Facultad</th>
                   <th>Unidad</th>
                   <th>Fecha de Creación</th>
                   <th>Editar</th>
                   <th>Eliminar</th>
+                  <th>Ver Archivo</th> 
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let anexo of anexos">
                   <td>{{ anexo.nombre_anexo }}</td>
-                  <td>{{ anexo.id_facultad }}</td>
-                  <td>{{ anexo.id_unidad }}</td>
-                  <td>{{ anexo.fecha_creacion | date }}</td>
+                  <td>{{ anexo.id_facultad.nombre_facultad }}</td>
+                  <td>{{ anexo.id_unidad.nombre_depto }}</td>
+                  <td>{{ anexo.fecha_creacion | date:'dd/MM/yyyy' }}</td>
                   <td>
-                    <button (click)="editarAnexo(anexo)" class="btn btn-warning btn-sm">
-                      Editar
-                    </button>
+                    <button (click)="editarAnexo(anexo)" class="btn btn-warning btn-sm">Editar</button>
                   </td>
                   <td>
-                    <button (click)="eliminarAnexo(anexo.id_anexo)" class="btn btn-danger btn-sm">
-                      Eliminar
-                    </button>
+                    <button (click)="eliminarAnexo(anexo.id_anexo)" class="btn btn-danger btn-sm">Eliminar</button>
+                  </td>
+                  <td>
+                    <a *ngIf="anexo.archivo" [href]="anexo.archivo" target="_blank">
+                      <i class="fas fa-file-excel fa-lg text-success"></i>
+                    </a>
                   </td>
                 </tr>
               </tbody>

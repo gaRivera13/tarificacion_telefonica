@@ -8,8 +8,8 @@
             <th>Nombre Proveedor</th>
             <th>Siglas</th>
             <th>Costo Cel</th>
-            <th>Costo SIM</th>
-            <th>Costo IDI</th>
+            <th>Costo SLM (Servicio Local Medido)</th>
+            <th>Costo LDI (Larga Dinstancia Internacional)</th>
           </tr>
         </thead>
         <tbody>
@@ -45,18 +45,18 @@
               <ng-template #verCel>{{ formatCurrency(proveedor.costo_seg_cel) }}</ng-template>
             </td>
             <td>
-              <ng-container *ngIf="editarId === proveedor.id_proveedor; else verSim">
-                <input type="number" [(ngModel)]="proveedorEditando.costo_seg_sim" />
+              <ng-container *ngIf="editarId === proveedor.id_proveedor; else verSlm">
+                <input type="number" [(ngModel)]="proveedorEditando.costo_seg_slm" />
               </ng-container>
-              <ng-template #verSim>{{ formatCurrency(proveedor.costo_seg_sim) }}</ng-template>
+              <ng-template #verSlm>{{ formatCurrency(proveedor.costo_seg_slm) }}</ng-template>
             </td>
             <td>
               <div class="siglas-y-botones">
                 <div class="siglas-texto">
-                  <ng-container *ngIf="editarId === proveedor.id_proveedor; else verIdi">
-                    <input type="number" [(ngModel)]="proveedorEditando.costo_seg_idi" />
+                  <ng-container *ngIf="editarId === proveedor.id_proveedor; else verLdi">
+                    <input type="number" [(ngModel)]="proveedorEditando.costo_seg_ldi" />
                   </ng-container>
-                  <ng-template #verIdi>{{ formatCurrency(proveedor.costo_seg_idi) }}</ng-template>
+                  <ng-template #verLdi>{{ formatCurrency(proveedor.costo_seg_ldi) }}</ng-template>
                 </div>
                 <div class="action-buttons">
                   <ng-container *ngIf="editarId === proveedor.id_proveedor; else botonesNormal">
@@ -119,12 +119,12 @@
       <input id="costoCel" type="number" [(ngModel)]="nuevo.costo_seg_cel" inputmode="decimal" />
 
       <!-- Costo por segundo SIM -->
-      <label for="costoSim" class="mt-4">Costo por segundo SIM:</label>
-      <input id="costoSim" type="number" [(ngModel)]="nuevo.costo_seg_sim" inputmode="decimal" />
+      <label for="costoSim" class="mt-4">Costo por segundo SLM:</label>
+      <input id="costoSim" type="number" [(ngModel)]="nuevo.costo_seg_slm" inputmode="decimal" />
 
       <!-- Costo por segundo IDI -->
-      <label for="costoIdi" class="mt-4">Costo por segundo IDI:</label>
-      <input id="costoIdi" type="number" [(ngModel)]="nuevo.costo_seg_idi" inputmode="decimal" />
+      <label for="costoIdi" class="mt-4">Costo por segundo LDI:</label>
+      <input id="costoIdi" type="number" [(ngModel)]="nuevo.costo_seg_ldi" inputmode="decimal" />
 
       <!-- Botones para guardar o cancelar -->
       <div class="modal-buttons">

@@ -16,11 +16,16 @@ export class AnexoService {
     return this.http.get(`${environment.coreurl}${this.baseUrl}/`);
   }
 
-  uploadAnexo(formData: FormData): Observable<any> {
-    return this.http.post(`${environment.coreurl}${this.baseUrl}/`, formData);
-  }
+  subirAnexo(formData: FormData): Observable<any> {
+  return this.http.post(`${this.baseUrl}/`, formData);
+}
 
   deleteAnexo(id: number): Observable<any> {
     return this.http.delete(`${environment.coreurl}${this.baseUrl}/${id}/`);
   }
+
+  buscarAnexosPorUnidad(unidadBusqueda: string): Observable<any> {
+  const url = `${this.baseUrl}?unidad=${unidadBusqueda}`;
+  return this.http.get(url);
+}
 }

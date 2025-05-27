@@ -40,8 +40,8 @@ export class ProveedoresComponent implements OnInit {
       siglas_proveedor: '',
       nombre_proveedor: '',
       costo_seg_cel: 0,
-      costo_seg_sim: 0,
-      costo_seg_idi: 0
+      costo_seg_slm: 0,
+      costo_seg_ldi: 0
     };
     this.mostrarModalAgregar = true;
   }

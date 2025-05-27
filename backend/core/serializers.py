@@ -50,4 +50,16 @@ class AnexoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Anexo
         fields = '__all__'
-        read_only_fields = ['fecha_creacion']
+
+class CalculoReporteSerializer(serializers.Serializer):
+    facultadId = serializers.IntegerField(required=False)
+    unidadId = serializers.IntegerField(required=False)
+    proveedorId = serializers.IntegerField(required=True)
+
+    def validate(self, data):
+        facultad_id = data.get ('facultadId')
+        unidad_id = data.get('unidadId')
+
+        if not facultad_id and not unidad_id:
+            raise serializers.ValidationError("Se debe proporcionar id_facultad o id_unidad.")
+        return data

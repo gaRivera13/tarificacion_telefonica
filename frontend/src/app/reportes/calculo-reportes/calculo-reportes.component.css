@@ -1,0 +1,57 @@
+/* calculo-reportes.css */
+
+.report-container {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filters label {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.filters select {
+  padding: 5px;
+  font-size: 1rem;
+}
+
+button {
+  padding: 10px;
+  font-size: 1rem;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.calculos-table {
+  margin-top: 20px;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.calculos-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.calculos-table th, .calculos-table td {
+  padding: 12px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.calculos-table th {
+  background-color: #f4f4f4;
+}

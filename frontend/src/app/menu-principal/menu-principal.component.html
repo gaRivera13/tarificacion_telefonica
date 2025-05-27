@@ -20,7 +20,7 @@
         <img height="22" src="https://img.icons8.com/ios-filled/50/000000/report-card.png" />
         <strong>Departamentos</strong>
       </button>
-      <button *ngIf="rol === 'admin'" [routerLink]="['/menu-principal/profile/home']">
+      <button *ngIf="rol === 'admin'" [routerLink]="['/menu-principal/gestion-usuarios']">
         <img height="22" src="https://storage.googleapis.com/a1aa/image/fd339202-4f26-4507-0152-82dafbc72d97.jpg" />
         <strong>Usuarios</strong>
       </button>
@@ -34,7 +34,7 @@
       </button>
 
       <div class="title">Consultas y procesos</div>
-      <button type="button">
+      <button *ngIf="rol === 'admin'" [routerLink]="['/menu-principal/calculo-reportes']">
         <img height="22" src="https://img.icons8.com/ios-filled/50/000000/document--v1.png" />
         Calculo de reportes
       </button>
