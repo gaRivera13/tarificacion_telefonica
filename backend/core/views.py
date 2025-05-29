@@ -4,9 +4,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.generics import ListAPIView
+from django.shortcuts import get_object_or_404
+from datetime import datetime
 from .models import *
 from .serializers import *
-from .utils import *
+from .utils import procesar_archivo_excel
+
 
 
 class ProveedorTelefonoViewSet(viewsets.ModelViewSet):
@@ -58,6 +61,15 @@ class AnexoViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             self.perform_create(serializer)
+            anexo = serializer.instance
+
+            try:
+                procesar_archivo_excel(anexo.id_anexo)
+            except Exception as e:
+                print(f"Error procesando Excel: {e}")
+                return Response(
+                    {'error': f'Archivo guardado pero error al procesar Excel: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             print(" Serializer errors:", serializer.errors)
@@ -65,30 +77,27 @@ class AnexoViewSet(viewsets.ModelViewSet):
 
 
 # @api_view(['POST'])
-# def calcular_reporte(request):
-#     serializer = CalculoReporteSerializer(data=request.data)
+# def subir_anexo(request):
+#     serializer = AnexoSerializer(data=request.data)
 #     if serializer.is_valid():
-#         facultad_id = serializer.validated_data.get('facultadId')
-#         unidad_id = serializer.validated_data.get('unidadId')
-#         proveedor_id = serializer.validated_data.get('proveedorId')
-
+#         anexo = serializer.save()
+#         print("DEBUG: Anexo guardado con ID:", anexo.id)
+#         print("DEBUG: Ruta del archivo:", anexo.archivo.path)
 #         try:
-#             if facultad_id:
-#                 calcular_reporte_facultad(facultad_id, proveedor_id)
-#             elif unidad_id:
-#                 calcular_reporte_unidad(unidad_id, proveedor_id)
-
-#             return Response ({"message": "Reporte generado correctamente."}, status=200)
+#             procesar_archivo_excel(anexo)
 #         except Exception as e:
-#             return Response ({"error": str(e)}, status=500)
-#     return Response(serializer.errors, status=400)
-
+            
+#             return Response({'error': 'Error procesando archivo Excel'}, status=500)
     
-# def calcular_reporte_facultad(facultad_id, proveedor_id):
-#     # Aquí puedes llamar a la función en utils.py para realizar los cálculos
-#     # Ejemplo para calcular el reporte de la facultad
-#     realizar_calculos(facultad_id=facultad_id, proveedor_id=proveedor_id, es_facultad=True)
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+   
 
+# def calcular_reporte_facultad(facultad_id, proveedor_id):
+#      # Aquí puedes llamar a la función en utils.py para realizar los cálculos
+#      # Ejemplo para calcular el reporte de la facultad
+#     realizar_calculos(facultad_id=facultad_id, proveedor_id=proveedor_id, es_facultad=True)
+    
 # def calcular_reporte_unidad(unidad_id, proveedor_id):
-#     # Aquí puedes hacer el cálculo para la unidad, similar a la facultad
+#      # Aquí puedes hacer el cálculo para la unidad, similar a la facultad
 #     realizar_calculos(unidad_id=unidad_id, proveedor_id=proveedor_id, es_facultad=False)
