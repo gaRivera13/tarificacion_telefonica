@@ -3,12 +3,9 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.generics import ListAPIView
-from django.shortcuts import get_object_or_404
-from datetime import datetime
 from .models import *
 from .serializers import *
-from .utils import procesar_archivo_excel
+from .utils import calculo_general, calculo_unidad, procesar_archivo_excel
 
 
 
@@ -34,20 +31,6 @@ class LoginView(APIView):
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset=Profile.objects.all()
     serializer_class=ProfileSerializer
-
-# class AnexoUploadView(APIView):
-#     parser_classes =[MultiPartParser, FormParser]
-
-#     def post(self, request, *args, **kwargs):
-#         serializer = AnexoSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response({'mensaje': 'Archivo subido correctamente', 'anexo': serializer.data}, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-# class AnexoListView(ListAPIView):
-#     queryset = Anexo.objects.all().order_by('-fecha_creacion')
-#     serializer_class = AnexoSerializer
 
 class AnexoViewSet(viewsets.ModelViewSet):
     queryset = Anexo.objects.all().order_by('-fecha_creacion')
@@ -76,28 +59,30 @@ class AnexoViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# @api_view(['POST'])
-# def subir_anexo(request):
-#     serializer = AnexoSerializer(data=request.data)
-#     if serializer.is_valid():
-#         anexo = serializer.save()
-#         print("DEBUG: Anexo guardado con ID:", anexo.id)
-#         print("DEBUG: Ruta del archivo:", anexo.archivo.path)
-#         try:
-#             procesar_archivo_excel(anexo)
-#         except Exception as e:
-            
-#             return Response({'error': 'Error procesando archivo Excel'}, status=500)
-    
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
-#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-   
+@api_view(['POST'])
+def generar_calculo_unidad(request):
+    try:
+        print("DATA RECIBIDA:", request.data)
+        facultad_id = request.data['id_facultad']
+        unidad_id = request.data['id_unidad']
+        nombre_calculo = request.data.get('nombre_calculo', 'Cálculo automático')
 
-# def calcular_reporte_facultad(facultad_id, proveedor_id):
-#      # Aquí puedes llamar a la función en utils.py para realizar los cálculos
-#      # Ejemplo para calcular el reporte de la facultad
-#     realizar_calculos(facultad_id=facultad_id, proveedor_id=proveedor_id, es_facultad=True)
-    
-# def calcular_reporte_unidad(unidad_id, proveedor_id):
-#      # Aquí puedes hacer el cálculo para la unidad, similar a la facultad
-#     realizar_calculos(unidad_id=unidad_id, proveedor_id=proveedor_id, es_facultad=False)
+        calculo = calculo_unidad(facultad_id, unidad_id, nombre_calculo)
+        return Response({'mensaje': 'Cálculo generado', 'id_calculo': calculo.id_calculo})
+    except KeyError as e:
+        return Response({'error': f"Falta el campo: {str(e)}"}, status=400)
+    except Exception as e:
+        return Response({'error': str(e)}, status=400)
+
+
+@api_view(['POST'])
+def generar_calculo_general(request):
+    try:
+        facultad_id = request.data['id_facultad']
+        nombre_calculo = request.data.get('nombre_calculo', 'Cálculo general')
+
+        calculo = calculo_general(facultad_id, nombre_calculo)
+        return Response({'mensaje': 'Cálculo general generado', 'id_calculo': calculo.id_calculo})
+    except Exception as e:
+        return Response({'error': str(e)}, status=400)
+

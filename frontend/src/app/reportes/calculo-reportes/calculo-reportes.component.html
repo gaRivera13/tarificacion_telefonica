@@ -1,53 +1,62 @@
-<div class="calculo-reportes">
-  <h2>Cálculo de Reportes</h2>
-  
-  <!-- Selección de tipo (Unidad o Facultad) -->
-  <div>
-    <label for="tipo">Seleccione tipo:</label>
-    <select id="tipo" [(ngModel)]="selectedTipo" (change)="cargarAnexos()">
-      <option value="unidad">Unidad</option>
-      <option value="facultad">Facultad</option>
-    </select>
-  </div>
+<div role="main">
+  <main aria-label="Contenido principal">
+    <section>
+      <div class="container">
+        <div class="calculo-reportes">
+          <h2 class="title-header">Cálculo de Reportes</h2>
 
-  <!-- Selección de facultad -->
-  <div *ngIf="selectedTipo === 'facultad'">
-    <label for="facultad">Seleccione Facultad:</label>
-    <select id="facultad" [(ngModel)]="selectedFacultad" (change)="cargarAnexos()">
-      <option *ngFor="let facultad of facultades" [value]="facultad.id_facultad">{{ facultad.nombre_facultad }}</option>
-    </select>
-  </div>
+          <!-- Tipo de cálculo -->
+          <div class="form-group">
+            <label for="tipo">Tipo de cálculo:</label>
+            <select id="tipo" [(ngModel)]="selectedTipo" class="styled-select">
+              <option value="unidad">Por Unidad</option>
+              <option value="facultad">Por Facultad</option>
+            </select>
+          </div>
 
-  <!-- Selección de unidad -->
-  <div *ngIf="selectedTipo === 'unidad'">
-    <label for="departamento">Seleccione Unidad:</label>
-    <select id="departamento" [(ngModel)]="selectedDepartamento" (change)="cargarAnexos()">
-      <option *ngFor="let depto of departamentos" [value]="depto.id_unidad">{{ depto.nombre_depto }}</option>
-    </select>
-  </div>
+          <!-- Contenedor para los selects de facultad y unidad -->
+          <div class="form-group-group">
+            <!-- Selección de Facultad -->
+            <div class="form-group">
+              <label for="facultad">Facultad:</label>
+              <select id="facultad" [(ngModel)]="selectedFacultad" class="styled-select">
+                <option *ngFor="let facultad of facultades" [value]="facultad.id_facultad">
+                  {{ facultad.nombre_facultad }}
+                </option>
+              </select>
+            </div>
 
-  <!-- Selección de proveedor -->
-  <div>
-    <label for="proveedor">Seleccione Proveedor:</label>
-    <select id="proveedor" [(ngModel)]="selectedProveedor">
-      <option *ngFor="let proveedor of proveedores" [value]="proveedor.id_proveedor">{{ proveedor.nombre_proveedor }}</option>
-    </select>
-  </div>
+            <!-- Selección de Unidad (solo visible cuando se elige "unidad") -->
+            <div *ngIf="selectedTipo === 'unidad'" class="form-group">
+              <label for="unidad">Unidad:</label>
+              <select id="unidad" [(ngModel)]="selectedDepartamento" class="styled-select">
+                <option *ngFor="let unidad of unidades" [value]="unidad.id_unidad">
+                  {{ unidad.nombre_depto }}
+                </option>
+              </select>
+            </div>
+          </div>
 
-  <!-- Anexos disponibles -->
-  <div *ngIf="anexos.length > 0">
-    <label for="anexo">Seleccione Anexo:</label>
-    <select id="anexo" [(ngModel)]="selectedAnexo">
-      <option *ngFor="let anexo of anexos" [value]="anexo.id">{{ anexo.nombre }}</option>
-    </select>
-  </div>
+          <!-- Botón para procesar cálculo -->
+          <div class="form-group">
+            <button class="add-btn" (click)="generarReporte()">Procesar</button>
+          </div>
+        </div>
+      </div>
 
-  <!-- Botón para generar el reporte -->
-  <button (click)="generarReporte()">Procesar</button>
-
-  <!-- Mostrar reporte generado -->
-  <div *ngIf="reporteGenerado">
-    <h3>Reporte Generado</h3>
-    <pre>{{ reporteGenerado | json }}</pre>
-  </div>
+      <!-- Modal de resultado -->
+      <div *ngIf="mostrarModal" class="modal" style="display: flex;">
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title-calculo">
+          <h2 id="modal-title-calculo">Resultado del Cálculo</h2>
+          <div class="modal-body">
+            <p>{{ mensaje }}</p>
+          </div>
+          <div class="modal-footer">
+            <button class="add-btn" (click)="cerrarModal()">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 </div>
+
