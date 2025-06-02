@@ -25,4 +25,18 @@ export class CalculoService {
       nombre_calculo
     });
   }
+
+  obtenerReportesPorUnidad(facultadId: number, unidadId: number) {
+    return this.http.get<any[]>(`/core/reportes/?facultad=${facultadId}&unidad=${unidadId}`);
+  }
+
+  obtenerReportesPorFacultad(facultadId: number) {
+    return this.http.get<any[]>(`/core/reportes/?facultad=${facultadId}`);
+  }
+
+  descargarReporte(reporteId: number) {
+    return this.http.get(`/core/reportes/${reporteId}/descargar/`, {
+      responseType: 'blob'
+    });
+  }
 }

@@ -1,33 +1,44 @@
 from rest_framework import serializers
 from .models import Profile, Anexo
 from .models import Departamento, Facultad, ProveedorTelefono
+from .models import ReporteGenerado
+
 
 class ProveedorTelefonoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProveedorTelefono
-        fields = '__all__'
+        fields = "__all__"
+
 
 class FacultadSerializer(serializers.ModelSerializer):
-    id_proveedor= serializers.PrimaryKeyRelatedField(queryset=ProveedorTelefono.objects.all())
-    proveedor_detalle = ProveedorTelefonoSerializer(source='id_proveedor', read_only=True)
+    id_proveedor = serializers.PrimaryKeyRelatedField(
+        queryset=ProveedorTelefono.objects.all()
+    )
+    proveedor_detalle = ProveedorTelefonoSerializer(
+        source="id_proveedor", read_only=True
+    )
+
     class Meta:
         model = Facultad
-        fields = '__all__'
+        fields = "__all__"
+
 
 class DepartamentoSerializer(serializers.ModelSerializer):
     id_facultad = serializers.PrimaryKeyRelatedField(queryset=Facultad.objects.all())
-    facultad_detalle = FacultadSerializer(source='id_facultad', read_only=True)
+    facultad_detalle = FacultadSerializer(source="id_facultad", read_only=True)
+
     class Meta:
         model = Departamento
-        fields = '__all__'
+        fields = "__all__"
+
 
 class LoginSerializer(serializers.Serializer):
     correo = serializers.EmailField()
     password = serializers.CharField()
 
     def validate(self, data):
-        correo = data.get('correo')
-        password = data.get('password')
+        correo = data.get("correo")
+        password = data.get("password")
 
         try:
             profile = Profile.objects.get(correo=correo, password=password)
@@ -36,20 +47,24 @@ class LoginSerializer(serializers.Serializer):
 
         # Retorna los datos útiles
         return {
-            'id': profile.id,
-            'nombre': profile.nombre,
-            'rol': profile.rol,
-            'correo': profile.correo,
-        }        
+            "id": profile.id,
+            "nombre": profile.nombre,
+            "rol": profile.rol,
+            "correo": profile.correo,
+        }
+
+
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = '__all__'
+        fields = "__all__"
+
 
 class AnexoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Anexo
-        fields = '__all__'
+        fields = "__all__"
+
 
 class CalculoReporteSerializer(serializers.Serializer):
     facultadId = serializers.IntegerField(required=False)
@@ -57,9 +72,26 @@ class CalculoReporteSerializer(serializers.Serializer):
     proveedorId = serializers.IntegerField(required=True)
 
     def validate(self, data):
-        facultad_id = data.get ('facultadId')
-        unidad_id = data.get('unidadId')
+        facultad_id = data.get("facultadId")
+        unidad_id = data.get("unidadId")
 
         if not facultad_id and not unidad_id:
-            raise serializers.ValidationError("Se debe proporcionar id_facultad o id_unidad.")
+            raise serializers.ValidationError(
+                "Se debe proporcionar id_facultad o id_unidad."
+            )
         return data
+
+
+class ReporteGeneradoSerializer(serializers.ModelSerializer):
+    id_unidad = serializers.PrimaryKeyRelatedField(
+        source="id_unidad.id", read_only=True
+    )
+    id_facultad = serializers.PrimaryKeyRelatedField(
+        source="id_facultad.id", read_only=True
+    )
+    unidad_detalle = DepartamentoSerializer(source="id_unidad", read_only=True)
+    facultad_detalle = FacultadSerializer(source="id_facultad", read_only=True)
+
+    class Meta:
+        model = ReporteGenerado
+        fields = "__all__"

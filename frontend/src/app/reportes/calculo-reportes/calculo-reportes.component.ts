@@ -46,9 +46,8 @@ export class CalculoReportesComponent implements OnInit {
   }
 
   generarReporte() {
-    const nombre_calculo = 'Cálculo generado desde frontend';
-
     if (this.selectedTipo === 'unidad' && this.selectedFacultad && this.selectedDepartamento) {
+      const nombre_calculo = 'Cálculo por Unidad';
       this.calculoService.calculoPorUnidad(
         Number(this.selectedFacultad),
         Number(this.selectedDepartamento),
@@ -66,6 +65,7 @@ export class CalculoReportesComponent implements OnInit {
         }
       });
     } else if (this.selectedTipo === 'facultad' && this.selectedFacultad) {
+      const nombre_calculo = 'Cálculo por Facultad';
       this.calculoService.calculoPorFacultad(
         Number(this.selectedFacultad),
         nombre_calculo

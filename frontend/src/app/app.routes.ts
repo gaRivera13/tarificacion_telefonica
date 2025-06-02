@@ -9,6 +9,7 @@ import { GestionFacultadComponent } from './servicios/gestion-facultad/gestion-f
 import { GestionAnexosComponent } from './servicios/gestion-anexos/gestion-anexos.component';
 import { CalculoReportesComponent } from './reportes/calculo-reportes/calculo-reportes.component';
 import { RoleGuard } from './guards/role.guard';
+import { ConsultarReportesComponent } from './reportes/consultar-reportes/consultar-reportes.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -49,6 +50,12 @@ export const routes: Routes = [
         component: CalculoReportesComponent,
         canActivate: [RoleGuard],
         data: { roles: ['admin'] }
+      },
+      {
+        path: 'consulta-reportes',
+        component: ConsultarReportesComponent, // Cambia esto si tienes un componente específico para consulta
+        canActivate: [RoleGuard],
+        data: { roles: ['admin', 'encargado'] }
       },
       {
         path: 'gestion-usuarios',

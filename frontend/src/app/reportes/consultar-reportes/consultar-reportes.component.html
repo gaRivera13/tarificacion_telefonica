@@ -1,1 +1,95 @@
-<p>consultar-reportes works!</p>
+<div role="main">
+  <main aria-label="Contenido principal">
+    <section>
+      <div class="container">
+        <div class="calculo-reportes">
+          <h2 class="title-header">Consulta de Reportes</h2>
+
+          <!-- Tipo de consulta -->
+          <div class="form-group">
+            <label for="tipo">Tipo de consulta:</label>
+            <select id="tipo" [(ngModel)]="selectedTipo" class="styled-select">
+              <option value="unidad">Por Unidad</option>
+              <option value="facultad">Por Facultad</option>
+            </select>
+          </div>
+
+          <div class="form-group-group">
+            <!-- Selección de Facultad -->
+            <div class="form-group">
+              <label for="facultad">Facultad:</label>
+              <select id="facultad" [(ngModel)]="selectedFacultad" class="styled-select">
+                <option 
+                  *ngFor="let facultad of facultades" 
+                  [value]="facultad.id_facultad"
+
+                >
+                  {{ facultad.nombre_facultad }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Selección de Unidad (solo visible cuando se elige "unidad") -->
+            <div *ngIf="selectedTipo === 'unidad'" class="form-group">
+              <label for="unidad">Unidad:</label>
+              <select id="unidad" [(ngModel)]="selectedDepartamento" class="styled-select">
+                <option 
+                  *ngFor="let unidad of unidades" 
+                  [value]="unidad.id_unidad"
+                  [hidden]="unidad.id_facultad != selectedFacultad"
+                >
+                  {{ unidad.nombre_depto }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Botón para buscar reportes -->
+          <div class="form-group">
+            <button class="add-btn" (click)="buscarReportes()">Buscar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resultados de la búsqueda -->
+      <div *ngIf="buscando" class="form-group">
+        <p>Buscando...</p>
+      </div>
+      <div *ngIf="reportes.length > 0" class="form-group">
+        <h3>Reportes encontrados</h3>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Unidad</th>
+                <th>Facultad</th>
+                <th>Fecha</th>
+                <th>Descargar</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let rep of reportes">
+                <td>{{ rep.nombre }}</td>
+                <td>
+                  <!-- Si el reporte es por unidad, muestra el nombre de la unidad, si no, vacío o '-' -->
+                  {{ selectedTipo === 'unidad' ? rep.nombre_unidad || '-' : '-' }}
+                </td>
+                <td>
+                  {{ rep.nombre_facultad || '-' }}
+                </td>
+                <td>
+                  {{ rep.fecha_creacion | date:'short' }}
+                </td>
+                <td>
+                  <button class="add-btn" (click)="descargarReporte(rep)">Descargar</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
