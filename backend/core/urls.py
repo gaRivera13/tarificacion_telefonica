@@ -2,12 +2,6 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import ProfileViewSet, DepartamentoViewSet, FacultadViewSet
 from .views import *
-from .views import (
-    generar_calculo_unidad,
-    generar_calculo_general,
-    listar_reportes,
-    descargar_reporte,
-)
 
 router = DefaultRouter()
 router.register(r"profiles", ProfileViewSet)

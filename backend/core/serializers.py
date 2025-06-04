@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import Profile, Anexo
 from .models import Departamento, Facultad, ProveedorTelefono
 from .models import ReporteGenerado
+import os
+from .models import validar_excel
 
 
 class ProveedorTelefonoSerializer(serializers.ModelSerializer):
@@ -61,9 +63,34 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class AnexoSerializer(serializers.ModelSerializer):
+    archivo = serializers.FileField(required=False, validators=[validar_excel])
+
+    id_facultad = serializers.PrimaryKeyRelatedField(
+        queryset=Facultad.objects.all()
+    )
+    id_unidad = serializers.PrimaryKeyRelatedField(
+        queryset=Departamento.objects.all()
+    )
+
+    facultad_detalle = FacultadSerializer(source="id_facultad", read_only=True)
+    unidad_detalle = DepartamentoSerializer(source="id_unidad", read_only=True)
+
     class Meta:
         model = Anexo
         fields = "__all__"
+
+    def validate_archivo(self, archivo):
+        if archivo:
+            ext = os.path.splitext(archivo.name)[1].lower()
+            if ext not in [".xls", ".xlsx"]:
+                raise serializers.ValidationError("Solo se permiten archivos Excel (.xls, .xlsx)")
+        return archivo
+
+    def validate(self, data):
+        # Si es creación (no hay instancia) y no se pasa archivo => error
+        if not self.instance and 'archivo' not in data:
+            raise serializers.ValidationError({"archivo": "Debe subir un archivo Excel."})
+        return data
 
 
 class CalculoReporteSerializer(serializers.Serializer):
@@ -94,4 +121,4 @@ class ReporteGeneradoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReporteGenerado
-        fields = "__all__"
+        fields = "__all__" 

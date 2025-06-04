@@ -28,4 +28,8 @@ export class AnexoService {
   const url = `${this.baseUrl}?unidad=${unidadBusqueda}`;
   return this.http.get(url);
 }
+
+actualizarAnexo(id: number, formData: FormData): Observable<any> {
+  return this.http.put(`${environment.coreurl}${this.baseUrl}/${id}/`, formData);
+}
 }

@@ -1,35 +1,37 @@
-    <div role="main">
-
-      <main aria-label="Contenido principal">
-        <section class="form-section">
-          <h5>Agregar Nuevo Anexo</h5>
-          <form (ngSubmit)="subirAnexo()" enctype="multipart/form-data">
-            <div class="form-grid">
-              <div class="form-group">
-                <label for="nombreAnexo">Nombre de Anexo</label>
-                <input
-                  type="text"
-                  id="nombreAnexo"
-                  class="form-control"
-                  [(ngModel)]="nombreAnexo"
-                  name="nombreAnexo"
-                  required
-                />
-              </div>
-
-              <div class="form-group">
-                <label for="idFacultad">Facultad</label>
-                <select
-                  id="idFacultad"
-                  class="form-control"
-                  [(ngModel)]="idFacultad"
-                  name="idFacultad"
-                  required
-                >
-                  <option *ngFor="let facultad of facultades" [value]="facultad.id_facultad">
-                    {{ facultad.nombre_facultad }}
-                  </option>
-                </select>
+<div role="main">
+  <main aria-label="Contenido principal">
+    <section class="form-section">
+      <button class="add-btn"(click)="abrirModalAnexo()">
+        Agregar Anexo
+      </button>
+    </section>
+    <div class="modal" *ngIf="mostrarModalAnexo" style="display: flex;">
+      <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title-anexo">
+        <h2 id="modal-title-anexo">Agregar Nuevo Anexo</h2>
+        <form (ngSubmit)="subirAnexo()" enctype="multipart/form-data">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="nombreAnexo">Nombre de Anexo: </label>
+              <input 
+              type="text" 
+              id="nombreAnexo"
+              class="form-control"[(ngModel)]="nombreAnexo"name="nombreAnexo"required/>
+            </div>
+            
+            <div class="form-group">
+              <label for="idFacultad">Facultad</label>
+              <select
+              id="idFacultad"
+              class="form-control"
+              [(ngModel)]="idFacultad"
+              name="idFacultad"
+              required
+              >
+              <option *ngFor="let facultad of facultades" [value]="facultad.id_facultad"
+              >
+              {{ facultad.nombre_facultad }}
+            </option>
+            </select>
               </div>
 
               <div class="form-group">
@@ -40,37 +42,43 @@
                   [(ngModel)]="idUnidad"
                   name="idUnidad"
                   required
-                >
+                  >
                   <option *ngFor="let unidad of unidades" [value]="unidad.id_unidad">
                     {{ unidad.nombre_depto }}
                   </option>
                 </select>
               </div>
-
+              
               <div class="form-group">
                 <label for="file">Subir archivo (.xls, .xlsx)</label>
                 <input
-                  type="file"
-                  id="file"
-                  class="form-control"
-                  (change)="onFileSelected($event)"
-                  accept=".xls, .xlsx"
-                  required
+                type="file"
+                id="file"
+                class="form-control"
+                (change)="onFileSelected($event)"
+                accept=".xls, .xlsx"
                 />
-                <small *ngIf="selectedFile">{{ selectedFile.name }}</small>
-                <!-- Mensaje de error -->
+                
                 <div *ngIf="fileError" class="alert alert-danger">
                   {{ fileError }}
                 </div>
               </div>
-
-              <button type="submit" class="btn btn-primary" [disabled]="!selectedFile || fileError">
+              <div class="modal-buttons">
+                <button 
+                type="submit" 
+                class="btn btn-primary"
+                [disabled]="(!selectedFile && !idAnexoEditando) || fileError">
                 Guardar Anexo
-              </button>
+                </button>
+                <button type="button" class="add-btn cancel" (click)="cerrarModalAnexo()">
+                  Cerrar
+                </button>                
+              </div>
             </div>
           </form>
-        </section>
 
+          </div>
+        </div>
         <!-- Función de búsqueda -->
         <section class="search-section">
           <h5>Buscar por Unidad</h5>
@@ -106,8 +114,8 @@
               <tbody>
                 <tr *ngFor="let anexo of anexos">
                   <td>{{ anexo.nombre_anexo }}</td>
-                  <td>{{ anexo.id_facultad.nombre_facultad }}</td>
-                  <td>{{ anexo.id_unidad.nombre_depto }}</td>
+                  <td>{{ anexo.facultad_detalle?.nombre_facultad }}</td>
+                  <td>{{ anexo.unidad_detalle?.nombre_depto }}</td>
                   <td>{{ anexo.fecha_creacion | date:'dd/MM/yyyy' }}</td>
                   <td>
                     <button (click)="editarAnexo(anexo)" class="btn btn-warning btn-sm">Editar</button>

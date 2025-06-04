@@ -6,13 +6,6 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from .models import *
 from .serializers import *
 from .utils import calculo_general, calculo_unidad, procesar_archivo_excel, crear_excel_reporte, crear_excel_reporte_general
-from .models import (
-    CalculoMensualDepto,
-    CalculoMensualGeneral,
-    ReporteGenerado,
-    Facultad,
-    Departamento,
-)
 from django.utils import timezone
 from django.http import FileResponse, Http404
 
@@ -73,6 +66,16 @@ class AnexoViewSet(viewsets.ModelViewSet):
         else:
             print(" Serializer errors:", serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+    def destroy(self, request, *args, **kwargs):
+        anexo = self.get_object()
+        archivo_path = anexo.archivo.path
+        
+        response = super().destroy(request, *args, **kwargs)
+        
+        if os.path.exists(archivo_path):
+            os.remove(archivo_path)
+        return response
 
 
 @api_view(["POST"])
