@@ -133,3 +133,15 @@ def descargar_reporte(request, pk):
         )
     except ReporteGenerado.DoesNotExist:
         raise Http404
+
+@api_view(["DELETE"])
+def eliminar_reporte(request, pk):
+    try:
+        reporte = ReporteGenerado.objects.get(pk=pk)
+        if reporte.archivo:
+            if os.path.exists(reporte.archivo.path):
+                os.remove(reporte.archivo.path)
+                reporte.delete()
+                return Response(status=204)
+    except ReporteGenerado.DoesNotExist:
+        return Response({"error": "Reporte no encontrado"}, status=404)

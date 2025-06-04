@@ -17,4 +17,5 @@ urlpatterns = [
     path("calculo-reportes/generar-calculo-general/", generar_calculo_general),
     path("reportes/", listar_reportes),
     path("reportes/<int:pk>/descargar/", descargar_reporte),
+    path('reporte/<int:pk>/', eliminar_reporte),
 ]

@@ -57,6 +57,38 @@
         </div>
       </div>
     </section>
+
+<div class="container">
+  <div class="reportes-generados-box">
+    <h2 class="title-header">Reportes Generados</h2>
+
+    <table *ngIf="reportes.length > 0" class="styled-table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Fecha</th>
+          <th>Facultad</th>
+          <th>Unidad</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let reporte of reportes">
+          <td>{{ reporte.nombre }}</td>
+          <td>{{ reporte.fecha_creacion | date: 'short' }}</td>
+          <td>{{ reporte.facultad_detalle?.nombre_facultad }}</td>
+          <td>{{ reporte.unidad_detalle?.nombre_depto || 'N/A' }}</td>
+          <td>
+            <button class="delete-btn" (click)="eliminarReporte(reporte.id)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="reportes.length === 0">No hay reportes generados aún.</p>
+  </div>
+</div>
+
   </main>
 </div>
 

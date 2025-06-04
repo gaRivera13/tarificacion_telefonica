@@ -39,4 +39,15 @@ export class CalculoService {
       responseType: 'blob'
     });
   }
+
+  listarReportes(facultadId: string, unidadId: string | null): Observable<any[]>{
+    let params: any = { facultad: facultadId};
+    if (unidadId) {
+      params.unidad = unidadId;
+    }
+    return this.http.get<any[]>('/core/reportes/', { params });
+  }
+  eliminarReporte(reporteId: number): Observable<any> {
+    return this.http.delete(`/core/reporte/${reporteId}/`);
+  }
 }
