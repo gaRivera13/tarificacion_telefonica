@@ -110,15 +110,27 @@ class CalculoReporteSerializer(serializers.Serializer):
 
 
 class ReporteGeneradoSerializer(serializers.ModelSerializer):
-    id_unidad = serializers.PrimaryKeyRelatedField(
-        source="id_unidad.id", read_only=True
-    )
-    id_facultad = serializers.PrimaryKeyRelatedField(
-        source="id_facultad.id", read_only=True
-    )
-    unidad_detalle = DepartamentoSerializer(source="id_unidad", read_only=True)
     facultad_detalle = FacultadSerializer(source="id_facultad", read_only=True)
+    unidad_detalle = DepartamentoSerializer(source="id_unidad", read_only=True)
 
     class Meta:
         model = ReporteGenerado
-        fields = "__all__" 
+        fields = [
+            'id',
+            'nombre',
+            'id_facultad',
+            'id_unidad',
+            'archivo',
+            'fecha_creacion',
+            'facultad_detalle',
+            'unidad_detalle',
+        ]
+    def get_facultad_detalle(self, obj):
+        if obj.id_facultad:
+            return FacultadSerializer(obj.id_facultad).data
+        return None
+
+    def get_unidad_detalle(self, obj):
+        if obj.id_unidad:
+            return DepartamentoSerializer(obj.id_unidad).data
+        return None

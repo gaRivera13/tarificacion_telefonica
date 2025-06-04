@@ -115,11 +115,14 @@ def generar_calculo_general(request):
 def listar_reportes(request):
     facultad = request.GET.get("facultad")
     unidad = request.GET.get("unidad")
+    print("Facultad:", facultad, "Unidad:", unidad)
+
     queryset = ReporteGenerado.objects.all()
     if facultad:
         queryset = queryset.filter(id_facultad=facultad)
     if unidad:
         queryset = queryset.filter(id_unidad=unidad)
+
     serializer = ReporteGeneradoSerializer(queryset, many=True)
     return Response(serializer.data)
 

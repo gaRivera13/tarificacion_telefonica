@@ -79,18 +79,24 @@ descargarURL(id: number): string {
   return `/api/descargar_reporte/${id}/`;
 }
 
-  generarReporte() {
+generarReporte() {
   if (this.selectedTipo === 'unidad' && this.selectedFacultad && this.selectedDepartamento) {
-    const nombre_calculo = 'Cálculo por Unidad';
+    const unidad = this.unidades.find(u => u.id_unidad === Number(this.selectedDepartamento))?.nombre_depto || '';
+    const fecha = new Date();
+    const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                   'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    const mes = meses[fecha.getMonth()];
+    const anio = fecha.getFullYear();
+    const nombre_calculo = `Cálculo por Unidad - ${unidad} - ${mes} ${anio}`;
     this.calculoService.calculoPorUnidad(
       Number(this.selectedFacultad),
       Number(this.selectedDepartamento),
       nombre_calculo
     ).subscribe({
-      next: (data) => {
+      next: () => {
         this.mensaje = 'Cálculo por unidad realizado correctamente.';
         this.mostrarModal = true;
-        this.cargarReportes();  // ✅ actualiza la tabla
+        this.cargarReportes(); 
       },
       error: (err) => {
         this.mensaje = 'Error al calcular por unidad.';
@@ -100,15 +106,21 @@ descargarURL(id: number): string {
     });
 
   } else if (this.selectedTipo === 'facultad' && this.selectedFacultad) {
-    const nombre_calculo = 'Cálculo por Facultad';
+    const facultad = this.facultades.find(f => f.id_facultad === Number(this.selectedFacultad))?.nombre_facultad || '';
+    const fecha = new Date();
+    const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                   'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    const mes = meses[fecha.getMonth()];
+    const anio = fecha.getFullYear();
+    const nombre_calculo = `Cálculo por Facultad - ${facultad} - ${mes} ${anio}`;
     this.calculoService.calculoPorFacultad(
       Number(this.selectedFacultad),
       nombre_calculo
     ).subscribe({
-      next: (data) => {
+      next: () => {
         this.mensaje = 'Cálculo por facultad realizado correctamente.';
         this.mostrarModal = true;
-        this.cargarReportes();  // ✅ actualiza la tabla
+        this.cargarReportes();  
       },
       error: (err) => {
         this.mensaje = 'Error al calcular por facultad.';
@@ -121,6 +133,7 @@ descargarURL(id: number): string {
     alert('Por favor selecciona los datos necesarios.');
   }
 }
+
   cerrarModal() {
     this.mostrarModal = false;
   }
