@@ -18,4 +18,5 @@ urlpatterns = [
     path("reportes/", listar_reportes),
     path("reportes/<int:pk>/descargar/", descargar_reporte),
     path('reporte/<int:pk>/', eliminar_reporte),
+    path('trafico/', trafico_por_proveedor_mes),
 ]

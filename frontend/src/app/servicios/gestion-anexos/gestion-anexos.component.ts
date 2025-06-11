@@ -82,13 +82,12 @@ subirAnexo(): void {
   const formData = new FormData();
   const esEdicion = this.idAnexoEditando !== null;
 
-  // Si es creación, archivo es obligatorio
   if (!esEdicion && !this.selectedFile) {
     this.fileError = 'Debe seleccionar un archivo';
     return;
   }
 
-  // Si hay archivo nuevo, lo subimos
+
   if (this.selectedFile) {
     formData.append('archivo', this.selectedFile);
   }

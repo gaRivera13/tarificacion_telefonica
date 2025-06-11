@@ -4,6 +4,7 @@ import { DepartamentoService } from '../../servicios/departamento.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { AlertaService } from '../../alerta-service.service';
 
 
 @Component({
@@ -24,7 +25,8 @@ export class ConsultarReportesComponent implements OnInit {
 
   constructor(
     private calculoService: CalculoService,
-    private deptoService: DepartamentoService
+    private deptoService: DepartamentoService,
+    private alertaService: AlertaService
   ) {}
 
   ngOnInit() {
@@ -61,35 +63,20 @@ export class ConsultarReportesComponent implements OnInit {
         facultadId,
         departamentoId
       ).subscribe((data) => {
-        this.reportes = data.filter((rep: any) => {
-          // Si es null, undefined, '', 0 o un objeto vacío
-          if (!rep.id_unidad) return true;
-          // Si es un objeto, revisa si está vacío o si tiene id_unidad null
-          if (typeof rep.id_unidad === 'object') {
-            // Si el objeto está vacío o su id es null/undefined/0
-            return (
-              Object.keys(rep.id_unidad).length === 0 ||
-              rep.id_unidad.id_unidad === null ||
-              rep.id_unidad.id_unidad === undefined ||
-              rep.id_unidad.id_unidad === 0
-            );
-          }
-          return false;
-        });
+        this.reportes = data; // <--- ¡asigna directo!
         this.buscando = false;
       });
     } else if (this.selectedTipo === 'facultad' && facultadId) {
       this.calculoService.obtenerReportesPorFacultad(
         facultadId
       ).subscribe((data) => {
-        // Solo reportes generales (de facultad)
-        this.reportes = data.filter((rep: any) => rep.unidad_detalle === null);
+        this.reportes = data; // <--- ¡asigna directo!
         this.buscando = false;
       });
     } else {
       this.reportes = [];
       this.buscando = false;
-      alert('Por favor selecciona los datos necesarios.');
+      this.alertaService.mostrar('Por favor selecciona los datos necesarios.');
     }
   }
 
@@ -98,7 +85,6 @@ export class ConsultarReportesComponent implements OnInit {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      // Usa el nombre del reporte o pon uno por defecto
       a.download = (rep.nombre || 'reporte') + '.xlsx';
       document.body.appendChild(a);
       a.click();

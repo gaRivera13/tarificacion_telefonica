@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../login/auth.service';
 import { OnInit } from '@angular/core';
 
 
@@ -17,22 +17,24 @@ import { OnInit } from '@angular/core';
 export class MenuPrincipalComponent implements OnInit {
   rol: string | null = '';
   showLogoutMenu = false;
+  sidebarVisible = false; 
 
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    // Obtener el rol del usuario desde el servicio de autenticación
     this.rol = this.authService.getUserRole();
   }
 
   toggleLogoutMenu(): void {
-    this.showLogoutMenu = !this.showLogoutMenu; // Alterna la visibilidad
+    this.showLogoutMenu = !this.showLogoutMenu; 
   }
 
   logout(): void {
     this.authService.logout();
-    this.router.navigate(['/login']); // Redirige al login después de cerrar sesión
+    this.router.navigate(['/login']); 
   }
 
-  
+  toggleSidebar(): void {
+    this.sidebarVisible = !this.sidebarVisible;
+  }
 }

@@ -57,6 +57,10 @@ class LoginSerializer(serializers.Serializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    id_facultad = serializers.PrimaryKeyRelatedField(queryset=Facultad.objects.all())
+    facultad_detalle = FacultadSerializer(source="id_facultad", read_only=True)
+    id_unidad = serializers.PrimaryKeyRelatedField(queryset=Departamento.objects.all())
+    unidad_detalle = DepartamentoSerializer(source="id_unidad", read_only=True)
     class Meta:
         model = Profile
         fields = "__all__"

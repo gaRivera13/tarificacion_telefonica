@@ -10,6 +10,8 @@ import { GestionAnexosComponent } from './servicios/gestion-anexos/gestion-anexo
 import { CalculoReportesComponent } from './reportes/calculo-reportes/calculo-reportes.component';
 import { RoleGuard } from './guards/role.guard';
 import { ConsultarReportesComponent } from './reportes/consultar-reportes/consultar-reportes.component';
+import { BienvenidaComponent } from './bienvenida/bienvenida.component';
+import { ConsultarTraficoComponent } from './reportes/consultar-trafico/consultar-trafico.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -21,6 +23,12 @@ export const routes: Routes = [
     canActivate: [RoleGuard],
     data: { roles: ['admin', 'encargado'] },
     children: [
+      {
+        path: 'bienvenida',
+        component: BienvenidaComponent,
+        canActivate: [RoleGuard],
+        data: { roles: ['admin', 'encargado'] }
+      },
       {
         path: 'gestion-unidades',
         component: GestionUnidadesComponent,
@@ -53,7 +61,7 @@ export const routes: Routes = [
       },
       {
         path: 'consulta-reportes',
-        component: ConsultarReportesComponent, // Cambia esto si tienes un componente específico para consulta
+        component: ConsultarReportesComponent,
         canActivate: [RoleGuard],
         data: { roles: ['admin', 'encargado'] }
       },
@@ -63,10 +71,15 @@ export const routes: Routes = [
         canActivate: [RoleGuard],
         data: { roles: ['admin'] }
       },
-      { path: '', redirectTo: 'gestion-usuarios', pathMatch: 'full' }
+      {
+        path: 'consulta-trafico',
+        component: ConsultarTraficoComponent,
+        canActivate: [RoleGuard],
+        data: { roles: ['admin', 'encargado'] }
+      },
+      { path: '', redirectTo: 'bienvenida', pathMatch: 'full' }
     ]
   },
 
-  // Redirección por defecto
   { path: '**', redirectTo: '' }
 ];

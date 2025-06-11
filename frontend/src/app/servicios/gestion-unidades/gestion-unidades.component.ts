@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DepartamentoService, Departamento, Facultad } from '../departamento.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AlertaService } from '../../alerta-service.service';
 
 @Component({
   selector: 'app-gestion-unidades',
@@ -25,7 +26,7 @@ export class GestionUnidadesComponent implements OnInit {
   departamentos: Departamento[] = [];
   facultades: Facultad[] = [];
 
-  constructor(private deptoService: DepartamentoService) {}
+  constructor(private deptoService: DepartamentoService, private alertaService: AlertaService) {}
 
   ngOnInit(): void {
     this.cargarDepartamentos();
@@ -45,26 +46,26 @@ export class GestionUnidadesComponent implements OnInit {
 
   confirmarAgregar() {
     if (!this.nuevoNombre.trim() || !this.nuevasSiglas.trim()) {
-      alert('Todos los campos son obligatorios.');
+      this.alertaService.mostrar('Todos los campos son obligatorios.');
       return;
     }
 
     const soloLetrasRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
 
     if (!soloLetrasRegex.test(this.nuevoNombre)) {
-      alert('El nombre solo puede contener letras y espacios.');
+      this.alertaService.mostrar('El nombre solo puede contener letras y espacios.');
       return;
     }
 
     if (!soloLetrasRegex.test(this.nuevasSiglas)) {
-      alert('Las siglas solo pueden contener letras.');
+      this.alertaService.mostrar('Las siglas solo pueden contener letras.');
       return;
     }
 
     const nuevoDepto: Partial<Departamento> = {
       nombre_depto: this.nuevoNombre.trim(),
       siglas_depto: this.nuevasSiglas.trim(),
-      id_facultad: this.nuevaFacultadId  // ✅ ID numérico
+      id_facultad: this.nuevaFacultadId  
     };
 
     this.deptoService.agregarDepartamento(nuevoDepto).subscribe(() => {
@@ -72,7 +73,7 @@ export class GestionUnidadesComponent implements OnInit {
       this.cerrarModalAgregar();
     }, (error) => {
       console.error('Error al agregar departamento:', error);
-      alert('Ocurrió un error al agregar el departamento.');
+      this.alertaService.mostrar('Ocurrió un error al agregar el departamento.');
     });
   }
 
@@ -92,24 +93,24 @@ export class GestionUnidadesComponent implements OnInit {
     this.editarId = depto.id_unidad;
     this.editNombre = depto.nombre_depto;
     this.editSiglas = depto.siglas_depto;
-    this.editFacultadId = depto.id_facultad;  // ✅ Asumimos que es un ID numérico (según API modificada)
+    this.editFacultadId = depto.id_facultad;  
   }
 
   guardarCambios(id: number) {
     const soloLetrasRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
 
     if (!this.editNombre.trim() || !this.editSiglas.trim()) {
-      alert('Todos los campos son obligatorios.');
+      this.alertaService.mostrar('Todos los campos son obligatorios.');
       return;
     }
 
     if (!soloLetrasRegex.test(this.editNombre)) {
-      alert('El nombre solo puede contener letras y espacios.');
+      this.alertaService.mostrar('El nombre solo puede contener letras y espacios.');
       return;
     }
 
     if (!soloLetrasRegex.test(this.editSiglas)) {
-      alert('Las siglas solo pueden contener letras.');
+      this.alertaService.mostrar('Las siglas solo pueden contener letras.');
       return;
     }
 

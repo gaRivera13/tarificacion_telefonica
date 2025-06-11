@@ -1,8 +1,8 @@
 <div role="main">
-  <main aria-label="Contenido principal">
+  <main class="gestion-facultad-main" aria-label="Contenido principal">
     <section>
-      <div class="title" role="heading" aria-level="2">Gestión de Proveedores Telefónicos</div>
-      <table>
+      <div class="gestion-facultad-title" role="heading" aria-level="2">Gestión de Proveedores Telefónicos</div>
+      <table class="gestion-facultad-table">
         <thead>
           <tr>
             <th>Nombre Proveedor</th>
@@ -17,6 +17,7 @@
             <td>
               <ng-container *ngIf="editarId === proveedor.id_proveedor; else verNombre">
                 <input 
+                  class="gestion-facultad-input"
                   type="text" 
                   [(ngModel)]="proveedorEditando.nombre_proveedor"
                   pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*" 
@@ -29,6 +30,7 @@
             <td>
               <ng-container *ngIf="editarId === proveedor.id_proveedor; else verSiglas">
                 <input 
+                  class="gestion-facultad-input"
                   type="text" 
                   [(ngModel)]="proveedorEditando.siglas_proveedor"
                   pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*" 
@@ -40,34 +42,38 @@
             </td>
             <td>
               <ng-container *ngIf="editarId === proveedor.id_proveedor; else verCel">
-                <input type="number" [(ngModel)]="proveedorEditando.costo_seg_cel" />
+                <input class="gestion-facultad-input" type="number" [(ngModel)]="proveedorEditando.costo_seg_cel" />
               </ng-container>
               <ng-template #verCel>{{ formatCurrency(proveedor.costo_seg_cel) }}</ng-template>
             </td>
             <td>
               <ng-container *ngIf="editarId === proveedor.id_proveedor; else verSlm">
-                <input type="number" [(ngModel)]="proveedorEditando.costo_seg_slm" />
+                <input class="gestion-facultad-input" type="number" [(ngModel)]="proveedorEditando.costo_seg_slm" />
               </ng-container>
               <ng-template #verSlm>{{ formatCurrency(proveedor.costo_seg_slm) }}</ng-template>
             </td>
             <td>
-              <div class="siglas-y-botones">
-                <div class="siglas-texto">
+              <div class="gestion-facultad-siglas-y-botones">
+                <div class="gestion-facultad-siglas-texto">
                   <ng-container *ngIf="editarId === proveedor.id_proveedor; else verLdi">
-                    <input type="number" [(ngModel)]="proveedorEditando.costo_seg_ldi" />
+                    <input class="gestion-facultad-input" type="number" [(ngModel)]="proveedorEditando.costo_seg_ldi" />
                   </ng-container>
                   <ng-template #verLdi>{{ formatCurrency(proveedor.costo_seg_ldi) }}</ng-template>
                 </div>
-                <div class="action-buttons">
+                <div class="gestion-facultad-action-buttons">
                   <ng-container *ngIf="editarId === proveedor.id_proveedor; else botonesNormal">
-                    <button (click)="guardarCambios(proveedor.id_proveedor)"><i class="fas fa-save"></i></button>
-                    <button (click)="cancelarEdicion()"><i class="fas fa-times"></i></button>
+                    <button class="gestion-facultad-add-btn" (click)="guardarCambios(proveedor.id_proveedor)">
+                      <i class="fas fa-save"></i>
+                    </button>
+                    <button class="gestion-facultad-add-btn cancel" (click)="cancelarEdicion()">
+                      <i class="fas fa-times"></i>
+                    </button>
                   </ng-container>
                   <ng-template #botonesNormal>
-                    <button (click)="editarProveedor(proveedor)" title="Editar">
+                    <button class="gestion-facultad-add-btn" (click)="editarProveedor(proveedor)" title="Editar">
                       <i class="fas fa-edit"></i>
                     </button>
-                    <button (click)="eliminarProveedor(proveedor.id_proveedor)" title="Eliminar">
+                    <button class="gestion-facultad-add-btn cancel" (click)="eliminarProveedor(proveedor.id_proveedor)" title="Eliminar">
                       <i class="fas fa-trash-alt"></i>
                     </button>
                   </ng-template>
@@ -76,62 +82,53 @@
             </td>
           </tr>
           <tr *ngIf="proveedores.length === 0">
-            <td colspan="6">No hay proveedores registrados.</td>
+            <td colspan="5">No hay proveedores registrados.</td>
           </tr>
         </tbody>
       </table>
       <footer>
-          <button class="add-btn" (click)="abrirModalAgregar()">Agregar</button>
-          <div class="pagination" role="navigation" aria-label="Paginación">
-            <label for="page-select" class="sr-only">Seleccionar página</label>
-            <select id="page-select" aria-controls="table" aria-label="Seleccionar página">
-              <option>1</option>
-            </select>
-            <span aria-live="polite" aria-atomic="true">1 de 10</span>
-            <button aria-label="Página anterior" type="button" title="Página anterior">
-              <i class="fas fa-arrow-left"></i>
-            </button>
-            <button aria-label="Página siguiente" type="button" title="Página siguiente">
-              <i class="fas fa-arrow-right"></i>
-            </button>
-          </div>
-        </footer>
+        <button class="gestion-facultad-add-btn" (click)="abrirModalAgregar()" style="margin-bottom: 30px;">Agregar</button>
+        <div class="gestion-facultad-pagination" role="navigation" aria-label="Paginación">
+          <label for="page-select" class="sr-only">Seleccionar página</label>
+          <select id="page-select" aria-controls="table" aria-label="Seleccionar página">
+            <option>1</option>
+          </select>
+          <span aria-live="polite" aria-atomic="true">1 de 10</span>
+          <button aria-label="Página anterior" type="button" title="Página anterior">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <button aria-label="Página siguiente" type="button" title="Página siguiente">
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </footer>
     </section>
   </main>
 </div>
 
 <!-- Modal para agregar nuevo proveedor -->
-<div>
-  <div class="modal" *ngIf="mostrarModalAgregar" style="display: flex;">
-    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-proveedor-title">
-      <h2 id="modal-proveedor-title">Agregar Proveedor</h2>
+<div class="gestion-facultad-modal" *ngIf="mostrarModalAgregar" style="display: flex;">
+  <div class="gestion-facultad-modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-proveedor-title">
+    <h2 id="modal-proveedor-title">Agregar proveedor</h2>
 
-      <!-- Nombre del proveedor -->
-      <label for="nombreProveedor">Nombre:</label>
-      <input id="nombreProveedor" type="text" [(ngModel)]="nuevo.nombre_proveedor" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*" inputmode="text" />
+    <label for="nombreProveedor">Nombre:</label>
+    <input class="gestion-facultad-input" id="nombreProveedor" type="text" [(ngModel)]="nuevo.nombre_proveedor" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*" inputmode="text" />
 
-      <!-- Siglas del proveedor -->
-      <label for="siglasProveedor" class="mt-4">Siglas:</label>
-      <input id="siglasProveedor" type="text" [(ngModel)]="nuevo.siglas_proveedor" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*" inputmode="text" />
+    <label for="siglasProveedor" class="mt-4">Siglas:</label>
+    <input class="gestion-facultad-input" id="siglasProveedor" type="text" [(ngModel)]="nuevo.siglas_proveedor" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*" inputmode="text" />
 
-      <!-- Costo por segundo celular -->
-      <label for="costoCel" class="mt-4">Costo por segundo celular:</label>
-      <input id="costoCel" type="number" [(ngModel)]="nuevo.costo_seg_cel" inputmode="decimal" />
+    <label for="costoCel" class="mt-4">Costo por segundo celular:</label>
+    <input class="gestion-facultad-input" id="costoCel" type="number" [(ngModel)]="nuevo.costo_seg_cel" inputmode="decimal" />
 
-      <!-- Costo por segundo SIM -->
-      <label for="costoSim" class="mt-4">Costo por segundo SLM:</label>
-      <input id="costoSim" type="number" [(ngModel)]="nuevo.costo_seg_slm" inputmode="decimal" />
+    <label for="costoSim" class="mt-4">Costo por segundo SLM:</label>
+    <input class="gestion-facultad-input" id="costoSim" type="number" [(ngModel)]="nuevo.costo_seg_slm" inputmode="decimal" />
 
-      <!-- Costo por segundo IDI -->
-      <label for="costoIdi" class="mt-4">Costo por segundo LDI:</label>
-      <input id="costoIdi" type="number" [(ngModel)]="nuevo.costo_seg_ldi" inputmode="decimal" />
+    <label for="costoIdi" class="mt-4">Costo por segundo LDI:</label>
+    <input class="gestion-facultad-input" id="costoIdi" type="number" [(ngModel)]="nuevo.costo_seg_ldi" inputmode="decimal" />
 
-      <!-- Botones para guardar o cancelar -->
-      <div class="modal-buttons">
-        <button type="button" class="add-btn" (click)="confirmarAgregar()">Guardar</button>
-        <button type="button" class="add-btn cancel" (click)="cerrarModalAgregar()">Cancelar</button>
-      </div>
+    <div class="gestion-facultad-modal-buttons">
+      <button type="button" class="gestion-facultad-add-btn" (click)="confirmarAgregar()">Guardar</button>
+      <button type="button" class="gestion-facultad-add-btn cancel" (click)="cerrarModalAgregar()">Cancelar</button>
     </div>
   </div>
 </div>
-

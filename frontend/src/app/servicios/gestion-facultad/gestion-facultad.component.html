@@ -1,13 +1,13 @@
 <div role="main">
-  <main aria-label="Contenido principal">
+  <main class="gestion-facultad-main" aria-label="Contenido principal">
     <section>
-      <div class="title" role="heading" aria-level="2">Gestión de Facultades</div>
-      <table>
+      <div class="gestion-facultad-title" role="heading" aria-level="2">Gestión de Facultades</div>
+      <table class="gestion-facultad-table">
         <thead>
           <tr>
             <th style="width: 30%;">Nombre Facultad</th>
             <th style="width: 20%;">Siglas</th>
-            <th style="width: 30%;">Proveedor</th>  <!-- Columna proveedor -->
+            <th style="width: 30%;">Proveedor</th>
           </tr>
         </thead>
         <tbody>
@@ -15,6 +15,7 @@
             <td>
               <ng-container *ngIf="editarFacultadId === fac.id_facultad; else nombreFacultad">
                 <input
+                  class="gestion-facultad-input"
                   id="nombreFacultad"
                   type="text"
                   [(ngModel)]="editNombreFacultad"
@@ -28,23 +29,22 @@
             <td>
               <ng-container *ngIf="editarFacultadId === fac.id_facultad; else siglasFacultad">
                 <input
-                      id="siglasFacultad"
-                      type="text"
-                      [(ngModel)]="editSiglasFacultad"
-                      pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*"
-                      inputmode="text"
-                      required
-                    />
+                  class="gestion-facultad-input"
+                  id="siglasFacultad"
+                  type="text"
+                  [(ngModel)]="editSiglasFacultad"
+                  pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*"
+                  inputmode="text"
+                  required
+                />
               </ng-container>
               <ng-template #siglasFacultad>{{ fac.siglas_facultad }}</ng-template>
             </td>
-
-            <!-- Columna proveedor -->
             <td>
-              <div class="siglas-y-botones">
-                <div class="siglas-texto">
+              <div class="gestion-facultad-siglas-y-botones">
+                <div class="gestion-facultad-siglas-texto">
                   <ng-container *ngIf="editarFacultadId === fac.id_facultad; else mostrarProveedor">
-                    <select [(ngModel)]="editIdProveedor" required>
+                    <select class="gestion-facultad-select" [(ngModel)]="editIdProveedor" required>
                       <option *ngFor="let prov of proveedores" [value]="prov.id_proveedor">
                         {{ prov.nombre_proveedor }}
                       </option>
@@ -54,21 +54,20 @@
                     {{ fac.proveedor_detalle.nombre_proveedor || 'Sin proveedor' }}
                   </ng-template>
                 </div>
-                <!-- Botones de editar/guardar/cancelar/eliminar aquí -->
-                <div class="action-buttons">
+                <div class="gestion-facultad-action-buttons">
                   <ng-container *ngIf="editarFacultadId === fac.id_facultad; else verFacultad">
-                    <button (click)="guardarCambiosFacultad(fac.id_facultad)">
+                    <button class="gestion-facultad-add-btn" (click)="guardarCambiosFacultad(fac.id_facultad)">
                       <i class="fas fa-save"></i>
                     </button>
-                    <button (click)="cancelarEdicionFacultad()">
+                    <button class="gestion-facultad-add-btn cancel" (click)="cancelarEdicionFacultad()">
                       <i class="fas fa-times"></i>
                     </button>
                   </ng-container>
                   <ng-template #verFacultad>
-                    <button (click)="editarFacultad(fac)">
+                    <button class="gestion-facultad-add-btn" (click)="editarFacultad(fac)">
                       <i class="fas fa-edit"></i>
                     </button>
-                    <button (click)="eliminarFacultad(fac.id_facultad)">
+                    <button class="gestion-facultad-add-btn cancel" (click)="eliminarFacultad(fac.id_facultad)">
                       <i class="fas fa-trash-alt"></i>
                     </button>
                   </ng-template>
@@ -76,38 +75,36 @@
               </div>
             </td>
           </tr>
-
           <tr *ngIf="facultades.length === 0">
-            <td colspan="3">No hay facultades registradas.</td>
+            <td colspan="5">No hay facultades registradas.</td>
           </tr>
         </tbody>
-
       </table>
-
+      
       <footer>
-        <button class="add-btn" (click)="abrirModalAgregarFacultad()">Agregar</button>
-          <div class="pagination" role="navigation" aria-label="Paginación">
-            <label for="page-select" class="sr-only">Seleccionar página</label>
-            <select id="page-select" aria-controls="table" aria-label="Seleccionar página">
-              <option>1</option>
-            </select>
-            <span aria-live="polite" aria-atomic="true">1 de 10</span>
-            <button aria-label="Página anterior" type="button" title="Página anterior">
-              <i class="fas fa-arrow-left"></i>
-            </button>
-            <button aria-label="Página siguiente" type="button" title="Página siguiente">
-              <i class="fas fa-arrow-right"></i>
-            </button>
-          </div>
+        <button class="gestion-facultad-add-btn" (click)="abrirModalAgregarFacultad()" style="margin-bottom: 30px;">Agregar</button>
+        <div class="gestion-facultad-pagination" role="navigation" aria-label="Paginación">
+          <label for="page-select" class="sr-only">Seleccionar página</label>
+          <select id="page-select" aria-controls="table" aria-label="Seleccionar página">
+            <option>1</option>
+          </select>
+          <span aria-live="polite" aria-atomic="true">1 de 10</span>
+          <button aria-label="Página anterior" type="button" title="Página anterior">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <button aria-label="Página siguiente" type="button" title="Página siguiente">
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
       </footer>
     </section>
   </main>
 </div>
 
 <!-- Modal para agregar nueva facultad -->
-<div class="modal" *ngIf="mostrarModalAgregarFacultad" style="display: flex;">
+<div class="gestion-facultad-modal" *ngIf="mostrarModalAgregarFacultad" style="display: flex;">
   <div
-    class="modal-content"
+    class="gestion-facultad-modal-content"
     role="dialog"
     aria-modal="true"
     aria-labelledby="modal-title-facultad"
@@ -116,6 +113,7 @@
 
     <label for="nombreFacultad">Nombre:</label>
     <input
+      class="gestion-facultad-input"
       id="nombreFacultad"
       type="text"
       [(ngModel)]="nuevoNombreFacultad"
@@ -126,6 +124,7 @@
 
     <label for="siglasFacultad" class="mt-4">Siglas:</label>
     <input
+      class="gestion-facultad-input"
       id="siglasFacultad"
       type="text"
       [(ngModel)]="nuevasSiglasFacultad"
@@ -134,9 +133,9 @@
       inputmode="text"
     />
 
-    <!-- Select para elegir proveedor -->
     <label for="selectProveedor" class="mt-4">Proveedor:</label>
     <select
+      class="gestion-facultad-select"
       id="selectProveedor"
       [(ngModel)]="nuevoIdProveedor"
       required
@@ -146,13 +145,13 @@
       </option>
     </select>
 
-    <div class="modal-buttons">
-      <button type="button" class="add-btn" (click)="confirmarAgregarFacultad()">
+    <div class="gestion-facultad-modal-buttons">
+      <button type="button" class="gestion-facultad-add-btn" (click)="confirmarAgregarFacultad()">
         Guardar
       </button>
       <button
         type="button"
-        class="add-btn cancel"
+        class="gestion-facultad-add-btn cancel"
         (click)="cerrarModalAgregarFacultad()"
       >
         Cancelar

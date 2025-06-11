@@ -2,3 +2,1581 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* ===================== */
+/* VARIABLES Y GLOBALES  */
+/* ===================== */
+:root {
+  --white: #fff;
+  --lightblue: #edf3fb;
+  --blue: #5aa8d6;
+  --darkblue: #3a4163;
+  --hoverblue: #cbe3ef;
+  --bordergray: #b0b7c3;
+  --shadowcolor: rgba(58, 65, 99, 0.1);
+  --notification-red: #e02424;
+  --notification-gray: #7a7a7a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6fa;
+  color: var(--darkblue);
+  min-height: 100vh;
+}
+
+/* ===================== */
+/* LOGIN STYLES          */
+/* ===================== */
+.login-container {
+  background-color: #f4f6fa;
+  display: flex;
+  flex: 1;
+  height: 100vh;
+  max-width: 100vw;
+  box-shadow: 0 0 12px var(--shadowcolor);
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  overflow: hidden;
+}
+
+#loginBox {
+  width: 100%;
+  max-width: 400px;
+  background-color: var(--white);
+  border-radius: 1rem;
+  box-shadow: 0 0 12px var(--shadowcolor);
+  padding: 2rem;
+  position: relative;
+}
+
+#loginBox h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: var(--darkblue);
+  user-select: none;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+label {
+  font-weight: 600;
+  color: var(--darkblue);
+  margin-bottom: 0.5rem;
+  display: block;
+  user-select: none;
+}
+
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 1.5px solid var(--bordergray);
+  border-radius: 0.5rem;
+  color: var(--darkblue);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 6px var(--blue);
+}
+
+.error-text {
+  color: var(--notification-red);
+  font-size: 0.95em;
+  margin-top: 0.25rem;
+  user-select: none;
+  display: block;
+}
+
+.error {
+  color: var(--notification-red);
+  font-weight: bold;
+  margin-top: 1em;
+  text-align: center;
+}
+
+button[type="submit"] {
+  background-color: var(--blue);
+  color: var(--white);
+  font-weight: 600;
+  font-size: 1.125rem;
+  padding: 0.75rem 0;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  user-select: none;
+}
+
+button[type="submit"]:hover:not(:disabled) {
+  background-color: var(--hoverblue);
+  color: var(--blue);
+}
+
+button[type="submit"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.recover-link {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.recover-link a {
+  color: var(--blue);
+  font-size: 0.875rem;
+  text-decoration: none;
+  user-select: none;
+  transition: color 0.3s ease;
+}
+
+.recover-link a:hover,
+.recover-link a:focus {
+  color: var(--hoverblue);
+  outline: none;
+}
+
+/* ===================== */
+/* MODAL LOGIN (Opcional)*/
+/* ===================== */
+#errorModal {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+#errorModal.active {
+  display: flex;
+}
+#errorModal .modal-content {
+  background-color: var(--white);
+  border-radius: 1rem;
+  box-shadow: 0 0 20px var(--shadowcolor);
+  max-width: 360px;
+  width: 90%;
+  padding: 1.5rem 2rem 2rem 2rem;
+  position: relative;
+  user-select: none;
+}
+#errorModal .modal-content h2 {
+  color: var(--notification-red);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+#errorModal .modal-content p {
+  color: var(--darkblue);
+  font-size: 1rem;
+  line-height: 1.4;
+  margin-bottom: 1.5rem;
+  user-select: text;
+}
+#errorModal .modal-content button.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  color: var(--notification-red);
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+#errorModal .modal-content button.close-btn:hover,
+#errorModal .modal-content button.close-btn:focus {
+  color: var(--blue);
+  outline: none;
+}
+#errorModal .modal-content button.ok-btn {
+  background-color: var(--blue);
+  color: var(--white);
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  user-select: none;
+}
+#errorModal .modal-content button.ok-btn:hover,
+#errorModal .modal-content button.ok-btn:focus {
+  background-color: var(--hoverblue);
+  color: var(--blue);
+  outline: none;
+}
+
+/* ===================== */
+/* MENU PRINCIPAL STYLES */
+/* ===================== */
+.main-container {
+  display: flex;
+  background-color: #f4f6fa;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+aside {
+  width: 280px;
+  min-width: 220px;
+  max-width: 320px;
+  flex-shrink: 0;
+  background-color: var(--lightblue);
+  border-right: 1px solid var(--bordergray);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 20px;
+  overflow-y: auto;
+  user-select: none;
+  transition: transform 0.3s ease;
+}
+
+aside.hidden {
+  transform: translateX(-100%);
+  position: fixed;
+  top: 56px;
+  left: 0;
+  height: calc(100vh - 56px);
+  z-index: 1000;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+  border-right: none;
+  border-bottom: 1px solid var(--bordergray);
+  width: 100%;
+  background-color: var(--lightblue);
+  padding: 16px 20px;
+  overflow-y: auto;
+}
+
+aside .section-title {
+  color: var(--darkblue);
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+  border-bottom: 2px solid var(--blue);
+  letter-spacing: 0.12em;
+  user-select: none;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+aside button {
+  background-color: transparent;
+  border: none;
+  color: var(--darkblue);
+  font-weight: 600;
+  font-size: 15px;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: background-color 0.25s ease, color 0.25s ease;
+  user-select: none;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.4;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+aside button img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: grayscale(30%) brightness(0.4);
+  transition: filter 0.25s ease;
+}
+
+aside button:hover,
+aside button:focus {
+  background-color: var(--hoverblue);
+  color: var(--blue);
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--blue);
+}
+
+aside button:hover img,
+aside button:focus img {
+  filter: none;
+}
+
+main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  background-color: var(--white);
+  min-width: 0;
+}
+
+header {
+  background-color: var(--blue);
+  color: var(--white);
+  height: 56px;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 1100;
+  box-shadow: 0 3px 8px rgba(90, 168, 214, 0.4);
+  user-select: none;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  justify-content: space-between;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 16px;
+  position: relative;
+  min-width: 0;
+}
+
+.role-label {
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.notification-container {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--notification-gray);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--white);
+  transition: color 0.3s ease, background-color 0.3s ease;
+  border: none;
+  box-shadow: 0 0 10px rgba(255 255 255 / 0.8);
+  flex-shrink: 0;
+  font-size: 0;
+}
+.notification-container:hover,
+.notification-container:focus {
+  color: var(--lightblue);
+  background-color: rgba(255 255 255 / 0.3);
+  outline: none;
+}
+
+.notification-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 10px;
+  height: 10px;
+  background-color: var(--notification-red);
+  border-radius: 50%;
+  box-shadow: 0 0 4px var(--notification-red);
+}
+
+/* Bell icon as SVG */
+.notification-container svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--notification-gray);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  transition: stroke 0.3s ease;
+}
+.notification-container:hover svg,
+.notification-container:focus svg {
+  stroke: var(--lightblue);
+}
+
+.profile-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: 24px;
+}
+
+.profile-btn {
+  background: transparent;
+  border: 2px solid var(--white);
+  border-radius: 50%;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  box-shadow: 0 0 10px rgba(255 255 255 / 0.8);
+  transition: background-color 0.3s ease, filter 0.3s ease;
+}
+
+.profile-btn img {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.profile-btn:hover,
+.profile-btn:focus {
+  background-color: var(--white);
+  filter: brightness(0.85);
+  outline: none;
+}
+
+.logout-menu {
+  position: absolute;
+  right: 0;
+  top: 52px;
+  background-color: var(--white);
+  border: 1px solid var(--blue);
+  border-radius: 8px;
+  box-shadow: 0 12px 20px rgba(58, 65, 99, 0.15);
+  padding: 12px 20px;
+  display: none;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  color: var(--darkblue);
+  font-weight: 600;
+  font-size: 15px;
+  user-select: none;
+  white-space: nowrap;
+  z-index: 1000;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.logout-menu.show {
+  display: flex;
+}
+
+.logout-menu:hover,
+.logout-menu:focus {
+  background-color: var(--blue);
+  color: var(--white);
+  outline: none;
+}
+
+section.content {
+  flex-grow: 1;
+  padding: 32px 40px;
+  overflow: auto;
+  color: var(--darkblue);
+  font-size: 17px;
+  user-select: none;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.5;
+  min-width: 0;
+}
+
+/* Scrollbar styling for sidebar */
+aside::-webkit-scrollbar {
+  width: 8px;
+}
+aside::-webkit-scrollbar-thumb {
+  background-color: var(--blue);
+  border-radius: 4px;
+}
+
+/* Hamburger button */
+.hamburger-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  color: var(--white);
+  padding: 8px;
+  margin-right: 8px;
+  flex-shrink: 0;
+  transition: color 0.3s ease;
+}
+.hamburger-btn:hover,
+.hamburger-btn:focus {
+  color: var(--lightblue);
+  outline: none;
+}
+
+/* ===================== */
+/* RESPONSIVE STYLES     */
+/* ===================== */
+@media (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+    height: auto;
+  }
+  aside {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    height: calc(100vh - 56px);
+    width: 100%;
+    max-width: 100%;
+    background-color: var(--lightblue);
+    border-right: none;
+    border-bottom: 1px solid var(--bordergray);
+    padding: 16px 20px;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+    overflow-y: auto;
+  }
+  aside.visible {
+    transform: translateY(0);
+  }
+  .hamburger-btn {
+    display: block;
+  }
+  main {
+    padding-top: 56px;
+  }
+  .header-left {
+    flex: 1;
+    justify-content: flex-start;
+    position: relative;
+  }
+  .role-label {
+    font-size: 18px;
+  }
+  .notification-container {
+    position: static;
+    transform: none;
+    margin-left: 16px;
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+    box-shadow: none;
+    background-color: var(--white);
+  }
+  .profile-container {
+    margin-left: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  #loginBox {
+    padding: 1.5rem 1.5rem 2rem 1.5rem;
+  }
+  #loginBox h1 {
+    font-size: 1.75rem;
+  }
+  button[type="submit"] {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 400px) {
+  aside button {
+    font-size: 13px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+  }
+}
+
+/* ===================== */
+/* BIENVENIDA STYLES     */
+/* ===================== */
+.welcome-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  min-height: 0;
+  background: transparent;
+  padding: 2.5rem 0 0 0;
+  box-shadow: none;
+}
+
+.welcome-box {
+  background-color: var(--white);
+  max-width: 1000px;      /* antes 700px */
+  max-height: 700px;      /* antes 500px */
+  width: 100%;
+  border-radius: 1.5rem;  /* más redondeado */
+  box-shadow: 0 0 24px var(--shadowcolor); /* sombra más notoria */
+  padding: 3rem 3rem 2.5rem 3rem; /* más espacio interno */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5rem;            /* más separación interna */
+}
+
+.welcome-text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 180px;
+  flex: 1 1 180px;
+}
+
+.welcome-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--darkblue);
+  white-space: nowrap;
+}
+
+.username-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--blue);
+  white-space: nowrap;
+}
+
+.welcome-image {
+  flex: 1 1 180px;
+  max-width: 180px;
+  border-radius: 1rem;
+  box-shadow: 0 0 8px var(--shadowcolor);
+  user-select: none;
+}
+
+.welcome-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 1rem;
+  display: block;
+}
+
+@media (max-width: 720px) {
+  .welcome-box {
+    flex-direction: column;
+    padding: 1.2rem 1rem;
+    max-width: 98vw;
+  }
+  .welcome-text,
+  .username-text {
+    font-size: 1.2rem;
+    white-space: normal;
+    text-align: center;
+  }
+  .welcome-text-container {
+    min-width: auto;
+    flex: none;
+    width: 100%;
+    gap: 0.25rem;
+  }
+  .welcome-image {
+    max-width: 100%;
+    flex: none;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .welcome-text,
+  .username-text {
+    font-size: 1rem;
+  }
+  .welcome-box {
+    padding: 0.8rem 0.5rem;
+  }
+}
+
+/* ============================= */
+/* Gestión de Facultad - Estilos */
+/* ============================= */
+.gestion-facultad-main[aria-label='Contenido principal'] {
+  width: 100%;
+  display: flex;
+  margin: 0;
+  background: var(--white);
+  border-radius: 1.5rem;
+  box-shadow: 0 0 24px var(--shadowcolor);
+  padding: 2.5rem 2vw 3rem 2vw; 
+  user-select: none;
+  font-size: 1.15rem;
+  
+}
+
+.gestion-facultad-title[role='heading'] {
+  font-weight: 700;
+  font-size: 1.75rem;
+  color: var(--darkblue);
+  margin-bottom: 1.5rem;
+  user-select: none;
+}
+
+.gestion-facultad-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.75rem;
+  font-size: 1rem;
+  color: var(--darkblue);
+  user-select: text;
+  table-layout: auto;
+  max-width: 100%;
+}
+
+.gestion-facultad-table thead tr {
+  background-color: var(--lightblue);
+  border-radius: 1rem;
+  user-select: none;
+}
+
+.gestion-facultad-table thead th {
+  font-weight: 700;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  color: var(--darkblue);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  user-select: none;
+}
+
+.gestion-facultad-table tbody tr {
+  background-color: var(--white);
+  box-shadow: 0 0 12px var(--shadowcolor);
+  border-radius: 1rem;
+  transition: box-shadow 0.3s ease;
+}
+.gestion-facultad-table tbody tr:hover,
+.gestion-facultad-table tbody tr:focus-within {
+  box-shadow: 0 0 20px var(--blue);
+  outline: none;
+}
+
+.gestion-facultad-table tbody tr td {
+  padding: 0.75rem 1rem;
+  vertical-align: middle;
+  font-weight: 500;
+  border-radius: 1rem;
+  user-select: text;
+}
+
+.gestion-facultad-table tbody tr td:first-child {
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+}
+.gestion-facultad-table tbody tr td:last-child {
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+
+.gestion-facultad-table tbody tr td[colspan='3'] {
+  text-align: center;
+  font-style: italic;
+  color: var(--notification-gray);
+  padding: 2rem 1rem;
+  user-select: none;
+}
+
+.gestion-facultad-input,
+.gestion-facultad-select {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.4rem 0.75rem;
+  border: 1.5px solid var(--bordergray);
+  border-radius: 0.5rem;
+  color: var(--darkblue);
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  user-select: text;
+}
+.gestion-facultad-input:focus,
+.gestion-facultad-select:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 6px var(--blue);
+}
+
+.gestion-facultad-siglas-y-botones {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: nowrap;
+}
+
+.gestion-facultad-siglas-texto {
+  flex-grow: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gestion-facultad-action-buttons {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.gestion-facultad-add-btn {
+  background-color: var(--blue);
+  color: var(--white);
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.5rem 1.25rem;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  user-select: none;
+}
+.gestion-facultad-add-btn:hover,
+.gestion-facultad-add-btn:focus {
+  background-color: var(--hoverblue);
+  color: var(--blue);
+  outline: none;
+}
+
+.gestion-facultad-pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--darkblue);
+  user-select: none;
+}
+.gestion-facultad-pagination select {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  border: 1.5px solid var(--bordergray);
+  font-size: 0.9rem;
+  color: var(--darkblue);
+  cursor: pointer;
+  user-select: text;
+}
+.gestion-facultad-pagination select:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 6px var(--blue);
+}
+.gestion-facultad-pagination button {
+  font-size: 1rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 0.5rem;
+  background-color: transparent;
+  border: none;
+  color: var(--blue);
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+.gestion-facultad-pagination button:hover,
+.gestion-facultad-pagination button:focus {
+  background-color: var(--hoverblue);
+  color: var(--darkblue);
+  outline: none;
+}
+
+.gestion-facultad-modal {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1500;
+  user-select: none;
+}
+.gestion-facultad-modal-content {
+  background-color: var(--white);
+  border-radius: 1rem;
+  box-shadow: 0 0 20px var(--shadowcolor);
+  max-width: 400px;
+  width: 90%;
+  padding: 2rem 2.5rem 2.5rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: var(--darkblue);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.gestion-facultad-modal-content h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  user-select: none;
+}
+.gestion-facultad-modal-content label {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  user-select: none;
+}
+.gestion-facultad-modal-content input[type='text'],
+.gestion-facultad-modal-content select {
+  width: 100%;
+  padding: 0.4rem 0.75rem;
+  font-size: 1rem;
+  border: 1.5px solid var(--bordergray);
+  border-radius: 0.5rem;
+  color: var(--darkblue);
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  user-select: text;
+}
+.gestion-facultad-modal-content input[type='text']:focus,
+.gestion-facultad-modal-content select:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 6px var(--blue);
+}
+.gestion-facultad-modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.gestion-facultad-modal-buttons .gestion-facultad-add-btn {
+  padding: 0.5rem 1.5rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  user-select: none;
+}
+.gestion-facultad-modal-buttons .cancel {
+  background-color: var(--notification-red);
+  color: var(--white);
+  transition: background-color 0.3s ease;
+}
+.gestion-facultad-modal-buttons .cancel:hover,
+.gestion-facultad-modal-buttons .cancel:focus {
+  background-color: #b71c1c;
+  outline: none;
+}
+
+.gestion-facultad-table th,
+.gestion-facultad-table td {
+  padding: 8px 6px;
+  font-size: 1rem;
+  word-break: normal;      /* Solo parte en espacios */
+  white-space: normal;     /* Permite saltos de línea normales */
+  max-width: 160px;        /* Ajusta según tu preferencia */
+  overflow-wrap: break-word;
+}
+.gestion-facultad-table .gestion-facultad-input[type="number"],
+.gestion-facultad-table .gestion-facultad-input[type="text"] {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  font-size: 1rem;
+  margin: 0;
+  padding: 0.4rem 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 720px) {
+  .gestion-facultad-main[aria-label='Contenido principal'] {
+    padding: 1.5rem 1.5rem 2rem 1.5rem;
+    max-width: 95vw;
+  }
+  .gestion-facultad-title[role='heading'] {
+    font-size: 1.4rem;
+  }
+  .gestion-facultad-table thead th {
+    font-size: 0.9rem;
+  }
+  .gestion-facultad-table tbody tr td {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+  }
+  .gestion-facultad-add-btn {
+    font-size: 0.95rem;
+    padding: 0.4rem 1rem;
+  }
+  .gestion-facultad-modal-content {
+    padding: 1.5rem 1.5rem 2rem 1.5rem;
+  }
+  .gestion-facultad-modal-content h2 {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .gestion-facultad-main[aria-label='Contenido principal'] {
+    padding: 1rem 1rem 1.5rem 1rem;
+  }
+  .gestion-facultad-title[role='heading'] {
+    font-size: 1.2rem;
+  }
+  .gestion-facultad-table thead th {
+    font-size: 0.85rem;
+  }
+  .gestion-facultad-table tbody tr td {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.5rem;
+  }
+  .gestion-facultad-pagination {
+    font-size: 0.8rem;
+    gap: 0.5rem;
+  }
+  .gestion-facultad-pagination select {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.4rem;
+  }
+  .gestion-facultad-add-btn {
+    font-size: 0.9rem;
+    padding: 0.35rem 0.8rem;
+  }
+}
+
+@media (max-width: 1100px) {
+  .gestion-facultad-table {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+    min-width: 700px;
+  }
+}
+
+/* ===================== */
+/* HOME STYLES          */
+/* ===================== */
+.home-modal {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1500;
+  user-select: none;
+}
+.home-modal-content {
+  background-color: var(--white);
+  border-radius: 1rem;
+  box-shadow: 0 0 20px var(--shadowcolor);
+  max-width: 650px;           /* antes 400px */
+  width: 96%;
+  padding: 2.5rem 3rem 2.5rem 3rem; /* más espacio interno */
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  color: var(--darkblue);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Estilo para formularios en grid de 2 columnas dentro del modal */
+.form-grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem 1.5rem;
+  width: 100%;
+}
+
+.form-grid-2col .form-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Para que el botón ocupe las dos columnas si lo necesitas */
+.form-grid-2col .form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+/* Responsive: en pantallas pequeñas, una sola columna */
+@media (max-width: 600px) {
+  .form-grid-2col {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================= */
+/* MENSAJE DE ERROR - Estilos */
+/* ============================= */
+.global-alert {
+  position: fixed;
+  top: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3000;
+  min-width: 320px;
+  max-width: 90vw;
+  background: var(--white);
+  color: var(--notification-red);
+  border-radius: 1rem;
+  box-shadow: 0 0 24px var(--shadowcolor);
+  padding: 1.2rem 2.5rem 1.2rem 2.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  animation: fadeInAlert 0.3s;
+}
+.global-alert .alert-icon {
+  font-size: 2rem;
+  color: var(--notification-red);
+  margin-right: 0.7rem;
+}
+.global-alert .alert-title {
+  font-weight: 700;
+  margin-right: 0.5rem;
+  letter-spacing: 0.05em;
+}
+.global-alert .alert-close {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: var(--notification-red);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0 0.5rem;
+  transition: color 0.2s;
+}
+.global-alert .alert-close:hover,
+.global-alert .alert-close:focus {
+  color: var(--blue);
+  outline: none;
+}
+@keyframes fadeInAlert {
+  from { opacity: 0; transform: translateX(-50%) translateY(-20px);}
+  to   { opacity: 1; transform: translateX(-50%) translateY(0);}
+}
+
+/* ============================= */
+/* Gestión de Anexos - Estilos   */
+/* ============================= */
+.gestion-anexos-main[aria-label='Contenido principal'] {
+  width: 100%;
+  margin: 0;
+  background: var(--white);
+  border-radius: 1.5rem;
+  box-shadow: 0 0 24px var(--shadowcolor);
+  padding: 2.5rem 2vw 3rem 2vw; 
+  user-select: none;
+  font-size: 1.15rem;
+}
+
+.gestion-anexos-title[role='heading'] {
+  font-weight: 700;
+  font-size: 1.75rem;
+  color: var(--darkblue);
+  margin-bottom: 1.5rem;
+  user-select: none;
+}
+
+.gestion-anexos-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.75rem;
+  font-size: 1rem;
+  color: var(--darkblue);
+  user-select: text;
+  table-layout: auto;
+  max-width: 100%;
+}
+
+.gestion-anexos-table thead tr {
+  background-color: var(--lightblue);
+  border-radius: 1rem;
+  user-select: none;
+}
+
+.gestion-anexos-table thead th {
+  font-weight: 700;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  color: var(--darkblue);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  user-select: none;
+}
+
+.gestion-anexos-table tbody tr {
+  background-color: var(--white);
+  box-shadow: 0 0 12px var(--shadowcolor);
+  border-radius: 1rem;
+  transition: box-shadow 0.3s ease;
+}
+.gestion-anexos-table tbody tr:hover,
+.gestion-anexos-table tbody tr:focus-within {
+  box-shadow: 0 0 20px var(--blue);
+  outline: none;
+}
+
+.gestion-anexos-table tbody tr td {
+  padding: 0.75rem 1rem;
+  vertical-align: middle;
+  font-weight: 500;
+  border-radius: 1rem;
+  user-select: text;
+}
+
+.gestion-anexos-table tbody tr td:first-child {
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+}
+.gestion-anexos-table tbody tr td:last-child {
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+
+.gestion-anexos-table tbody tr td[colspan='3'] {
+  text-align: center;
+  font-style: italic;
+  color: var(--notification-gray);
+  padding: 2rem 1rem;
+  user-select: none;
+}
+
+.gestion-anexos-input,
+.gestion-anexos-select {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.4rem 0.75rem;
+  border: 1.5px solid var(--bordergray);
+  border-radius: 0.5rem;
+  color: var(--darkblue);
+  width: 30%;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  user-select: text;
+}
+.gestion-anexos-input:focus,
+.gestion-anexos-select:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 6px var(--blue);
+}
+
+.gestion-anexos-siglas-y-botones {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: nowrap;
+}
+
+.gestion-anexos-siglas-texto {
+  flex-grow: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gestion-anexos-action-buttons {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.gestion-anexos-add-btn {
+  background-color: var(--blue);
+  color: var(--white);
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.5rem 1.25rem;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  user-select: none;
+}
+.gestion-anexos-add-btn:hover,
+.gestion-anexos-add-btn:focus {
+  background-color: var(--hoverblue);
+  color: var(--blue);
+  outline: none;
+}
+
+.gestion-anexos-pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--darkblue);
+  user-select: none;
+}
+.gestion-anexos-pagination select {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  border: 1.5px solid var(--bordergray);
+  font-size: 0.9rem;
+  color: var(--darkblue);
+  cursor: pointer;
+  user-select: text;
+}
+.gestion-anexos-pagination select:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 6px var(--blue);
+}
+.gestion-anexos-pagination button {
+  font-size: 1rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 0.5rem;
+  background-color: transparent;
+  border: none;
+  color: var(--blue);
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+.gestion-anexos-pagination button:hover,
+.gestion-anexos-pagination button:focus {
+  background-color: var(--hoverblue);
+  color: var(--darkblue);
+  outline: none;
+}
+
+.gestion-anexos-modal {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1500;
+  user-select: none;
+}
+.gestion-anexos-modal-content {
+  background-color: var(--white);
+  border-radius: 1rem;
+  box-shadow: 0 0 20px var(--shadowcolor);
+  max-width: 600px !important;
+  width: 96%;
+  padding: 2.5rem 3rem 2.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  color: var(--darkblue);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.gestion-anexos-modal-content h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  user-select: none;
+}
+.gestion-anexos-modal-content label {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  user-select: none;
+}
+.gestion-anexos-modal-content input[type='text'],
+.gestion-anexos-modal-content select {
+  width: 100%;
+  padding: 0.4rem 0.75rem;
+  font-size: 1rem;
+  border: 1.5px solid var(--bordergray);
+  border-radius: 0.5rem;
+  color: var(--darkblue);
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  user-select: text;
+}
+.gestion-anexos-modal-content input[type='text']:focus,
+.gestion-anexos-modal-content select:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 6px var(--blue);
+}
+.gestion-anexos-modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.gestion-anexos-modal-buttons .gestion-anexos-add-btn {
+  padding: 0.5rem 1.5rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  user-select: none;
+}
+.gestion-anexos-modal-buttons .cancel {
+  background-color: var(--notification-red);
+  color: var(--white);
+  transition: background-color 0.3s ease;
+}
+.gestion-anexos-modal-buttons .cancel:hover,
+.gestion-anexos-modal-buttons .cancel:focus {
+  background-color: #b71c1c;
+  outline: none;
+}
+
+.gestion-anexos-table th,
+.gestion-anexos-table td {
+  padding: 8px 6px;
+  font-size: 1rem;
+  word-break: normal;
+  white-space: normal;
+  max-width: 160px;
+  overflow-wrap: break-word;
+}
+.gestion-anexos-table .gestion-anexos-input[type="number"],
+.gestion-anexos-table .gestion-anexos-input[type="text"] {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  font-size: 1rem;
+  margin: 0;
+  padding: 0.4rem 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 720px) {
+  .gestion-anexos-main[aria-label='Contenido principal'] {
+    padding: 1.5rem 1.5rem 2rem 1.5rem;
+    max-width: 95vw;
+  }
+  .gestion-anexos-title[role='heading'] {
+    font-size: 1.4rem;
+  }
+  .gestion-anexos-table thead th {
+    font-size: 0.9rem;
+  }
+  .gestion-anexos-table tbody tr td {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+  }
+  .gestion-anexos-add-btn {
+    font-size: 0.95rem;
+    padding: 0.4rem 1rem;
+  }
+  .gestion-anexos-modal-content {
+    padding: 1.5rem 1.5rem 2rem 1.5rem;
+  }
+  .gestion-anexos-modal-content h2 {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .gestion-anexos-main[aria-label='Contenido principal'] {
+    padding: 1rem 1rem 1.5rem 1rem;
+  }
+  .gestion-anexos-title[role='heading'] {
+    font-size: 1.2rem;
+  }
+  .gestion-anexos-table thead th {
+    font-size: 0.85rem;
+  }
+  .gestion-anexos-table tbody tr td {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.5rem;
+  }
+  .gestion-anexos-pagination {
+    font-size: 0.8rem;
+    gap: 0.5rem;
+  }
+  .gestion-anexos-pagination select {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.4rem;
+  }
+  .gestion-anexos-add-btn {
+    font-size: 0.9rem;
+    padding: 0.35rem 0.8rem;
+  }
+}
+
+@media (max-width: 1100px) {
+  .gestion-anexos-table {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+    min-width: 700px;
+  }
+}
+
+.search-input-wrapper {
+  position: relative;
+  width: 90%; /* igual que el input */
+  display: inline-block;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--bordergray); /* círculo */
+  border-radius: 50%;
+}
+
+.search-icon::after {
+  content: "";
+  position: absolute;
+  right: -5px;
+  bottom: -5px;
+  width: 6px;
+  height: 2px;
+  background: var(--bordergray); /* mango */
+  transform: rotate(45deg);
+  transform-origin: top left;
+}
+
+.search-input-wrapper .gestion-anexos-input {
+  padding-left: 2rem; /* espacio para la lupa */
+}
+
+.custom-file-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.custom-file-input {
+  display: none;
+}
+
+.custom-file-btn {
+  margin: 0;
+  padding: 0.45rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+}
+
+.custom-file-name {
+  font-size: 0.98rem;
+  color: var(--darkblue);
+  font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+  display: inline-block;
+}

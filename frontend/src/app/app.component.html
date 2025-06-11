@@ -1,1 +1,7 @@
+<!-- Ejemplo de alerta global -->
+<div *ngIf="alertaGlobalVisible" class="global-alert" role="alert">
+  <span class="alert-icon">⚠️</span>
+  <span class="alert-title">¡ERROR!</span>
+  <span>{{ alertaGlobalMensaje }}</span>
+</div>
 <router-outlet></router-outlet>

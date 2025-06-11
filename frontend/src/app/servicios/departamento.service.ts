@@ -12,21 +12,20 @@ export interface ProveedorTelefono {
   costo_seg_idi: number;
 }
 
-
 export interface Facultad {
   id_facultad: number;
   nombre_facultad: string;
   siglas_facultad: string;
-  id_proveedor: number;          // FK al proveedor, necesario para enviar al backend
-  proveedor_detalle: ProveedorTelefono;  // Objeto proveedor para mostrar nombre, etc.
+  id_proveedor: number;        
+  proveedor_detalle: ProveedorTelefono; 
 }
 
 export interface Departamento {
   id_unidad: number;
   nombre_depto: string;
   siglas_depto: string;
-  id_facultad: number;               // ✅ número (FK)
-  facultad_detalle: Facultad;        // ✅ objeto solo para lectura
+  id_facultad: number;              
+  facultad_detalle: Facultad;      
 }
 
 @Injectable({
@@ -50,12 +49,10 @@ export class DepartamentoService {
   }
 
   agregarDepartamento(depto: Partial<Departamento>): Observable<Departamento> {
-    // ✅ Ya asumimos que id_facultad es un número, así que no hacemos nada especial
     return this.http.post<Departamento>(`${environment.coreurl}${this.deptoBaseUrl}/`, depto);
   }
 
   editarDepartamento(id: number, depto: Partial<Departamento>): Observable<Departamento> {
-    // ✅ Eliminamos la lógica innecesaria de conversión
     return this.http.put<Departamento>(`${environment.coreurl}${this.deptoBaseUrl}/${id}/`, depto);
   }
 

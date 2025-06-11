@@ -3,6 +3,7 @@ import { CalculoService } from '../calculo.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DepartamentoService, Facultad, Departamento } from '../../servicios/departamento.service';
+import { AlertaService } from '../../alerta-service.service';
 
 
 @Component({
@@ -18,16 +19,18 @@ export class CalculoReportesComponent implements OnInit {
   unidades : any[] = [];
   selectedFacultad: string = '';
   selectedDepartamento: string = '';
-  selectedTipo: string = 'unidad';  // por defecto
+  selectedTipo: string = 'unidad';  
   reporteGenerado: any;
   mensaje: string = '';
   mostrarModal: boolean = false;
+  modalEliminarVisible: boolean = false;
+  idReporteAEliminar: number | null = null;
   reportes: any[] = [];
 
   constructor(
     private calculoService: CalculoService,
-    private deptoService: DepartamentoService
-  
+    private deptoService: DepartamentoService,
+    private alertaService: AlertaService
   ) {}
 
   ngOnInit() {
@@ -130,11 +133,36 @@ generarReporte() {
     });
 
   } else {
-    alert('Por favor selecciona los datos necesarios.');
+    this.alertaService.mostrar('Por favor selecciona los datos necesarios.');
   }
 }
 
   cerrarModal() {
     this.mostrarModal = false;
+  }
+
+  mostrarModalEliminar(id: number) {
+    this.idReporteAEliminar = id;
+    this.modalEliminarVisible = true;
+  }
+
+  confirmarEliminarReporte() {
+    if (this.idReporteAEliminar !== null) {
+      this.calculoService.eliminarReporte(this.idReporteAEliminar).subscribe({
+        next: () => {
+          this.cargarReportes();
+          this.cerrarModalEliminar();
+        },
+        error: (err) => {
+          console.error('Error al eliminar reporte:', err);
+          this.cerrarModalEliminar();
+        }
+      });
+    }
+  }
+
+  cerrarModalEliminar() {
+    this.modalEliminarVisible = false;
+    this.idReporteAEliminar = null;
   }
 }

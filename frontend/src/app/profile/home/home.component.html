@@ -1,180 +1,145 @@
 <div role="main">
-      <main aria-label="Contenido principal">
-        <section>
-          <h5>Gestión de usuarios</h5>
-          <button class="add-btn" (click)="abrirModalAgregarUsuario()">
-            Agregar Usuario
+  <main class="gestion-facultad-main" aria-label="Contenido principal">
+    <section>
+      <div class="gestion-facultad-title" role="heading" aria-level="2">Gestión de Usuarios</div>
+      <table class="gestion-facultad-table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Segundo Nombre</th>
+            <th>Apellido Paterno</th>
+            <th>Apellido Materno</th>
+            <th>Correo</th>
+            <th>Facultad</th>
+            <th>Unidad</th>
+            <th>Username</th>
+            <th>Rol</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let usuario of profiles">
+            <td [title]="usuario.nombre">{{ usuario.nombre }}</td>
+            <td [title]="usuario.s_nombre">{{ usuario.s_nombre }}</td>
+            <td [title]="usuario.apellido_p">{{ usuario.apellido_p }}</td>
+            <td [title]="usuario.apellido_m">{{ usuario.apellido_m }}</td>
+            <td [title]="usuario.correo">{{ usuario.correo }}</td>
+            <td [title]="usuario.facultad_detalle?.nombre_facultad || usuario.id_facultad">
+              {{ usuario.facultad_detalle?.nombre_facultad || usuario.id_facultad }}
+            </td>
+            <td [title]="usuario.unidad_detalle?.nombre_depto || usuario.id_unidad">
+              {{ usuario.unidad_detalle?.nombre_depto || usuario.id_unidad }}
+            </td>
+            <td [title]="usuario.username">{{ usuario.username }}</td>
+            <td>
+              <div class="gestion-facultad-siglas-y-botones">
+                <span class="gestion-facultad-siglas-texto">
+                  {{ usuario.rol === 'admin' ? 'Administrador' : 'Encargado de Unidad' }}
+                </span>
+                <span class="gestion-facultad-action-buttons">
+                  <button class="gestion-facultad-add-btn" (click)="setProfile(usuario)" title="Editar">
+                    <i class="fas fa-edit" aria-hidden="true"></i>
+                    <span class="sr-only">Editar usuario {{ usuario.nombre }}</span>
+                  </button>
+                  <button class="gestion-facultad-add-btn cancel" (click)="deleteProfile(usuario.id)" title="Eliminar">
+                    <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                    <span class="sr-only">Eliminar usuario {{ usuario.nombre }}</span>
+                  </button>
+                </span>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="profiles.length === 0">
+            <td colspan="9" style="text-align: center; font-style: italic; color: var(--notification-gray); padding: 2rem 1rem;">
+              No hay usuarios registrados.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <footer>
+        <button class="gestion-facultad-add-btn" (click)="abrirModalAgregarUsuario()" style="margin-bottom: 30px;">Agregar</button>
+        <!-- Paginación de ejemplo, puedes adaptarla a tu lógica real -->
+        <div class="gestion-facultad-pagination" role="navigation" aria-label="Paginación">
+          <label for="page-select" class="sr-only">Seleccionar página</label>
+          <select id="page-select" aria-controls="table" aria-label="Seleccionar página">
+            <option>1</option>
+          </select>
+          <span aria-live="polite" aria-atomic="true">1 de 10</span>
+          <button aria-label="Página anterior" type="button" title="Página anterior">
+            <i class="fas fa-arrow-left"></i>
           </button>
-        </section>
-        
-        
-        <div class="modal" *ngIf="mostrarModalAgregarUsuario" style="display: flex">
-
-          <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-            <h2 id="modal-title">Agregar Usuario</h2>
-          
-            <div class="form-grid">
-              <div class="form-group">
-                <label for="nombre">Nombre:</label>
-                <input id="nombre" type="text" [(ngModel)]="nuevoNombre" />
-              </div>
-          
-              <div class="form-group">
-                <label for="s_nombre">Segundo Nombre:</label>
-                <input id="s_nombre" type="text" [(ngModel)]="nuevoSNombre" />
-              </div>
-          
-              <div class="form-group">
-                <label for="apellido_p">Apellido Paterno:</label>
-                <input id="apellido_p" type="text" [(ngModel)]="nuevoApellidoP" />
-              </div>
-          
-              <div class="form-group">
-                <label for="apellido_m">Apellido Materno:</label>
-                <input id="apellido_m" type="text" [(ngModel)]="nuevoApellidoM" />
-              </div>
-          
-              <div class="form-group">
-                <label for="correo">Correo:</label>
-                <input id="correo" type="email" [(ngModel)]="nuevoCorreo" />
-              </div>
-          
-              <div class="form-group">
-                <label for="facultad">Facultad:</label>
-                <select id="facultad" [(ngModel)]="nuevaFacultadId">
-                  <option *ngFor="let facultad of facultades" [value]="facultad.id_facultad">
-                    {{ facultad.nombre_facultad }}
-                  </option>
-                </select>
-              </div>
-          
-              <div class="form-group">
-                <label for="unidad">Unidad:</label>
-                <select id="unidad" [(ngModel)]="nuevaUnidadId">
-                  <option *ngFor="let unidad of unidades" [value]="unidad.id_unidad">
-                    {{ unidad.nombre_depto }}
-                  </option>
-                </select>
-              </div>
-          
-              <div class="form-group">
-                <label for="username">Username:</label>
-                <input id="username" type="text" [(ngModel)]="nuevoUsername" />
-              </div>
-          
-              <div class="form-group">
-                <label for="password">Password:</label>
-                <input id="password" type="password" [(ngModel)]="nuevoPassword" />
-              </div>
-          
-              <div class="form-group">
-                <label for="rol">Rol:</label>
-                <select id="rol" [(ngModel)]="nuevoRol">
-                  <option value="admin">Administrador</option>
-                  <option value="encargado">Encargado de Unidad</option>
-                </select>
-              </div>
-            </div>
-          
-            <div class="modal-buttons">
-              <button type="button" class="add-btn" (click)="agregarNuevoUsuario()">Guardar</button>
-              <button type="button" class="add-btn cancel" (click)="cerrarModalAgregarUsuario()">Cancelar</button>
-            </div>
-          </div>
-          
+          <button aria-label="Página siguiente" type="button" title="Página siguiente">
+            <i class="fas fa-arrow-right"></i>
+          </button>
         </div>
+      </footer>
+    </section>
+  </main>
+</div>
 
-<mat-form-field appearance="outline" class="custom-search">
-  <mat-label>Buscar perfil</mat-label>
-  <input
-    matInput
-    type="text"
-    placeholder="Ej: Juan Pérez"
-    (input)="searchProfile(filter.value)"
-    #filter
-  />
-  <mat-icon matSuffix>search</mat-icon>
-</mat-form-field>
-
-
-        <table
-          mat-table
-          [dataSource]="dataSource"
-          class="mat-elevation-z8"
-          matSort
-        >
-          <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-            <td mat-cell *matCellDef="let profile">{{ profile.id }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="nombre">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
-            <td mat-cell *matCellDef="let profile">{{ profile.nombre }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="nombreSeg">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>
-              Segundo Nombre
-            </th>
-            <td mat-cell *matCellDef="let profile">{{ profile.s_nombre }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="apellidop">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>
-              Apellido Paterno
-            </th>
-            <td mat-cell *matCellDef="let profile">{{ profile.apellido_p }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="apellidom">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>
-              Apellido Materno
-            </th>
-            <td mat-cell *matCellDef="let profile">{{ profile.apellido_m }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="email">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Correo</th>
-            <td mat-cell *matCellDef="let profile">{{ profile.correo }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="unidad">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Unidad</th>
-            <td mat-cell *matCellDef="let profile">{{ profile.id_unidad }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="facultad">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Facultad</th>
-            <td mat-cell *matCellDef="let profile">{{ profile.id_facultad }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="edit">
-            <th mat-header-cell *matHeaderCellDef>Editar</th>
-            <td mat-cell *matCellDef="let profile">
-              <button mat-flat-button class="edit-button" (click)="setProfile(profile)">
-                Editar
-              </button>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="delete">
-            <th mat-header-cell *matHeaderCellDef>Eliminar</th>
-            <td mat-cell *matCellDef="let profile">
-              <button mat-flat-button class="delete-button" (click)="deleteProfile(profile.id)">
-                Eliminar
-              </button>
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let profiles; columns: displayedColumns"></tr>
-        </table>
-        <br />
-        <mat-paginator
-          [pageSizeOptions]="[5, 10, 20]"
-          showFirstLastButtons
-          aria-label="Select page of periodic elements"
-        >
-        </mat-paginator>
-      </main>
-    </div>
+<!-- Modal para agregar/editar usuario -->
+<div class="home-modal" *ngIf="mostrarModalAgregarUsuario" style="display: flex">
+  <div class="home-modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <h3 id="modal-title">{{ modoEdicion ? 'Editar Usuario' : 'Agregar Usuario' }}</h3>
+    <form class="form-grid-2col">
+      <div class="form-group">
+        <label for="nombre">Nombre:</label>
+        <input class="gestion-facultad-input" id="nombre" type="text" [(ngModel)]="nuevoNombre" name="nombre" />
+      </div>
+      <div class="form-group">
+        <label for="s_nombre">Segundo Nombre:</label>
+        <input class="gestion-facultad-input" id="s_nombre" type="text" [(ngModel)]="nuevoSNombre" name="s_nombre" />
+      </div>
+      <div class="form-group">
+        <label for="apellido_p">Apellido Paterno:</label>
+        <input class="gestion-facultad-input" id="apellido_p" type="text" [(ngModel)]="nuevoApellidoP" name="apellido_p" />
+      </div>
+      <div class="form-group">
+        <label for="apellido_m">Apellido Materno:</label>
+        <input class="gestion-facultad-input" id="apellido_m" type="text" [(ngModel)]="nuevoApellidoM" name="apellido_m" />
+      </div>
+      <div class="form-group">
+        <label for="correo">Correo:</label>
+        <input class="gestion-facultad-input" id="correo" type="email" [(ngModel)]="nuevoCorreo" name="correo" />
+      </div>
+      <div class="form-group">
+        <label for="facultad">Facultad:</label>
+        <select class="gestion-facultad-select" id="facultad" [(ngModel)]="nuevaFacultadId" name="facultad">
+          <option *ngFor="let facultad of facultades" [value]="facultad.id_facultad">
+            {{ facultad.nombre_facultad }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="unidad">Unidad:</label>
+        <select class="gestion-facultad-select" id="unidad" [(ngModel)]="nuevaUnidadId" name="unidad">
+          <option *ngFor="let unidad of unidades" [value]="unidad.id_unidad">
+            {{ unidad.nombre_depto }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input class="gestion-facultad-input" id="username" type="text" [(ngModel)]="nuevoUsername" name="username" />
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input class="gestion-facultad-input" id="password" type="password" [(ngModel)]="nuevoPassword" name="password" />
+      </div>
+      <div class="form-group">
+        <label for="rol">Rol:</label>
+        <select class="gestion-facultad-select" id="rol" [(ngModel)]="nuevoRol" name="rol">
+          <option value="admin">Administrador</option>
+          <option value="encargado">Encargado de Unidad</option>
+        </select>
+      </div>
+      <div class="form-group full-width">
+        <div class="gestion-facultad-modal-buttons">
+          <button type="button" class="gestion-facultad-add-btn" (click)="agregarNuevoUsuario()">
+            {{ modoEdicion ? 'Guardar Cambios' : 'Guardar' }}
+          </button>
+          <button type="button" class="gestion-facultad-add-btn cancel" (click)="cerrarModalAgregarUsuario()">Cancelar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

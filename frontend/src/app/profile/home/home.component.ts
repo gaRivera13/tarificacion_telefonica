@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { DepartamentoService, Facultad, Departamento } from '../../servicios/departamento.service';
+import { AlertaService } from '../../alerta-service.service';
 
 @Component({
   selector: 'app-home',
@@ -54,7 +55,8 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
   constructor(
     private profileService: ProfileService,
-    private deptoService: DepartamentoService
+    private deptoService: DepartamentoService,
+    private alertaService: AlertaService
   ) {}
 
   profile: Profile = {
@@ -71,7 +73,6 @@ export class HomeComponent implements AfterViewInit, OnInit {
     rol: '',
   };
 
-  // Variables del formulario
   nuevoNombre: string = '';
   nuevoSNombre: string = '';
   nuevoApellidoP: string = '';
@@ -85,6 +86,8 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
   facultades: any[] = [];
   unidades: any[] = [];
+
+  private soloLetrasRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
 
   ngOnInit(): void {
     this.cargarPerfiles();
@@ -123,6 +126,32 @@ export class HomeComponent implements AfterViewInit, OnInit {
   }
 
   agregarNuevoUsuario() {
+    if (
+      !this.validarSoloLetras(this.nuevoNombre) ||
+      (this.nuevoSNombre && !this.validarSoloLetras(this.nuevoSNombre)) ||
+      !this.validarSoloLetras(this.nuevoApellidoP) ||
+      !this.validarSoloLetras(this.nuevoApellidoM)
+    ) {
+      this.alertaService.mostrar('Por favor, ingrese solo letras y espacios en nombres y apellidos.');
+      return;
+    }
+
+    const correoExistente = this.profiles.some(
+      (p) =>
+        p.correo.trim().toLowerCase() === this.nuevoCorreo.trim().toLowerCase() &&
+        (!this.modoEdicion || p.id !== this.profile.id)
+    );
+    const usernameExistente = this.profiles.some(
+      (p) =>
+        p.username.trim().toLowerCase() === this.nuevoUsername.trim().toLowerCase() &&
+        (!this.modoEdicion || p.id !== this.profile.id)
+    );
+
+    if (correoExistente || usernameExistente) {
+      this.alertaService.mostrar('Este correo o usuario ya existe, vuelve a intentarlo.');
+      return;
+    }
+
     const nuevoProfile: Profile = {
       id: this.profile.id,
       nombre: this.nuevoNombre,
@@ -146,7 +175,7 @@ export class HomeComponent implements AfterViewInit, OnInit {
         },
         error: (err) => {
           console.error(err);
-          alert('Error al actualizar usuario');
+          this.alertaService.mostrar('Error al actualizar usuario');
         },
       });
     } else {
@@ -158,7 +187,7 @@ export class HomeComponent implements AfterViewInit, OnInit {
         },
         error: (err) => {
           console.error(err);
-          alert('Error al crear usuario');
+          this.alertaService.mostrar('Error al crear usuario');
         },
       });
     }
@@ -191,19 +220,19 @@ export class HomeComponent implements AfterViewInit, OnInit {
     this.nuevoRol = profile.rol;
   }
 
-searchProfile(input: string) {
-  const lowerInput = input.toLowerCase();
+  searchProfile(input: string) {
+    const lowerInput = input.toLowerCase();
 
-  this.filteredProfiles = this.profiles.filter((item) =>
-    item.nombre.toLowerCase().includes(lowerInput) ||
-    item.s_nombre?.toLowerCase().includes(lowerInput) ||
-    item.apellido_p?.toLowerCase().includes(lowerInput) ||
-    item.apellido_m?.toLowerCase().includes(lowerInput) ||
-    item.correo.toLowerCase().includes(lowerInput)
-  );
+    this.filteredProfiles = this.profiles.filter((item) =>
+      item.nombre.toLowerCase().includes(lowerInput) ||
+      item.s_nombre?.toLowerCase().includes(lowerInput) ||
+      item.apellido_p?.toLowerCase().includes(lowerInput) ||
+      item.apellido_m?.toLowerCase().includes(lowerInput) ||
+      item.correo.toLowerCase().includes(lowerInput)
+    );
 
-  this.dataSource = new MatTableDataSource<Profile>(this.filteredProfiles);
-}
+    this.dataSource = new MatTableDataSource<Profile>(this.filteredProfiles);
+  }
 
   cargarFacultades() {
     this.deptoService.obtenerFacultades().subscribe((data) => {
@@ -224,5 +253,9 @@ searchProfile(input: string) {
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     });
+  }
+
+  validarSoloLetras(valor: string): boolean {
+    return this.soloLetrasRegex.test(valor || '');
   }
 }

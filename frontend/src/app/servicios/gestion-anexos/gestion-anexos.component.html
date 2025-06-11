@@ -1,140 +1,154 @@
 <div role="main">
-  <main aria-label="Contenido principal">
-    <section class="form-section">
-      <button class="add-btn"(click)="abrirModalAnexo()">
+  <main class="gestion-anexos-main" aria-label="Contenido principal">
+    <section>
+      <div class="gestion-anexos-title" role="heading" aria-level="2">Gestión de Anexos</div>
+      <button class="gestion-anexos-add-btn" (click)="abrirModalAnexo()" style="margin-bottom: 1.5rem;">
         Agregar Anexo
       </button>
     </section>
-    <div class="modal" *ngIf="mostrarModalAnexo" style="display: flex;">
-      <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title-anexo">
-        <h2 id="modal-title-anexo">Agregar Nuevo Anexo</h2>
-        <form (ngSubmit)="subirAnexo()" enctype="multipart/form-data">
-          <div class="form-grid">
-            <div class="form-group">
-              <label for="nombreAnexo">Nombre de Anexo: </label>
-              <input 
-              type="text" 
+    <!-- Modal para agregar/editar anexo -->
+    <div class="gestion-anexos-modal" *ngIf="mostrarModalAnexo">
+      <div class="gestion-anexos-modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title-anexo">
+        <h2 id="modal-title-anexo">{{ idAnexoEditando ? 'Editar Anexo' : 'Agregar Nuevo Anexo' }}</h2>
+        <form (ngSubmit)="subirAnexo()" enctype="multipart/form-data" class="form-grid-2col">
+          <div class="form-group">
+            <label for="nombreAnexo">Nombre de Anexo:</label>
+            <input 
+              type="text"
               id="nombreAnexo"
-              class="form-control"[(ngModel)]="nombreAnexo"name="nombreAnexo"required/>
-            </div>
-            
-            <div class="form-group">
-              <label for="idFacultad">Facultad</label>
-              <select
+              class="gestion-anexos-input"
+              [(ngModel)]="nombreAnexo"
+              name="nombreAnexo"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="idFacultad">Facultad</label>
+            <select
               id="idFacultad"
-              class="form-control"
+              class="gestion-anexos-select"
               [(ngModel)]="idFacultad"
               name="idFacultad"
               required
-              >
-              <option *ngFor="let facultad of facultades" [value]="facultad.id_facultad"
-              >
-              {{ facultad.nombre_facultad }}
-            </option>
+            >
+              <option *ngFor="let facultad of facultades" [value]="facultad.id_facultad">
+                {{ facultad.nombre_facultad }}
+              </option>
             </select>
-              </div>
-
-              <div class="form-group">
-                <label for="idUnidad">Unidad</label>
-                <select
-                  id="idUnidad"
-                  class="form-control"
-                  [(ngModel)]="idUnidad"
-                  name="idUnidad"
-                  required
-                  >
-                  <option *ngFor="let unidad of unidades" [value]="unidad.id_unidad">
-                    {{ unidad.nombre_depto }}
-                  </option>
-                </select>
-              </div>
-              
-              <div class="form-group">
-                <label for="file">Subir archivo (.xls, .xlsx)</label>
-                <input
+          </div>
+          <div class="form-group">
+            <label for="idUnidad">Unidad</label>
+            <select
+              id="idUnidad"
+              class="gestion-anexos-select"
+              [(ngModel)]="idUnidad"
+              name="idUnidad"
+              required
+            >
+              <option *ngFor="let unidad of unidades" [value]="unidad.id_unidad">
+                {{ unidad.nombre_depto }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="file">Subir archivo (.xls, .xlsx)</label>
+            <div class="custom-file-wrapper">
+              <input
                 type="file"
                 id="file"
-                class="form-control"
+                class="gestion-anexos-input custom-file-input"
                 (change)="onFileSelected($event)"
                 accept=".xls, .xlsx"
-                />
-                
-                <div *ngIf="fileError" class="alert alert-danger">
-                  {{ fileError }}
-                </div>
-              </div>
-              <div class="modal-buttons">
-                <button 
-                type="submit" 
-                class="btn btn-primary"
-                [disabled]="(!selectedFile && !idAnexoEditando) || fileError">
-                Guardar Anexo
-                </button>
-                <button type="button" class="add-btn cancel" (click)="cerrarModalAnexo()">
-                  Cerrar
-                </button>                
-              </div>
+                #fileInput
+              />
+              <button type="button" class="gestion-anexos-add-btn custom-file-btn" (click)="fileInput.click()">
+                Seleccionar archivo
+              </button>
+              <span class="custom-file-name">{{ selectedFile?.name || 'Ningún archivo seleccionado' }}</span>
             </div>
-          </form>
-
+            <div *ngIf="fileError" class="error-text">
+              {{ fileError }}
+            </div>
           </div>
-        </div>
-        <!-- Función de búsqueda -->
-        <section class="search-section">
-          <h5>Buscar por Unidad</h5>
-          <mat-form-field appearance="outline" class="custom-search">
-            <mat-label>Buscar Unidad</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="Ej: Departamento de Ciencias"
-              [(ngModel)]="unidadBusqueda"
-              (input)="buscarAnexosPorUnidad()"
-            />
-            <mat-icon matSuffix>search</mat-icon>
-          </mat-form-field>
-        </section>
-
-        <!-- Tabla de anexos -->
-        <section class="table-section">
-          <h5>Lista de Anexos</h5>
-          <div *ngIf="anexos.length > 0">
-            <table class="table">
-              <thead>
-                <tr> 
-                  <th>Nombre</th>
-                  <th>Facultad</th>
-                  <th>Unidad</th>
-                  <th>Fecha de Creación</th>
-                  <th>Editar</th>
-                  <th>Eliminar</th>
-                  <th>Ver Archivo</th> 
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let anexo of anexos">
-                  <td>{{ anexo.nombre_anexo }}</td>
-                  <td>{{ anexo.facultad_detalle?.nombre_facultad }}</td>
-                  <td>{{ anexo.unidad_detalle?.nombre_depto }}</td>
-                  <td>{{ anexo.fecha_creacion | date:'dd/MM/yyyy' }}</td>
-                  <td>
-                    <button (click)="editarAnexo(anexo)" class="btn btn-warning btn-sm">Editar</button>
-                  </td>
-                  <td>
-                    <button (click)="eliminarAnexo(anexo.id_anexo)" class="btn btn-danger btn-sm">Eliminar</button>
-                  </td>
-                  <td>
-                    <a *ngIf="anexo.archivo" [href]="anexo.archivo" target="_blank">
-                      <i class="fas fa-file-excel fa-lg text-success"></i>
-                    </a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="form-group full-width">
+            <div class="gestion-anexos-modal-buttons">
+              <button 
+                type="submit"
+                class="gestion-anexos-add-btn"
+                [disabled]="(!selectedFile && !idAnexoEditando) || fileError"
+              >
+                Guardar Anexo
+              </button>
+              <button type="button" class="gestion-anexos-add-btn cancel" (click)="cerrarModalAnexo()">
+                Cerrar
+              </button>
+            </div>
           </div>
-          <div *ngIf="anexos.length === 0">
-            <p>No hay anexos disponibles.</p>
-          </div>
-        </section>
-      </main>
+        </form>
+      </div>
     </div>
+
+    <section class="search-section" style="margin: 2rem 0 1rem 0;">
+      <h5>Buscar por Unidad</h5>
+      <div class="search-input-wrapper">
+        <span class="search-icon"></span>
+        <input
+          type="text"
+          class="gestion-anexos-input"
+          placeholder="Ej: Departamento de Ciencias"
+          [(ngModel)]="unidadBusqueda"
+          (input)="buscarAnexosPorUnidad()"
+        />
+      </div>
+    </section>
+
+    <br>
+
+    <section class="table-section">
+      <h5>Lista de Anexos</h5>
+      <div *ngIf="anexos.length > 0">
+        <table class="gestion-anexos-table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Facultad</th>
+              <th>Unidad</th>
+              <th>Fecha de Creación</th>
+              <th>Editar</th>
+              <th>Eliminar</th>
+              <th>Ver Archivo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let anexo of anexos">
+              <td>{{ anexo.nombre_anexo }}</td>
+              <td>{{ anexo.facultad_detalle?.nombre_facultad }}</td>
+              <td>{{ anexo.unidad_detalle?.nombre_depto }}</td>
+              <td>{{ anexo.fecha_creacion | date:'dd/MM/yyyy' }}</td>
+              <td>
+                <button (click)="editarAnexo(anexo)" class="gestion-anexos-add-btn" title="Editar">
+                  <i class="fas fa-edit"></i>
+                </button>
+              </td>
+              <td>
+                <button (click)="eliminarAnexo(anexo.id_anexo)" class="gestion-anexos-add-btn cancel" title="Eliminar">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </td>
+              <td>
+                <a *ngIf="anexo.archivo" [href]="anexo.archivo" target="_blank">
+                  <i class="fas fa-file-excel fa-lg" style="color: #1d6f42;"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="anexos.length === 0">
+        <p style="text-align:center; color:var(--notification-gray); font-style:italic; padding:2rem 1rem;">
+          No hay anexos disponibles.
+        </p>
+      </div>
+    </section>
+  </main>
+</div>

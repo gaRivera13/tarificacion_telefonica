@@ -20,10 +20,8 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) {}
 
   login(correo: string, password: string): Observable<any> {
-    // Primero intento login con backend real
     return this.http.post<any>(this.apiUrl, { correo, password }).pipe(
       tap(user => {
-        // Verificamos que contenga los campos necesarios
         if (!user || !user.rol || !user.correo) {
           throw new Error('Respuesta del servidor inválida');
         }
@@ -31,7 +29,6 @@ export class AuthService {
         localStorage.setItem('user', JSON.stringify(user));
       }),
       catchError(err => {
-        // Si falla el login real, intento con usuarios fake
         const userFake = this.fakeUsers.find(u => u.correo === correo && u.password === password);
         if (userFake) {
           this.userData = userFake;

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProveedorService, ProveedorTelefono } from '../proveedor.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AlertaService } from '../../alerta-service.service';
 
 
 @Component({
@@ -14,16 +15,14 @@ import { FormsModule } from '@angular/forms';
 export class ProveedoresComponent implements OnInit {
   proveedores: ProveedorTelefono[] = [];
 
-  // Para agregar
   nuevo: Partial<ProveedorTelefono> = {};
 
-  // Para editar
   editarId: number | null = null;
   proveedorEditando: Partial<ProveedorTelefono> = {};
 
   mostrarModalAgregar = false;
 
-  constructor(private proveedorService: ProveedorService) {}
+  constructor(private proveedorService: ProveedorService, private alertaService: AlertaService) {}
 
   ngOnInit(): void {
     this.cargarProveedores();
@@ -57,7 +56,12 @@ export class ProveedoresComponent implements OnInit {
   }
 
   confirmarAgregar(): void {
-    const nuevoProveedor = { ...this.nuevo }; // evitar referencia directa
+    const nuevoProveedor = { ...this.nuevo }; 
+
+    if (!nuevoProveedor.nombre_proveedor?.trim() || !nuevoProveedor.siglas_proveedor?.trim()) {
+      this.alertaService.mostrar('Todos los campos son obligatorios.');
+      return;
+    }
 
     if (
       this.validarTextoCampo(nuevoProveedor.nombre_proveedor) &&
@@ -68,13 +72,12 @@ export class ProveedoresComponent implements OnInit {
         this.cerrarModalAgregar();
       });
     } else {
-      alert('Por favor, ingrese solo letras en el nombre y las siglas.');
+      this.alertaService.mostrar('Por favor, ingrese solo letras en el nombre y las siglas.');
     }
   }
 
   editarProveedor(proveedor: ProveedorTelefono): void {
     this.editarId = proveedor.id_proveedor;
-    // Clonar para evitar modificar la lista directamente
     this.proveedorEditando = { ...proveedor };
   }
 
@@ -95,7 +98,7 @@ export class ProveedoresComponent implements OnInit {
         this.cancelarEdicion();
       });
     } else {
-      alert('Por favor, ingrese solo letras en el nombre y las siglas.');
+      this.alertaService.mostrar('Por favor, ingrese solo letras en el nombre y las siglas.');
     }
   }
 

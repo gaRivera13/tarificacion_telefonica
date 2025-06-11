@@ -1,131 +1,143 @@
 <div role="main">
-    <main aria-label="Contenido principal">
-      <section>
-        <div class="title" role="heading" aria-level="2">Gestión de unidades de la facultad</div>
-        <table>
-          <thead>
-            <tr>
-              <th style="width: 40%;">Nombre Unidad</th>
-              <th style="width: 20%;">Siglas departamento</th>
-              <th style="width: 40%;">Facultad</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let depto of departamentos">
-              <td>
-                <ng-container *ngIf="editarId === depto.id_unidad; else nombreDepto">
-                  <input 
-                  id="nombreUnidad" 
-                  type="text" 
-                  [(ngModel)]="editNombre" 
-                  pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*" 
-                  inputmode="text" 
-                  required 
-                  />
-                </ng-container>
-                <ng-template #nombreDepto>{{ depto.nombre_depto }}</ng-template>
-              </td>
-              <td>
-                <ng-container *ngIf="editarId === depto.id_unidad; else siglasDepto">
-                  <input 
-                  id="siglasUnidad" 
-                  type="text" 
+  <main class="gestion-facultad-main" aria-label="Contenido principal">
+    <section>
+      <div class="gestion-facultad-title" role="heading" aria-level="2">Gestión de Unidades (Departamentos)</div>
+      <table class="gestion-facultad-table">
+        <thead>
+          <tr>
+            <th style="width: 40%;">Nombre Unidad</th>
+            <th style="width: 20%;">Siglas departamento</th>
+            <th style="width: 40%;">Facultad</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let depto of departamentos">
+            <td>
+              <ng-container *ngIf="editarId === depto.id_unidad; else nombreDepto">
+                <input
+                  class="gestion-facultad-input"
+                  id="nombreUnidad"
+                  type="text"
+                  [(ngModel)]="editNombre"
+                  pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*"
+                  inputmode="text"
+                  required
+                />
+              </ng-container>
+              <ng-template #nombreDepto>{{ depto.nombre_depto }}</ng-template>
+            </td>
+            <td>
+              <ng-container *ngIf="editarId === depto.id_unidad; else siglasDepto">
+                <input
+                  class="gestion-facultad-input"
+                  id="siglasUnidad"
+                  type="text"
                   [(ngModel)]="editSiglas"
-                  pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*" 
-                  inputmode="text" 
-                  required 
-                  />
+                  pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*"
+                  inputmode="text"
+                  required
+                />
+              </ng-container>
+              <ng-template #siglasDepto>{{ depto.siglas_depto }}</ng-template>
+            </td>
+            <td>
+              <div class="gestion-facultad-siglas-y-botones">
+                <ng-container *ngIf="editarId === depto.id_unidad; else verModo">
+                  <div class="gestion-facultad-siglas-texto">
+                    <select class="gestion-facultad-select" [(ngModel)]="editFacultadId">
+                      <option *ngFor="let fac of facultades" [value]="fac.id_facultad">
+                        {{ fac.nombre_facultad }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="gestion-facultad-action-buttons">
+                    <button class="gestion-facultad-add-btn" (click)="guardarCambios(depto.id_unidad)" title="Guardar cambios">
+                      <i class="fas fa-save"></i>
+                    </button>
+                    <button class="gestion-facultad-add-btn cancel" (click)="cancelarEdicion()" title="Cancelar">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
                 </ng-container>
-                <ng-template #siglasDepto>{{ depto.siglas_depto }}</ng-template>
-              </td>
-              <td>
-                <div class="siglas-y-botones">
-                  <ng-container *ngIf="editarId === depto.id_unidad; else verModo">
-                    <div class="siglas-texto">
-                      <select [(ngModel)]="editFacultadId">
-                        <option *ngFor="let fac of facultades" [value]="fac.id_facultad">
-                          {{ fac.nombre_facultad }}
-                        </option>
-                      </select>
-                    </div>
-                    <div class="action-buttons">
-                      <button (click)="guardarCambios(depto.id_unidad)" title="Guardar cambios">
-                        <i class="fas fa-save"></i>
-                      </button>
-                      <button (click)="cancelarEdicion()" title="Cancelar">
-                        <i class="fas fa-times"></i>
-                      </button>
-                    </div>
-                  </ng-container>
-
-                  <ng-template #verModo>
-                    <div class="siglas-texto">
-                      <span>{{ depto.facultad_detalle.nombre_facultad }}</span>
-                    </div>
-                    <div class="action-buttons">
-                      <button (click)="editarDepartamento(depto)" title="Editar">
-                        <i class="fas fa-edit"></i>
-                      </button>
-                      <button (click)="eliminarDepartamento(depto.id_unidad)" title="Eliminar">
-                        <i class="fas fa-trash-alt"></i>
-                      </button>
-                    </div>
-                  </ng-template>
-                </div>
-              </td>
-            </tr>
-            <tr *ngIf="departamentos.length === 0">
-              <td colspan="3">No hay departamentos registrados.</td>
-            </tr>
-          </tbody>
-        </table>
-        <footer>
-          <button class="add-btn" (click)="abrirModalAgregar()">Agregar</button>
-          <div class="pagination" role="navigation" aria-label="Paginación">
-            <label for="page-select" class="sr-only">Seleccionar página</label>
-            <select id="page-select" aria-controls="table" aria-label="Seleccionar página">
-              <option>1</option>
-            </select>
-            <span aria-live="polite" aria-atomic="true">1 de 10</span>
-            <button aria-label="Página anterior" type="button" title="Página anterior">
-              <i class="fas fa-arrow-left"></i>
-            </button>
-            <button aria-label="Página siguiente" type="button" title="Página siguiente">
-              <i class="fas fa-arrow-right"></i>
-            </button>
-          </div>
-        </footer>
-      </section>
-    </main>
+                <ng-template #verModo>
+                  <div class="gestion-facultad-siglas-texto">
+                    <span>{{ depto.facultad_detalle.nombre_facultad }}</span>
+                  </div>
+                  <div class="gestion-facultad-action-buttons">
+                    <button class="gestion-facultad-add-btn" (click)="editarDepartamento(depto)" title="Editar">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="gestion-facultad-add-btn cancel" (click)="eliminarDepartamento(depto.id_unidad)" title="Eliminar">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </ng-template>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="departamentos.length === 0">
+            <td colspan="5">No hay departamentos registrados.</td>
+          </tr>
+        </tbody>
+      </table>
+      <footer>
+        <button class="gestion-facultad-add-btn" (click)="abrirModalAgregar()" style="margin-bottom: 30px;">Agregar</button>
+        <div class="gestion-facultad-pagination" role="navigation" aria-label="Paginación">
+          <label for="page-select" class="sr-only">Seleccionar página</label>
+          <select id="page-select" aria-controls="table" aria-label="Seleccionar página">
+            <option>1</option>
+          </select>
+          <span aria-live="polite" aria-atomic="true">1 de 10</span>
+          <button aria-label="Página anterior" type="button" title="Página anterior">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <button aria-label="Página siguiente" type="button" title="Página siguiente">
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </footer>
+    </section>
+  </main>
 </div>
+
 <!-- Modal para agregar nuevo departamento -->
-<div>
-  <div class="modal" *ngIf="mostrarModalAgregar" style="display: flex;">
-    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <h2 id="modal-title">Agregar Departamento</h2>
-      <!-- Nombre del Departamento -->
-      <label for="nombre">Nombre:</label>
-      <input id="nombre" type="text" [(ngModel)]="nuevoNombre" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*" inputmode="text" />
+<div class="gestion-facultad-modal" *ngIf="mostrarModalAgregar" style="display: flex;">
+  <div class="gestion-facultad-modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <h2 id="modal-title">Agregar Departamento</h2>
+    <label for="nombre">Nombre:</label>
+    <input
+      class="gestion-facultad-input"
+      id="nombre"
+      type="text"
+      [(ngModel)]="nuevoNombre"
+      pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*"
+      inputmode="text"
+    />
 
-      <!-- Siglas del Departamento -->
-      <label for="siglas" class="mt-4">Siglas:</label>
-      <input id="siglas" type="text" [(ngModel)]="nuevasSiglas" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*" inputmode="text" />
+    <label for="siglas" class="mt-4">Siglas:</label>
+    <input
+      class="gestion-facultad-input"
+      id="siglas"
+      type="text"
+      [(ngModel)]="nuevasSiglas"
+      pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*"
+      inputmode="text"
+    />
 
-      <!-- Selección de Facultad -->
-      <label for="facultad" class="mt-4">Facultad:</label>
-      <select id="facultad" [(ngModel)]="nuevaFacultadId">
-        <option *ngFor="let facultad of facultades" [value]="facultad.id_facultad">
-          {{ facultad.nombre_facultad }}
-        </option>
-      </select>
+    <label for="facultad" class="mt-4">Facultad:</label>
+    <select
+      class="gestion-facultad-select"
+      id="facultad"
+      [(ngModel)]="nuevaFacultadId"
+    >
+      <option *ngFor="let facultad of facultades" [value]="facultad.id_facultad">
+        {{ facultad.nombre_facultad }}
+      </option>
+    </select>
 
-      <!-- Botones para guardar o cancelar -->
-      <div class="modal-buttons">
-        <button type="button" class="add-btn" (click)="confirmarAgregar()">Guardar</button>
-        <button type="button" class="add-btn cancel" (click)="cerrarModalAgregar()">Cancelar</button>
-      </div>
+    <div class="gestion-facultad-modal-buttons">
+      <button type="button" class="gestion-facultad-add-btn" (click)="confirmarAgregar()">Guardar</button>
+      <button type="button" class="gestion-facultad-add-btn cancel" (click)="cerrarModalAgregar()">Cancelar</button>
     </div>
   </div>
 </div>
-
-

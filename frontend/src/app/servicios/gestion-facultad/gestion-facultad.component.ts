@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DepartamentoService, Facultad, ProveedorTelefono } from '../departamento.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AlertaService } from '../../alerta-service.service';
 
 @Component({
   selector: 'app-gestion-facultad',
@@ -30,7 +31,7 @@ export class GestionFacultadComponent implements OnInit {
     this.cargarProveedores();
   }
 
-  constructor(private deptoService: DepartamentoService) {}
+  constructor(private deptoService: DepartamentoService, private alertaService: AlertaService) {}
 
   cargarFacultades() {
     this.deptoService.obtenerFacultades().subscribe((data) => {
@@ -57,29 +58,27 @@ export class GestionFacultadComponent implements OnInit {
   }
   
   confirmarAgregarFacultad() {
-    // Validación: campos vacíos
     if (!this.nuevoNombreFacultad.trim() || !this.nuevasSiglasFacultad.trim()) {
-      alert('Todos los campos son obligatorios.');
+      this.alertaService.mostrar('Todos los campos son obligatorios.');
       return;
     }
 
-    // Validación: solo letras y espacios
     const soloLetrasRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
 
     if (!soloLetrasRegex.test(this.nuevoNombreFacultad)) {
-      alert('El nombre de la facultad solo puede contener letras y espacios.');
+      this.alertaService.mostrar('El nombre de la facultad solo puede contener letras y espacios.');
       return;
     }
 
     if (!soloLetrasRegex.test(this.nuevasSiglasFacultad)) {
-      alert('Las siglas solo pueden contener letras.');
+      this.alertaService.mostrar('Las siglas solo pueden contener letras.');
       return;
     }
 
     const nuevaFacultad: Partial<Facultad> = {
       nombre_facultad: this.nuevoNombreFacultad.trim(),
       siglas_facultad: this.nuevasSiglasFacultad.trim(),
-      id_proveedor: this.nuevoIdProveedor !== null ? this.nuevoIdProveedor : undefined  // agregar proveedor
+      id_proveedor: this.nuevoIdProveedor !== null ? this.nuevoIdProveedor : undefined 
     };
 
 
@@ -98,21 +97,20 @@ export class GestionFacultadComponent implements OnInit {
 
   
   guardarCambiosFacultad(id: number) {
-    // Validación: campos vacíos
     if (!this.editNombreFacultad.trim() || !this.editSiglasFacultad.trim()) {
-      alert('Todos los campos son obligatorios.');
+      this.alertaService.mostrar('Todos los campos son obligatorios.');
       return;
     }
 
     const soloLetrasRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
 
     if (!soloLetrasRegex.test(this.editNombreFacultad)) {
-      alert('El nombre solo puede contener letras y espacios.');
+      this.alertaService.mostrar('El nombre solo puede contener letras y espacios.');
       return;
     }
 
     if (!soloLetrasRegex.test(this.editSiglasFacultad)) {
-      alert('Las siglas solo pueden contener letras.');
+      this.alertaService.mostrar('Las siglas solo pueden contener letras.');
       return;
     }
 
@@ -133,7 +131,7 @@ export class GestionFacultadComponent implements OnInit {
       if (confirm('¿Estás seguro de que deseas eliminar esta facultad?')) {
           this.deptoService.eliminarFacultad(id).subscribe(() => {
               console.log(`Facultad ${id} eliminada correctamente`);
-              this.cargarFacultades(); // Recarga las facultades
+              this.cargarFacultades(); 
           }, error => {
               console.error('Error al eliminar la facultad', error);
           });

@@ -1,0 +1,74 @@
+<div role="main">
+  <main class="gestion-anexos-main" aria-label="Contenido principal">
+    <section>
+      <div class="gestion-anexos-title" role="heading" aria-level="2">Consulta de Tráfico Telefónico</div>
+      <form class="form-grid-2col" style="margin-bottom: 2rem;">
+        <div class="form-group">
+          <label for="proveedor">Proveedor:</label>
+          <input
+            id="proveedor"
+            type="text"
+            class="gestion-anexos-input"
+            placeholder="Ej: Movistar"
+            [(ngModel)]="nombreProveedor"
+            name="nombreProveedor"
+            (input)="filtrarProveedores()"
+            list="proveedores-list"
+            required
+          />
+          <datalist id="proveedores-list">
+            <option *ngFor="let prov of proveedoresFiltrados" [value]="prov.nombre_proveedor"></option>
+          </datalist>
+        </div>
+        <div class="form-group">
+          <label for="mes">Mes:</label>
+          <select
+            id="mes"
+            class="gestion-anexos-select"
+            [(ngModel)]="mesSeleccionado"
+            name="mesSeleccionado"
+            required
+          >
+            <option *ngFor="let mes of meses" [value]="mes.valor">{{ mes.nombre }}</option>
+          </select>
+        </div>
+        <div class="form-group full-width" style="justify-content: flex-end; width: 10%;">
+          <button class="gestion-anexos-add-btn" type="button" (click)="buscarTrafico()">Buscar</button>
+        </div>
+      </form>
+    </section>
+
+    <section style="margin-top: 2.5rem;">
+      <div class="gestion-anexos-title" role="heading" aria-level="2">Resultados</div>
+      <div *ngIf="resultados.length > 0">
+        <table class="gestion-anexos-table">
+          <thead>
+            <tr>
+              <th>Tipo de llamada</th>
+              <th>Tiempo en segundos</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let res of resultados" >
+              <td [ngStyle]="res.tipo_llamada === 'TOTAL' ? {'font-weight':'bold', 'background':'#e3f2fd'} : {}">
+                {{ res.tipo_llamada }}
+              </td>
+              <td [ngStyle]="res.tipo_llamada === 'TOTAL' ? {'font-weight':'bold', 'background':'#e3f2fd'} : {}">
+                {{ res.tiempo_segundos }}
+              </td>
+              <td [ngStyle]="res.tipo_llamada === 'TOTAL' ? {'font-weight':'bold', 'background':'#e3f2fd'} : {}">
+                {{ res.total | currency:'CLP':'symbol':'1.0-0' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="resultados.length === 0 && !buscando">
+        <p style="text-align:center; color:var(--notification-gray); font-style:italic; padding:2rem 1rem;">
+          No hay resultados para la búsqueda.
+        </p>
+      </div>
+    </section>
+  </main>
+</div>

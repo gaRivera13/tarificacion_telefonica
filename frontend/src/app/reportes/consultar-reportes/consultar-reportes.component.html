@@ -1,93 +1,89 @@
 <div role="main">
-  <main aria-label="Contenido principal">
+  <main class="gestion-anexos-main" aria-label="Contenido principal">
     <section>
-      <div class="container">
-        <div class="calculo-reportes">
-          <h2 class="title-header">Consulta de Reportes</h2>
+      <div class="gestion-anexos-title" role="heading" aria-level="2">Consulta de Reportes</div>
 
-          <!-- Tipo de consulta -->
-          <div class="form-group">
-            <label for="tipo">Tipo de consulta:</label>
-            <select id="tipo" [(ngModel)]="selectedTipo" class="styled-select">
-              <option value="unidad">Por Unidad</option>
-              <option value="facultad">Por Facultad</option>
-            </select>
-          </div>
-
-          <div class="form-group-group">
-            <!-- Selección de Facultad -->
-            <div class="form-group">
-              <label for="facultad">Facultad:</label>
-              <select id="facultad" [(ngModel)]="selectedFacultad" class="styled-select">
-                <option 
-                  *ngFor="let facultad of facultades" 
-                  [value]="facultad.id_facultad"
-
-                >
-                  {{ facultad.nombre_facultad }}
-                </option>
-              </select>
-            </div>
-
-            <!-- Selección de Unidad (solo visible cuando se elige "unidad") -->
-            <div *ngIf="selectedTipo === 'unidad'" class="form-group">
-              <label for="unidad">Unidad:</label>
-              <select id="unidad" [(ngModel)]="selectedDepartamento" class="styled-select">
-                <option 
-                  *ngFor="let unidad of unidades" 
-                  [value]="unidad.id_unidad"
-                  [hidden]="unidad.id_facultad != selectedFacultad"
-                >
-                  {{ unidad.nombre_depto }}
-                </option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Botón para buscar reportes -->
-          <div class="form-group">
-            <button class="add-btn" (click)="buscarReportes()">Buscar</button>
-          </div>
+      <!-- Tipo de consulta -->
+      <form class="form-grid-2col" style="margin-bottom: 2rem;">
+        <div class="form-group">
+          <label for="tipo">Tipo de consulta:</label>
+          <select id="tipo" [(ngModel)]="selectedTipo" name="tipo" class="gestion-anexos-select">
+            <option value="unidad">Por Unidad</option>
+            <option value="facultad">Por Facultad</option>
+          </select>
         </div>
-      </div>
+        <br>
+        <div class="form-group">
+          <label for="facultad">Facultad:</label>
+          <select id="facultad" [(ngModel)]="selectedFacultad" name="facultad" class="gestion-anexos-select"  style="width: 200px;">
+            <option 
+              *ngFor="let facultad of facultades" 
+              [value]="facultad.id_facultad"
+            >
+              {{ facultad.nombre_facultad }}
+            </option>
+          </select>
+        </div>
 
-      <!-- Resultados de la búsqueda -->
+        <div class="form-group" *ngIf="selectedTipo === 'unidad'">
+          <label for="unidad">Unidad:</label>
+          <select id="unidad" [(ngModel)]="selectedDepartamento" name="unidad" class="gestion-anexos-select"  style="width: 200px;">
+            <option 
+              *ngFor="let unidad of unidades" 
+              [value]="unidad.id_unidad"
+              [hidden]="unidad.id_facultad != selectedFacultad"
+            >
+              {{ unidad.nombre_depto }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group full-width" style="justify-content: flex-end; width: 10%;">
+          <button class="gestion-anexos-add-btn" type="button" (click)="buscarReportes()">Buscar</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Resultados de la búsqueda -->
+    <section style="margin-top: 2.5rem;">
+      <div class="gestion-anexos-title" role="heading" aria-level="2">Reportes encontrados</div>
       <div *ngIf="buscando" class="form-group">
         <p>Buscando...</p>
       </div>
-      <div *ngIf="reportes.length > 0" class="form-group">
-        <h3>Reportes encontrados</h3>
-        <div class="table-responsive">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Unidad</th>
-                <th>Facultad</th>
-                <th>Fecha</th>
-                <th>Descargar</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let rep of reportes">
-                <td>{{ rep.nombre }}</td>
-                <td>
-                  <!-- Si el reporte es por unidad, muestra el nombre de la unidad, si no, vacío o '-' -->
-                  {{ selectedTipo === 'unidad' ? rep.nombre_unidad || '-' : '-' }}
-                </td>
-                <td>
-                  {{ rep.nombre_facultad || '-' }}
-                </td>
-                <td>
-                  {{ rep.fecha_creacion | date:'short' }}
-                </td>
-                <td>
-                  <button class="add-btn" (click)="descargarReporte(rep)">Descargar</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div *ngIf="reportes.length > 0">
+        <table class="gestion-anexos-table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Unidad</th>
+              <th>Facultad</th>
+              <th>Fecha</th>
+              <th>Descargar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let rep of reportes">
+              <td>{{ rep.nombre }}</td>
+              <td>
+                {{ rep.unidad_detalle?.nombre_depto || '-' }}
+              </td>
+              <td>
+                {{ rep.facultad_detalle?.nombre_facultad || '-' }}
+              </td>
+              <td>
+                {{ rep.fecha_creacion | date:'short' }}
+              </td>
+              <td>
+                <button class="gestion-anexos-add-btn" (click)="descargarReporte(rep)">Descargar</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="reportes.length === 0 && !buscando">
+        <p style="text-align:center; color:var(--notification-gray); font-style:italic; padding:2rem 1rem;">
+          No hay reportes encontrados.
+        </p>
       </div>
     </section>
   </main>

@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';  // Asegúrate de importar RouterModule
-import { routes } from './app.routes';  // Si estás usando un archivo de rutas
+import { RouterModule } from '@angular/router'; 
+import { routes } from './app.routes'; 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { FormsModule } from '@angular/forms';
@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
   ],
   imports: [
     RouterModule.forRoot(routes),
-    ReactiveFormsModule,  // Asegúrate de que ReactiveFormsModule esté aquí
+    ReactiveFormsModule,  
     HttpClientModule,
     LoginComponent,
     AppComponent,
@@ -21,6 +21,6 @@ import { FormsModule } from '@angular/forms';
     FormsModule
   ],
   providers: [],
-  // Removed bootstrap array as AppComponent is a standalone component
+
 })
 export class AppModule { }

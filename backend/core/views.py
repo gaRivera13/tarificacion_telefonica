@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
+from django.db.models import Sum
 from .models import *
 from .serializers import *
 from .utils import calculo_general, calculo_unidad, procesar_archivo_excel, crear_excel_reporte, crear_excel_reporte_general
@@ -148,3 +149,56 @@ def eliminar_reporte(request, pk):
                 return Response(status=204)
     except ReporteGenerado.DoesNotExist:
         return Response({"error": "Reporte no encontrado"}, status=404)
+
+
+
+@api_view(['GET'])
+def trafico_por_proveedor_mes(request):
+    proveedor_nombre = request.GET.get('proveedor')
+    mes = request.GET.get('mes')
+
+    if not proveedor_nombre or not mes:
+        return Response([], status=400)
+
+    try:
+        proveedor = ProveedorTelefono.objects.get(nombre_proveedor__iexact=proveedor_nombre)
+    except ProveedorTelefono.DoesNotExist:
+        return Response([], status=404)
+
+    llamadas = RegistroLlamadas.objects.filter(
+        id_proveedor=proveedor,
+        fecha_llamada__month=mes
+    )
+
+    resultados = []
+    suma_segundos = 0
+    suma_total = 0
+
+    for tipo, nombre_tipo, costo_attr in [
+        ('SLM', 'Local', 'costo_seg_slm'),
+        ('CEL', 'Celular', 'costo_seg_cel'),
+        ('LDI', 'Larga distancia', 'costo_seg_ldi')
+    ]:
+        total_segundos = llamadas.filter(tipo_llamada_sigla=tipo).aggregate(
+            total=Sum('duracion_llamada')
+        )['total'] or 0
+        costo_segundo = float(getattr(proveedor, costo_attr))
+        total = total_segundos * costo_segundo
+        resultados.append({
+            'tipo_llamada': nombre_tipo,
+            'tiempo_segundos': total_segundos,
+            'costo_segundo': costo_segundo,
+            'total': total
+        })
+        suma_segundos += total_segundos
+        suma_total += total
+
+    # Agrega el resumen total al final
+    resultados.append({
+        'tipo_llamada': 'TOTAL',
+        'tiempo_segundos': suma_segundos,
+        'costo_segundo': None,
+        'total': suma_total
+    })
+
+    return Response(resultados)
