@@ -17,8 +17,8 @@ export class NotificacionesService {
 
   constructor(private http: HttpClient) {}
 
-  obtenerNotificaciones(username: string): Observable<Notificacion[]> {
-    return this.http.get<Notificacion[]>(`${this.baseUrl}/${username}/`);
+  obtenerNotificaciones(correo: string): Observable<Notificacion[]> {
+    return this.http.get<Notificacion[]>(`${this.baseUrl}/${correo}/`);
   }
 
   marcarComoLeido(id: number): Observable<any> {

@@ -81,9 +81,8 @@ class AnexoViewSet(viewsets.ModelViewSet):
         return response
     
 class NotificacionViewSet(viewsets.ViewSet):
-    
-    def list(self, request, username=None):
-        user = get_object_or_404(Profile, username=username)
+    def list(self, request, correo=None):
+        user = get_object_or_404(Profile, correo=correo)
         notificaciones = Notificacion.objects.filter(destinatario=user).order_by('-fecha_creacion')
         serializer = NotificacionSerializer(notificaciones, many=True)
         return Response(serializer.data)
@@ -95,15 +94,6 @@ class NotificacionViewSet(viewsets.ViewSet):
         noti.save()
         return Response({'status': 'marcado como leído'})
 
-# class NotificacionViewSet(viewsets.ReadOnlyModelViewSet):
-#     queryset = Notificacion.objects.all()
-#     serializer_class = NotificacionSerializer
-
-#     def get_queryset(self):
-#         username = self.request.query_params.get('username', None)
-#         if username is not None:
-#             return Notificacion.objects.filter(destinatario__username=username).order_by('-fecha_creacion')
-#         return Notificacion.objects.none()
 
 @api_view(["POST"])
 def generar_calculo_unidad(request):
@@ -219,7 +209,6 @@ def trafico_por_proveedor_mes(request):
         suma_segundos += total_segundos
         suma_total += total
 
-    # Agrega el resumen total al final
     resultados.append({
         'tipo_llamada': 'TOTAL',
         'tiempo_segundos': suma_segundos,
@@ -230,32 +219,3 @@ def trafico_por_proveedor_mes(request):
     return Response(resultados)
 
 
-
-# @api_view(['GET'])
-# def listar_notificaciones(request):
-#     username = request.user.username if request.user and request.user.is_authenticated else request.GET.get('username')
-    
-#     if not username:
-#         return Response({'error': 'Usuario no autenticado'}, status=401)
-    
-#     try:
-#         perfil = Profile.objects.get(username=username)
-#     except Profile.DoesNotExist:
-#         return Response({'error': 'Perfil no encontrado'}, status=404)
-
-#     notifs = Notificacion.objects.filter(destinatario=perfil).order_by('-fecha_creacion')
-#     return Response(NotificacionSerializer(notifs, many=True).data)
-
-# @api_view(['PATCH'])
-# def marcar_leido(request, pk):
-#     try:
-#         usuario = request.user
-#         perfil = Profile.objects.get(username=usuario.username)
-#         notif = Notificacion.objects.get(pk=pk, destinatario=perfil)
-#         notif.leido = True
-#         notif.save()
-#         return Response({'status': 'leido'})
-#     except Profile.DoesNotExist:
-#         return Response({'error': 'Perfil no encontrado'}, status=404)
-#     except Notificacion.DoesNotExist:
-#         return Response({'error': 'Notificación no encontrada'}, status=404)

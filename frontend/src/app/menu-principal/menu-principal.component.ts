@@ -39,19 +39,18 @@ export class MenuPrincipalComponent implements OnInit {
   }
 
   cargarNotificaciones(): void {
-  const session = localStorage.getItem('sessionUser');
-  const usuario = session ? JSON.parse(session).username : null;
-  
-  if (!usuario) {
-    console.error('No se pudo obtener el nombre de usuario');
+  const session = localStorage.getItem('user');
+  const correo = session ? JSON.parse(session).correo : null;
+  if (!correo) {
+    console.error('No se pudo obtener el correo de usuario');
     return;
   }
-  
-  this.notificacionesService.obtenerNotificaciones(usuario).subscribe(
+
+  this.notificacionesService.obtenerNotificaciones(correo).subscribe(
     (data) => {
       this.notificaciones = data;
       this.nuevasNotificaciones = data.filter(n => !n.leido);
-      this.newNotifications = this.nuevasNotificaciones.length; // ← AQUÍ ESTÁ
+      this.newNotifications = this.nuevasNotificaciones.length; 
     },
     (error) => {
       console.error('Error al obtener notificaciones:', error);

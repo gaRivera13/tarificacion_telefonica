@@ -29,7 +29,6 @@ def procesar_archivo_excel(anexo_id):
             Departamento, siglas_depto=fila["siglas_depto"]
         )
 
-        # Crear un nuevo registro de llamada
         RegistroLlamadas.objects.create(
             id_anexo=anexo,
             id_facultad=facultad,
@@ -86,7 +85,14 @@ def crear_excel_reporte(datos, nombre_archivo):
     output = BytesIO()
     wb.save(output)
     output.seek(0)
-    return ContentFile(output.read(), name=nombre_archivo)
+    #Crea una carpeta reportes si no existe
+    reportes_dir = os.path.join(settings.MEDIA_ROOT, "reportes")
+    if not os.path.exists(reportes_dir):
+        os.makedirs(reportes_dir)
+
+    #Guarda el archivo en la carpeta reportes
+    file_path = os.path.join("reportes", nombre_archivo)
+    return ContentFile(output.read(), name=file_path)
 
 
 def crear_excel_reporte_general(datos, nombre_archivo):
@@ -126,7 +132,15 @@ def crear_excel_reporte_general(datos, nombre_archivo):
     output = BytesIO()
     wb.save(output)
     output.seek(0)
-    return ContentFile(output.read(), name=nombre_archivo)
+
+    # Crear una carpeta reportes si no existe
+    reportes_dir = os.path.join(settings.MEDIA_ROOT, "reportes")
+    if not os.path.exists(reportes_dir):
+        os.makedirs(reportes_dir)
+
+    #Guarda el archivo en la carpeta reportes
+    file_path = os.path.join("reportes", nombre_archivo)
+    return ContentFile(output.read(), name=file_path)
 
 
 def calculo_unidad(facultad_id, unidad_id, nombre_calculo):
@@ -194,7 +208,6 @@ def calculo_unidad(facultad_id, unidad_id, nombre_calculo):
         "tarif_ldi": calculo.tarif_ldi,
         "tarif_general": calculo.tarif_general,
     }]
-    # Generar nombre de archivo con timestamp
     nombre_archivo = (
         f"reporte_unidad_{unidad_id}_{datetime.now().strftime('%Y%m%d%H%M%S')}.xlsx"
     )
@@ -290,19 +303,19 @@ def calculo_general(facultad_id, nombre_calculo):
     return calculo
 
 def notificar_calculo_unidad(unidad, mensaje):
-    try:
-        encargado = Profile.objects.get(id_unidad=unidad, rol='encargado')
-    except Profile.DoesNotExist:
+    encargados = Profile.objects.filter(id_unidad=unidad, rol='encargado')
+    if not encargados.exists():
+        print("No se encontró encargado para la unidad:", unidad)
         return
-    try:
-        Notificacion.objects.create(destinatario=encargado, mensaje=mensaje)
-        
-        send_mail(
-            subject="Nuevo cálculo realizado",
-            message=mensaje,
-            from_email="notificaciones@sistema.com",
-            recipient_list=[encargado.correo],
-            fail_silently=False
-        )
-    except Exception as e:
-        print(f"Error enviando notificación o correo: {e}")
+    for encargado in encargados:
+        try:
+            Notificacion.objects.create(destinatario=encargado, mensaje=mensaje)
+            send_mail(
+                subject="Nuevo cálculo realizado",
+                message=mensaje,
+                from_email="notificaciones@sistema.com",
+                recipient_list=[encargado.correo],
+                fail_silently=False
+            )
+        except Exception as e:
+            print(f"Error enviando notificación o correo: {e}")

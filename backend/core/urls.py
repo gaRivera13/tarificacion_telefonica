@@ -27,7 +27,7 @@ urlpatterns = [
     path("reportes/", listar_reportes),
     path("reportes/<int:pk>/descargar/", descargar_reporte),
     path('reporte/<int:pk>/', eliminar_reporte),
-    path('notificaciones/<str:username>/', notificacion_list, name='notificaciones-list'),
+    path('notificaciones/<str:correo>/', notificacion_list, name='notificaciones-list'),
     path('notificaciones/marcar/<int:pk>/', notificacion_marcar_leido, name='notificacion-marcar'),
     path('trafico/', trafico_por_proveedor_mes),
 ]
