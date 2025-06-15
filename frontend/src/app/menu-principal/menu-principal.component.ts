@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../login/auth.service';
 import { OnInit } from '@angular/core';
+import { NotificacionesService, Notificacion } from '../notificar/notificaciones.service';
 
 
 @Component({
@@ -15,15 +16,68 @@ import { OnInit } from '@angular/core';
 })
 
 export class MenuPrincipalComponent implements OnInit {
+
   rol: string | null = '';
   showLogoutMenu = false;
-  sidebarVisible = false; 
+  sidebarVisible = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  notificaciones: Notificacion[] = [];
+  nuevasNotificaciones: Notificacion[] = [];
+  newNotifications = 0;
+  showModal: boolean = false;
+
+  constructor(
+    private authService: AuthService, 
+    private notificacionesService: NotificacionesService,
+    private router: Router,
+  
+  ) {}
 
   ngOnInit(): void {
     this.rol = this.authService.getUserRole();
+    this.cargarNotificaciones();
   }
+
+  cargarNotificaciones(): void {
+  const session = localStorage.getItem('sessionUser');
+  const usuario = session ? JSON.parse(session).username : null;
+  
+  if (!usuario) {
+    console.error('No se pudo obtener el nombre de usuario');
+    return;
+  }
+  
+  this.notificacionesService.obtenerNotificaciones(usuario).subscribe(
+    (data) => {
+      this.notificaciones = data;
+      this.nuevasNotificaciones = data.filter(n => !n.leido);
+      this.newNotifications = this.nuevasNotificaciones.length; // ← AQUÍ ESTÁ
+    },
+    (error) => {
+      console.error('Error al obtener notificaciones:', error);
+    }
+  );
+}
+
+  marcarComoLeida(notificacion: Notificacion): void {
+  this.notificacionesService.marcarComoLeido(notificacion.id).subscribe(
+    () => {
+      notificacion.leido = true;
+      this.nuevasNotificaciones = this.notificaciones.filter(n => !n.leido);
+      this.newNotifications = this.nuevasNotificaciones.length;
+    },
+    (error) => {
+      console.error('Error al marcar notificación como leída:', error);
+    }
+  );
+}
+
+toggleModal(): void {
+  this.showModal = !this.showModal;
+  if (this.showModal) {
+    this.newNotifications = 0;
+  }
+}
 
   toggleLogoutMenu(): void {
     this.showLogoutMenu = !this.showLogoutMenu; 

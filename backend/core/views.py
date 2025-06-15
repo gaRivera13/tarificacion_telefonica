@@ -1,5 +1,6 @@
 from rest_framework import viewsets, status, generics
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes, action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -9,6 +10,7 @@ from .serializers import *
 from .utils import calculo_general, calculo_unidad, procesar_archivo_excel, crear_excel_reporte, crear_excel_reporte_general
 from django.utils import timezone
 from django.http import FileResponse, Http404
+from django.shortcuts import get_object_or_404
 
 
 class ProveedorTelefonoViewSet(viewsets.ModelViewSet):
@@ -77,7 +79,31 @@ class AnexoViewSet(viewsets.ModelViewSet):
         if os.path.exists(archivo_path):
             os.remove(archivo_path)
         return response
+    
+class NotificacionViewSet(viewsets.ViewSet):
+    
+    def list(self, request, username=None):
+        user = get_object_or_404(Profile, username=username)
+        notificaciones = Notificacion.objects.filter(destinatario=user).order_by('-fecha_creacion')
+        serializer = NotificacionSerializer(notificaciones, many=True)
+        return Response(serializer.data)
 
+    @action(detail=True, methods=['patch'])
+    def marcar_como_leida(self, request, pk=None):
+        noti = get_object_or_404(Notificacion, pk=pk)
+        noti.leido = True
+        noti.save()
+        return Response({'status': 'marcado como leído'})
+
+# class NotificacionViewSet(viewsets.ReadOnlyModelViewSet):
+#     queryset = Notificacion.objects.all()
+#     serializer_class = NotificacionSerializer
+
+#     def get_queryset(self):
+#         username = self.request.query_params.get('username', None)
+#         if username is not None:
+#             return Notificacion.objects.filter(destinatario__username=username).order_by('-fecha_creacion')
+#         return Notificacion.objects.none()
 
 @api_view(["POST"])
 def generar_calculo_unidad(request):
@@ -202,3 +228,34 @@ def trafico_por_proveedor_mes(request):
     })
 
     return Response(resultados)
+
+
+
+# @api_view(['GET'])
+# def listar_notificaciones(request):
+#     username = request.user.username if request.user and request.user.is_authenticated else request.GET.get('username')
+    
+#     if not username:
+#         return Response({'error': 'Usuario no autenticado'}, status=401)
+    
+#     try:
+#         perfil = Profile.objects.get(username=username)
+#     except Profile.DoesNotExist:
+#         return Response({'error': 'Perfil no encontrado'}, status=404)
+
+#     notifs = Notificacion.objects.filter(destinatario=perfil).order_by('-fecha_creacion')
+#     return Response(NotificacionSerializer(notifs, many=True).data)
+
+# @api_view(['PATCH'])
+# def marcar_leido(request, pk):
+#     try:
+#         usuario = request.user
+#         perfil = Profile.objects.get(username=usuario.username)
+#         notif = Notificacion.objects.get(pk=pk, destinatario=perfil)
+#         notif.leido = True
+#         notif.save()
+#         return Response({'status': 'leido'})
+#     except Profile.DoesNotExist:
+#         return Response({'error': 'Perfil no encontrado'}, status=404)
+#     except Notificacion.DoesNotExist:
+#         return Response({'error': 'Notificación no encontrada'}, status=404)

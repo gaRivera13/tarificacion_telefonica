@@ -178,6 +178,18 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.nombre
+    
+class Notificacion(models.Model):
+    destinatario = models.ForeignKey(Profile, on_delete=models.CASCADE,related_name="notificaciones")
+    mensaje = models.TextField()
+    leido = models.BooleanField(default=False)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "notificaciones"
+    
+    def __str__(self):
+        return f"Para {self.destinatario.nombre} - {'Leído 'if self.leido else 'No leído'}"
 
 
 class ReporteGenerado(models.Model):

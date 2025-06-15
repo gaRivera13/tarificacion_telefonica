@@ -1,17 +1,17 @@
 import pandas as pd
 from .models import *
-from django.core.exceptions import ValidationError
 from datetime import datetime
+from django.core.exceptions import ValidationError
+from django.core.files.base import ContentFile
+from django.core.mail import send_mail
 from django.db.models import Sum, Q
 from django.shortcuts import get_object_or_404
-import openpyxl
-from openpyxl import Workbook
 from django.conf import settings
-import os
 from django.core.files import File
+import openpyxl
+import os
+from openpyxl import Workbook
 from io import BytesIO
-from django.core.files.base import ContentFile
-
 
 
 def procesar_archivo_excel(anexo_id):
@@ -131,7 +131,6 @@ def crear_excel_reporte_general(datos, nombre_archivo):
 
 def calculo_unidad(facultad_id, unidad_id, nombre_calculo):
     from datetime import datetime
-
     registros = RegistroLlamadas.objects.filter(
         id_facultad_id=facultad_id, id_unidad_id=unidad_id
     )
@@ -208,7 +207,8 @@ def calculo_unidad(facultad_id, unidad_id, nombre_calculo):
         archivo=excel_file,
         fecha_creacion=datetime.now(),
     )
-
+    mensaje = f"Se ha generado un nuevo cálculo para tu unidad: {n_unidad.nombre_depto}"
+    notificar_calculo_unidad(n_unidad, mensaje)
     return calculo
 
 
@@ -288,3 +288,21 @@ def calculo_general(facultad_id, nombre_calculo):
     )
 
     return calculo
+
+def notificar_calculo_unidad(unidad, mensaje):
+    try:
+        encargado = Profile.objects.get(id_unidad=unidad, rol='encargado')
+    except Profile.DoesNotExist:
+        return
+    try:
+        Notificacion.objects.create(destinatario=encargado, mensaje=mensaje)
+        
+        send_mail(
+            subject="Nuevo cálculo realizado",
+            message=mensaje,
+            from_email="notificaciones@sistema.com",
+            recipient_list=[encargado.correo],
+            fail_silently=False
+        )
+    except Exception as e:
+        print(f"Error enviando notificación o correo: {e}")

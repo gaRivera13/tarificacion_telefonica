@@ -1,7 +1,8 @@
 from rest_framework import serializers
+from core.models import Profile
 from .models import Profile, Anexo
 from .models import Departamento, Facultad, ProveedorTelefono
-from .models import ReporteGenerado
+from .models import ReporteGenerado, Notificacion
 import os
 from .models import validar_excel
 
@@ -138,3 +139,8 @@ class ReporteGeneradoSerializer(serializers.ModelSerializer):
         if obj.id_unidad:
             return DepartamentoSerializer(obj.id_unidad).data
         return None
+    
+class NotificacionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notificacion
+        fields = '__all__'
