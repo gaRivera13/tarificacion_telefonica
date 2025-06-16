@@ -3,13 +3,17 @@ from rest_framework.routers import DefaultRouter
 from .views import ProfileViewSet, DepartamentoViewSet, FacultadViewSet
 from .views import *
 
-notificacion_list = NotificacionViewSet.as_view({
-    'get': 'list',
-})
+notificacion_list = NotificacionViewSet.as_view(
+    {
+        "get": "list",
+    }
+)
 
-notificacion_marcar_leido = NotificacionViewSet.as_view({
-    'patch': 'marcar_como_leida',
-})
+notificacion_marcar_leido = NotificacionViewSet.as_view(
+    {
+        "patch": "marcar_como_leida",
+    }
+)
 
 router = DefaultRouter()
 router.register(r"profiles", ProfileViewSet)
@@ -26,8 +30,9 @@ urlpatterns = [
     path("calculo-reportes/generar-calculo-general/", generar_calculo_general),
     path("reportes/", listar_reportes),
     path("reportes/<int:pk>/descargar/", descargar_reporte),
-    path('reporte/<int:pk>/', eliminar_reporte),
-    path('notificaciones/<str:correo>/', notificacion_list, name='notificaciones-list'),
-    path('notificaciones/marcar/<int:pk>/', notificacion_marcar_leido, name='notificacion-marcar'),
-    path('trafico/', trafico_por_proveedor_mes),
+    path("reporte/<int:pk>/", eliminar_reporte),
+    path("notificaciones/<str:correo>/", notificacion_list, name="notificaciones-list"),
+    path("notificaciones/marcar/<int:pk>/", notificacion_marcar_leido, name="notificacion-marcar"),
+    path("trafico/", trafico_por_proveedor_mes),
+    path("recuperar-password-confirm/", recuperar_password_confirm, name="recuperar-password-confirm"),
 ]

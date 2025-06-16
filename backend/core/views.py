@@ -7,7 +7,13 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from django.db.models import Sum
 from .models import *
 from .serializers import *
-from .utils import calculo_general, calculo_unidad, procesar_archivo_excel, crear_excel_reporte, crear_excel_reporte_general
+from .utils import (
+    calculo_general,
+    calculo_unidad,
+    procesar_archivo_excel,
+    crear_excel_reporte,
+    crear_excel_reporte_general,
+)
 from django.utils import timezone
 from django.http import FileResponse, Http404
 from django.shortcuts import get_object_or_404
@@ -69,30 +75,33 @@ class AnexoViewSet(viewsets.ModelViewSet):
         else:
             print(" Serializer errors:", serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+
     def destroy(self, request, *args, **kwargs):
         anexo = self.get_object()
         archivo_path = anexo.archivo.path
-        
+
         response = super().destroy(request, *args, **kwargs)
-        
+
         if os.path.exists(archivo_path):
             os.remove(archivo_path)
         return response
-    
+
+
 class NotificacionViewSet(viewsets.ViewSet):
     def list(self, request, correo=None):
         user = get_object_or_404(Profile, correo=correo)
-        notificaciones = Notificacion.objects.filter(destinatario=user).order_by('-fecha_creacion')
+        notificaciones = Notificacion.objects.filter(destinatario=user).order_by(
+            "-fecha_creacion"
+        )
         serializer = NotificacionSerializer(notificaciones, many=True)
         return Response(serializer.data)
 
-    @action(detail=True, methods=['patch'])
+    @action(detail=True, methods=["patch"])
     def marcar_como_leida(self, request, pk=None):
         noti = get_object_or_404(Notificacion, pk=pk)
         noti.leido = True
         noti.save()
-        return Response({'status': 'marcado como leído'})
+        return Response({"status": "marcado como leído"})
 
 
 @api_view(["POST"])
@@ -127,7 +136,6 @@ def generar_calculo_general(request):
         return Response({"error": str(e)}, status=400)
 
 
-
 @api_view(["GET"])
 def listar_reportes(request):
     facultad = request.GET.get("facultad")
@@ -154,6 +162,7 @@ def descargar_reporte(request, pk):
     except ReporteGenerado.DoesNotExist:
         raise Http404
 
+
 @api_view(["DELETE"])
 def eliminar_reporte(request, pk):
     try:
@@ -167,23 +176,23 @@ def eliminar_reporte(request, pk):
         return Response({"error": "Reporte no encontrado"}, status=404)
 
 
-
-@api_view(['GET'])
+@api_view(["GET"])
 def trafico_por_proveedor_mes(request):
-    proveedor_nombre = request.GET.get('proveedor')
-    mes = request.GET.get('mes')
+    proveedor_nombre = request.GET.get("proveedor")
+    mes = request.GET.get("mes")
 
     if not proveedor_nombre or not mes:
         return Response([], status=400)
 
     try:
-        proveedor = ProveedorTelefono.objects.get(nombre_proveedor__iexact=proveedor_nombre)
+        proveedor = ProveedorTelefono.objects.get(
+            nombre_proveedor__iexact=proveedor_nombre
+        )
     except ProveedorTelefono.DoesNotExist:
         return Response([], status=404)
 
     llamadas = RegistroLlamadas.objects.filter(
-        id_proveedor=proveedor,
-        fecha_llamada__month=mes
+        id_proveedor=proveedor, fecha_llamada__month=mes
     )
 
     resultados = []
@@ -191,31 +200,57 @@ def trafico_por_proveedor_mes(request):
     suma_total = 0
 
     for tipo, nombre_tipo, costo_attr in [
-        ('SLM', 'Local', 'costo_seg_slm'),
-        ('CEL', 'Celular', 'costo_seg_cel'),
-        ('LDI', 'Larga distancia', 'costo_seg_ldi')
+        ("SLM", "Local", "costo_seg_slm"),
+        ("CEL", "Celular", "costo_seg_cel"),
+        ("LDI", "Larga distancia", "costo_seg_ldi"),
     ]:
-        total_segundos = llamadas.filter(tipo_llamada_sigla=tipo).aggregate(
-            total=Sum('duracion_llamada')
-        )['total'] or 0
+        total_segundos = (
+            llamadas.filter(tipo_llamada_sigla=tipo).aggregate(
+                total=Sum("duracion_llamada")
+            )["total"]
+            or 0
+        )
         costo_segundo = float(getattr(proveedor, costo_attr))
         total = total_segundos * costo_segundo
-        resultados.append({
-            'tipo_llamada': nombre_tipo,
-            'tiempo_segundos': total_segundos,
-            'costo_segundo': costo_segundo,
-            'total': total
-        })
+        resultados.append(
+            {
+                "tipo_llamada": nombre_tipo,
+                "tiempo_segundos": total_segundos,
+                "costo_segundo": costo_segundo,
+                "total": total,
+            }
+        )
         suma_segundos += total_segundos
         suma_total += total
 
-    resultados.append({
-        'tipo_llamada': 'TOTAL',
-        'tiempo_segundos': suma_segundos,
-        'costo_segundo': None,
-        'total': suma_total
-    })
+    resultados.append(
+        {
+            "tipo_llamada": "TOTAL",
+            "tiempo_segundos": suma_segundos,
+            "costo_segundo": None,
+            "total": suma_total,
+        }
+    )
 
     return Response(resultados)
 
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Profile
+
+
+@api_view(["POST"])
+def recuperar_password_confirm(request):
+    email = request.data.get("email")
+    username = request.data.get("username")
+    if not email or not username:
+        return Response({"error": "Faltan datos."}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        user = Profile.objects.get(correo=email, username=username)
+        return Response({"password": user.password})
+    except Profile.DoesNotExist:
+        return Response(
+            {"error": "Correo o usuario incorrecto."}, status=status.HTTP_404_NOT_FOUND
+        )

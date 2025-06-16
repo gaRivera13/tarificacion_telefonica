@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './profile/home/home.component';
 import { LoginComponent } from './login/login.component';
-import { RecuperarPasswordComponent } from './recuperar-password/recuperar-password.component';
 import { MenuPrincipalComponent } from './menu-principal/menu-principal.component';
 import { GestionUnidadesComponent } from './servicios/gestion-unidades/gestion-unidades.component';
 import { ProveedoresComponent } from './proveedores/gestion-proveedores/gestion-proveedores.component';
@@ -12,6 +11,7 @@ import { RoleGuard } from './guards/role.guard';
 import { ConsultarReportesComponent } from './reportes/consultar-reportes/consultar-reportes.component';
 import { BienvenidaComponent } from './bienvenida/bienvenida.component';
 import { ConsultarTraficoComponent } from './reportes/consultar-trafico/consultar-trafico.component';
+import { RecuperarPasswordComponent } from './recuperar-password/recuperar-password.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
