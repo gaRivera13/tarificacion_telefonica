@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
 import { AlertaService } from '../../alerta-service.service';
+import { environment } from '../../../environments/environment.development';
 
 interface Proveedor {
   id_proveedor: number;
@@ -57,7 +58,7 @@ export class ConsultarTraficoComponent implements OnInit {
   }
 
   cargarProveedores() {
-    this.http.get<Proveedor[]>('/core/proveedores/').subscribe(data => {
+    this.http.get<Proveedor[]>(`${environment.coreurl}/core/proveedores/`).subscribe(data => {
       this.proveedores = data;
       this.proveedoresFiltrados = data;
     });
@@ -78,7 +79,7 @@ export class ConsultarTraficoComponent implements OnInit {
     }
     this.buscando = true;
     this.http.get<ResultadoTrafico[]>(
-      `/core/trafico/?proveedor=${encodeURIComponent(this.nombreProveedor)}&mes=${this.mesSeleccionado}`
+      `${environment.coreurl}/core/trafico/?proveedor=${encodeURIComponent(this.nombreProveedor)}&mes=${this.mesSeleccionado}`
     ).subscribe({
       next: (data) => {
         this.resultados = data;

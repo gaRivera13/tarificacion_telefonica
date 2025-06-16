@@ -2,14 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, of, throwError } from 'rxjs';
-import { catchError, tap, switchMap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private apiUrl = '/core/login/';
+  private apiUrl = `${environment.coreurl}/core/login/`;
   private userData: any = null;
 
   private fakeUsers = [
@@ -40,7 +41,6 @@ export class AuthService {
       })
     );
   }
-
 
   logout(): void {
     this.userData = null;
