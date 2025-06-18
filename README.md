@@ -1,41 +1,46 @@
-## Instrucciones de despliegue de aplicación.
+# Instrucciones de Despliegue de Aplicación
 
-#### Instalación y configuración de BackEnd
+## Instalación y configuración de BackEnd
 
->Importante: El despliegue del sistema esta pensado y ejecutado en sistema windows por lo que las instrucciones estan basadas en los comandos y funciones del sistema operativo antes mencionado.
+> **Importante:** El despliegue del sistema está pensado y ejecutado en sistema Windows, por lo que las instrucciones están basadas en los comandos y funciones del sistema operativo antes mencionado.
 
- Requisitos previos:
+### Requisitos previos
 Para la correcta ejecución del proyecto es necesario tener instalado:
-- `pip`
 
+- `pip`
 - `Python`
 
->Todos los comandos se deben ejecutar en una ventana de comandos cmd, asegurando que se este en la carpeta raíz del proyecto.
+> Todos los comandos se deben ejecutar en una ventana de comandos (cmd), asegurando que se esté en la carpeta raíz del proyecto.
 
-
-
->#####Ejemplo de ruta de proyecto
+#### Ejemplo de ruta de proyecto
+```
 C:\Users\nombreUsuario\CarpetaProyecto
-
-Creacion de ambiente virtual, el nuestro tiene de nombre "env", pero no es obligatorio que sea el mismo si usted desea cambiarlo.
-```
-python -m venv env 
 ```
 
-Activar ambiente virtual
+### Creación de ambiente virtual
+
+El nuestro tiene de nombre "env", pero no es obligatorio que sea el mismo si desea cambiarlo.
+
 ```
-env\Spricts\activate 
+python -m venv env
 ```
 
-Para asegurarse que el ambiente virtual este activo, en la termina debe salir algo como esto, usando VSCode o cmd
+### Activar ambiente virtual
 
----
+```
+env\Scripts\activate
+```
 
->(.venv) C:\Users\nombreUsuario\CarpetaProyecto
+Para asegurarse de que el ambiente virtual está activo, en la terminal debe salir algo como esto, usando VSCode o cmd:
 
----
+```
+(.venv) C:\Users\nombreUsuario\CarpetaProyecto
+```
 
-Una ves con el ambiente virtual activo se deben instalar los siguentes sequerimientos para que todas las funciones del sistemas esten operativas correctamente
+### Instalación de requerimientos
+
+Una vez con el ambiente virtual activo se deben instalar los siguientes requerimientos para que todas las funciones del sistema estén operativas correctamente:
+
 ```
 pip install django==5.2
 pip install djangorestframework
@@ -48,107 +53,138 @@ pip install openpyxl
 
 ---
 
----
+## Instalación del FrontEnd
 
-#### Instalación del FrontEnd
+### Requisitos previos
 
-- Requisitos previos:
-Para el correcto funcionamiento del Frontend se necesita instalar:
+Para el correcto funcionamiento del FrontEnd se necesita instalar:
 
 - `Node.js`
 
-Una ves creado el BackEnd del proyecto, se necesita instalar Angular, la version que se uso en el proyecto fue la 18 por lo que es importante que sea la misma versión.
+Una vez creado el BackEnd del proyecto, se necesita instalar Angular. La versión que se usó en el proyecto fue la 18, por lo que es importante que sea la misma:
+
 ```
-    npm install -g @angular/cli@18
-```
-Luego se debe dirigir a la carpeta "FrontEnd" y ejecutar el siguiente comando
-```
-    npm install
+npm install -g @angular/cli@18
 ```
 
-#### Ejecución de Base de Datos
+Luego se debe dirigir a la carpeta `FrontEnd` y ejecutar el siguiente comando:
 
->######Importante: Se debe hacer un cambio en settings.py para que la base de datos pueda funcionar correctamente
-
-En DATABASES en el apartado:
-````
-"default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": "gestion_telefonica",
-        "USER": "root",
-        "PASSWORD": "",
-        "HOST": "db",
-        "PORT": 3306,
-````
-Se debe cambiar el HOST de "db" a "localhost" quedando de la siguiente manera
-````
-"default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": "gestion_telefonica",
-        "USER": "root",
-        "PASSWORD": "",
-        "HOST": "localhost",
-        "PORT": 3306,
-````
+```
+npm install
+```
 
 ---
 
----
+## Ejecución de Base de Datos
 
-Requisitos previos
+> **Importante:** Se debe hacer un cambio en `settings.py` para que la base de datos pueda funcionar correctamente.
+
+En `DATABASES`, en el apartado:
+
+```
+"default": {
+    "ENGINE": "django.db.backends.mysql",
+    "NAME": "gestion_telefonica",
+    "USER": "root",
+    "PASSWORD": "",
+    "HOST": "db",
+    "PORT": 3306,
+}
+```
+
+Se debe cambiar el `HOST` de `"db"` a `"localhost"` quedando de la siguiente manera:
+
+```
+"default": {
+    "ENGINE": "django.db.backends.mysql",
+    "NAME": "gestion_telefonica",
+    "USER": "root",
+    "PASSWORD": "",
+    "HOST": "localhost",
+    "PORT": 3306,
+}
+```
+
+### Requisitos previos
+
 Se debe tener instalado alguno de estos visualizadores para base de datos:
-- ``MySQL Workbench``
-- ``XAMPP``
 
-Para XAMPP en el panel de control se debe activar los modulos de "Apache" y "MySQL". Donde despues se debe apretar "admin" para ser redirigido a "phpMyAdmin"
+- `MySQL Workbench`
+- `XAMPP`
 
-"poner imange aqui xd"
+Para XAMPP, en el panel de control se deben activar los módulos de **Apache** y **MySQL**. Luego presionar **Admin** para ser redirigido a `phpMyAdmin`.
 
-Una ves ahi se debe crear una nueva base de datos precionando en el menu lateral la opcion de "Nuevo" donde sera redirigido a una interfaz para poder ponerle el nombre de la nueva base de datos en este caso de nombre:
-````
+> _Aquí puede ir una imagen de ejemplo_
+
+Una vez ahí, se debe crear una nueva base de datos presionando en el menú lateral la opción **Nuevo**, donde será redirigido a una interfaz para escribir el nombre de la nueva base de datos, en este caso:
+
+```
 gestion_telefonica
-````
-Precione "crear" para que se cree la base de datos.
-Luego en el BackEnd del proyecto, desde una terminal cmd, se debe ejecutar las migraciones correspondientes
-````
+```
+
+Presione **Crear** para que se cree la base de datos.
+
+Luego, en el BackEnd del proyecto, desde una terminal (cmd), se deben ejecutar las migraciones correspondientes:
+
+```
 python manage.py makemigrations
 python manage.py migrate
-````
-
-#### Lanzamiento del sistema
-
-Una vez instalados el Frontend y el Backend abrir dos terminales cmd.
-
-En una se debe inicializar el BackEnd desde la raiz del proyecto
-``(.venv) C:\Users\nombreUsuario\CarpetaProyecto`` 
-
-Y ejecutar el siguiente comando 
-````
-cd backend
-````
-
-una ves dentro se debe ejecutar el comando
-````
-python manage.py runserver
-````
-Si todo lo anterior fue correctamente instalado deberia aparecer lo siguente dando la url del backend de administracion de django
+```
 
 ---
 
-Para inicializar el FrontEnd por otro lado desde otra terminal se debe acceder a la ruta principal:
-``C:\Users\nombreUsuario\CarpetaProyecto`` 
+## Lanzamiento del sistema
 
-y ejecutar el sigiente comando para entrar al FrontEnd del proyecto
-````
+Una vez instalados el FrontEnd y el BackEnd, abrir dos terminales (cmd).
+
+### Lanzamiento del BackEnd
+
+En una terminal, inicializar el BackEnd desde la raíz del proyecto:
+
+```
+(.venv) C:\Users\nombreUsuario\CarpetaProyecto
+```
+
+Ejecutar:
+
+```
+cd backend
+```
+
+Una vez dentro:
+
+```
+python manage.py runserver
+```
+
+Si todo fue correctamente instalado, debería aparecer lo siguiente, dando la URL del backend de administración de Django.
+
+### Lanzamiento del FrontEnd
+
+Desde otra terminal, acceder a la ruta principal:
+
+```
+C:\Users\nombreUsuario\CarpetaProyecto
+```
+
+Ejecutar el siguiente comando para entrar al FrontEnd del proyecto:
+
+```
 cd frontend
-````
+```
 
-Dodne despues se podra usar el siguiente comando para inicializar el servicio de Angular
-````
+Luego se podrá usar el siguiente comando para inicializar el servicio de Angular:
+
+```
 ng serve
-````
+```
 
-En la terminal deberia salir asi:
+En la terminal debería salir algo como:
 
+```
+✔ Compiled successfully.
 
-Y al ir a la URL que sale en el terminal "http://localhost:4200/" te llevara al Login principal del sistema
+** Angular Live Development Server is listening on localhost:4200, open your browser on http://localhost:4200/ **
+```
+
+Al ir a la URL `http://localhost:4200/` se accederá al login principal del sistema.
