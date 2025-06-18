@@ -141,9 +141,12 @@ GRANT ALL PRIVILEGES ON gestion_telefonica.* TO 'root'@'localhost';
 -- Aplicar los cambios
 FLUSH PRIVILEGES;
 
+```
+
 Esto creará correctamente la base de datos gestion_telefonica con la codificación adecuada y los permisos necesarios para que Django pueda gestionarla, permitiendo así la creación de las tablas mediante las migraciones.
 
 Luego, en el BackEnd del proyecto, desde una terminal (cmd), se deben ejecutar las migraciones correspondientes:
+
 ```
 python manage.py makemigrations
 python manage.py migrate
