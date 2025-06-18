@@ -189,6 +189,7 @@ En la terminal debería salir algo como:
 
 ** Angular Live Development Server is listening on localhost:4200, open your browser on http://localhost:4200/ **
 ```
+![Image](https://github.com/user-attachments/assets/908a836e-c791-49ae-83f2-216b6c598960)
 
 
 Al ir a la URL `http://localhost:4200/` se accederá al login principal del sistema donde se podran ingresar las credenciales de administrador o de responsable de unidad.
