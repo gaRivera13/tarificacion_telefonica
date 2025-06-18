@@ -2,7 +2,7 @@
 
 #### Instalación y configuración de BackEnd
 
->######Importante: El despliegue del sistema esta pensado y ejecutado en sistema windows por lo que las instrucciones estan basadas en los comandos y funciones del sistema operativo antes mencionado.
+>Importante: El despliegue del sistema esta pensado y ejecutado en sistema windows por lo que las instrucciones estan basadas en los comandos y funciones del sistema operativo antes mencionado.
 
  Requisitos previos:
 Para la correcta ejecución del proyecto es necesario tener instalado:
@@ -12,7 +12,7 @@ Para la correcta ejecución del proyecto es necesario tener instalado:
 
 >Todos los comandos se deben ejecutar en una ventana de comandos cmd, asegurando que se este en la carpeta raíz del proyecto.
 
-[========]
+
 
 >#####Ejemplo de ruta de proyecto
 C:\Users\nombreUsuario\CarpetaProyecto
@@ -29,11 +29,11 @@ env\Spricts\activate
 
 Para asegurarse que el ambiente virtual este activo, en la termina debe salir algo como esto, usando VSCode o cmd
 
-[========]
+---
 
 >(.venv) C:\Users\nombreUsuario\CarpetaProyecto
 
-[========]
+---
 
 Una ves con el ambiente virtual activo se deben instalar los siguentes sequerimientos para que todas las funciones del sistemas esten operativas correctamente
 ```
@@ -46,9 +46,9 @@ pip install pandas
 pip install openpyxl
 ```
 
-[========]
+---
 
-[========]
+---
 
 #### Instalación del FrontEnd
 
@@ -91,9 +91,9 @@ Se debe cambiar el HOST de "db" a "localhost" quedando de la siguiente manera
         "PORT": 3306,
 ````
 
-[========]
+---
 
-[========]
+---
 
 Requisitos previos
 Se debe tener instalado alguno de estos visualizadores para base de datos:
