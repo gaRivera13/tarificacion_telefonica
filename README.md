@@ -74,12 +74,12 @@ npm install
 ```
 
 ---
-
+---
 ## Ejecución de Base de Datos
 
 > **Importante:** Se debe hacer un cambio en `settings.py` para que la base de datos pueda funcionar correctamente.
 
-En `DATABASES`, en el apartado:
+En la seccion `DATABASES`, en el apartado:
 
 ```
 "default": {
@@ -114,7 +114,9 @@ Se debe tener instalado alguno de estos visualizadores para base de datos:
 
 Para XAMPP, en el panel de control se deben activar los módulos de **Apache** y **MySQL**. Luego presionar **Admin** para ser redirigido a `phpMyAdmin`.
 
-> _Aquí puede ir una imagen de ejemplo_
+![Image](https://github.com/user-attachments/assets/9df79955-6bfd-4dd0-a6a0-8a1bf5e54877)
+
+![Image](https://github.com/user-attachments/assets/118bbae8-05f4-498e-91e7-16f1a8a32827)
 
 Una vez ahí, se debe crear una nueva base de datos presionando en el menú lateral la opción **Nuevo**, donde será redirigido a una interfaz para escribir el nombre de la nueva base de datos, en este caso:
 
@@ -123,9 +125,9 @@ gestion_telefonica
 ```
 
 Presione **Crear** para que se cree la base de datos.
+![Image](https://github.com/user-attachments/assets/fb83116d-6a02-4679-8682-d1191adab418)
 
 Luego, en el BackEnd del proyecto, desde una terminal (cmd), se deben ejecutar las migraciones correspondientes:
-
 ```
 python manage.py makemigrations
 python manage.py migrate
@@ -137,7 +139,7 @@ python manage.py migrate
 
 Una vez instalados el FrontEnd y el BackEnd, abrir dos terminales (cmd).
 
-### Lanzamiento del BackEnd
+### Lanzamiento del Sistema BackEnd
 
 En una terminal, inicializar el BackEnd desde la raíz del proyecto:
 
@@ -158,8 +160,9 @@ python manage.py runserver
 ```
 
 Si todo fue correctamente instalado, debería aparecer lo siguiente, dando la URL del backend de administración de Django.
+![Image](https://github.com/user-attachments/assets/bc317af6-bbe3-4012-b103-3f05a4537370)
 
-### Lanzamiento del FrontEnd
+### Lanzamiento Sistema FrontEnd
 
 Desde otra terminal, acceder a la ruta principal:
 
@@ -187,4 +190,6 @@ En la terminal debería salir algo como:
 ** Angular Live Development Server is listening on localhost:4200, open your browser on http://localhost:4200/ **
 ```
 
-Al ir a la URL `http://localhost:4200/` se accederá al login principal del sistema.
+
+Al ir a la URL `http://localhost:4200/` se accederá al login principal del sistema donde se podran ingresar las credenciales de administrador o de responsable de unidad.
+![Image](https://github.com/user-attachments/assets/fce948b7-aa9a-4ba1-8036-087d09391ede)
