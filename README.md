@@ -127,6 +127,22 @@ gestion_telefonica
 Presione **Crear** para que se cree la base de datos.
 ![Image](https://github.com/user-attachments/assets/fb83116d-6a02-4679-8682-d1191adab418)
 
+### Alternativa: Creación de base de datos usando MySQL Workbench
+
+Para el caso de **MySQL Workbench**, en lugar de utilizar `phpMyAdmin`, puedes ejecutar directamente el siguiente script desde una conexión local con el usuario **root** (sin contraseña):
+
+```sql
+-- Crear la base de datos
+CREATE DATABASE gestion_telefonica CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- Conceder todos los permisos al usuario 'root' desde localhost sobre esta base de datos
+GRANT ALL PRIVILEGES ON gestion_telefonica.* TO 'root'@'localhost';
+
+-- Aplicar los cambios
+FLUSH PRIVILEGES;
+
+Esto creará correctamente la base de datos gestion_telefonica con la codificación adecuada y los permisos necesarios para que Django pueda gestionarla, permitiendo así la creación de las tablas mediante las migraciones.
+
 Luego, en el BackEnd del proyecto, desde una terminal (cmd), se deben ejecutar las migraciones correspondientes:
 ```
 python manage.py makemigrations
