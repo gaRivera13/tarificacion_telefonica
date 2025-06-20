@@ -3,7 +3,7 @@
     <section>
       <div class="gestion-anexos-title" role="heading" aria-level="2">Consulta de Tráfico Telefónico</div>
       <form class="form-grid-2col" style="margin-bottom: 2rem;">
-        <div class="form-group">
+        <div class="form-group" style="max-width: 300px;">
           <label for="proveedor">Proveedor:</label>
           <input
             id="proveedor"
@@ -13,7 +13,6 @@
             [(ngModel)]="nombreProveedor"
             name="nombreProveedor"
             (input)="filtrarProveedores()"
-            list="proveedores-list"
             required
           />
           <datalist id="proveedores-list">

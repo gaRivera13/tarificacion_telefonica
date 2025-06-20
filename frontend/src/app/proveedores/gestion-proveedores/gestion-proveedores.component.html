@@ -132,3 +132,14 @@
     </div>
   </div>
 </div>
+
+<div *ngIf="modalEliminarVisible" class="gestion-anexos-modal" style="display: flex;">
+  <div class="gestion-anexos-modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title-eliminar">
+    <h2 id="modal-title-eliminar">Confirmar eliminación</h2>
+    <p>¿Estás seguro de que quieres eliminar este proveedor?</p>
+    <div class="gestion-anexos-modal-buttons">
+      <button class="gestion-anexos-add-btn cancel" (click)="confirmarEliminarProveedor()">Eliminar</button>
+      <button class="gestion-anexos-add-btn" (click)="cerrarModalEliminar()">Cancelar</button>
+    </div>
+  </div>
+</div>

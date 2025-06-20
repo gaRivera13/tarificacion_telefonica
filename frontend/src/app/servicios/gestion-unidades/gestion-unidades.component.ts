@@ -26,6 +26,9 @@ export class GestionUnidadesComponent implements OnInit {
   departamentos: Departamento[] = [];
   facultades: Facultad[] = [];
 
+  modalEliminarVisible: boolean = false;
+  idDepartamentoAEliminar: number | null = null;
+
   constructor(private deptoService: DepartamentoService, private alertaService: AlertaService) {}
 
   ngOnInit(): void {
@@ -136,8 +139,21 @@ export class GestionUnidadesComponent implements OnInit {
   }
 
   eliminarDepartamento(id: number) {
-    this.deptoService.eliminarDepartamento(id).subscribe(() => {
-      this.departamentos = this.departamentos.filter(d => d.id_unidad !== id);
-    });
+    this.idDepartamentoAEliminar = id;
+    this.modalEliminarVisible = true;
+  }
+
+  confirmarEliminarDepartamento() {
+    if (this.idDepartamentoAEliminar !== null) {
+      this.deptoService.eliminarDepartamento(this.idDepartamentoAEliminar).subscribe(() => {
+        this.cargarDepartamentos(); // O el método que refresca la lista
+        this.cerrarModalEliminar();
+      });
+    }
+  }
+
+  cerrarModalEliminar() {
+    this.modalEliminarVisible = false;
+    this.idDepartamentoAEliminar = null;
   }
 }

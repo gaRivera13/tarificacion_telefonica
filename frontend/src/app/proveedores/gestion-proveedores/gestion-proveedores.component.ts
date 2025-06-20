@@ -21,6 +21,8 @@ export class ProveedoresComponent implements OnInit {
   proveedorEditando: Partial<ProveedorTelefono> = {};
 
   mostrarModalAgregar = false;
+  modalEliminarVisible: boolean = false;
+  proveedorAEliminar: number | null = null;
 
   constructor(private proveedorService: ProveedorService, private alertaService: AlertaService) {}
 
@@ -102,12 +104,23 @@ export class ProveedoresComponent implements OnInit {
     }
   }
 
-  eliminarProveedor(id: number): void {
-    if (confirm('¿Estás seguro de que deseas eliminar este proveedor?')) {
-      this.proveedorService.eliminarProveedor(id).subscribe(() => {
+  eliminarProveedor(id: number) {
+    this.proveedorAEliminar = id;
+    this.modalEliminarVisible = true;
+  }
+
+  confirmarEliminarProveedor() {
+    if (this.proveedorAEliminar !== null) {
+      this.proveedorService.eliminarProveedor(this.proveedorAEliminar).subscribe(() => {
         this.cargarProveedores();
+        this.cerrarModalEliminar();
       });
     }
+  }
+
+  cerrarModalEliminar() {
+    this.modalEliminarVisible = false;
+    this.proveedorAEliminar = null;
   }
 
   formatCurrency(value: number): string {

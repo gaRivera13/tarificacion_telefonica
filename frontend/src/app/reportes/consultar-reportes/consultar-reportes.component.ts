@@ -17,6 +17,7 @@ import { AlertaService } from '../../alerta-service.service';
 export class ConsultarReportesComponent implements OnInit {
   facultades: any[] = [];
   unidades: any[] = [];
+  filteredUnidades: any[] = [];
   selectedTipo: string = 'unidad';
   selectedFacultad: string = '';
   selectedDepartamento: string = '';
@@ -43,6 +44,7 @@ export class ConsultarReportesComponent implements OnInit {
   cargarDepartamentos() {
     this.deptoService.obtenerDepartamentos().subscribe((data) => {
       this.unidades = data;
+      this.filtrarUnidadesPorFacultad();
     });
   }
 
@@ -53,24 +55,46 @@ export class ConsultarReportesComponent implements OnInit {
     }
   }
 
+  onFacultadChange() {
+    this.filtrarUnidadesPorFacultad();
+    this.selectedDepartamento = '';
+  }
+
+  filtrarUnidadesPorFacultad() {
+    if (this.selectedFacultad) {
+      this.filteredUnidades = this.unidades.filter(
+        unidad => String(unidad.id_facultad) === String(this.selectedFacultad)
+      );
+    } else {
+      this.filteredUnidades = [];
+    }
+  }
+
   buscarReportes() {
     this.buscando = true;
     const facultadId = Number(this.selectedFacultad);
     const departamentoId = Number(this.selectedDepartamento);
 
     if (this.selectedTipo === 'unidad' && facultadId && departamentoId) {
+      const unidad = this.unidades.find(u => u.id_unidad === departamentoId);
+      if (!unidad || String(unidad.id_facultad) !== String(this.selectedFacultad)) {
+        this.reportes = [];
+        this.buscando = false;
+        this.alertaService.mostrar('La unidad seleccionada no pertenece a la facultad elegida o no existe.');
+        return;
+      }
       this.calculoService.obtenerReportesPorUnidad(
         facultadId,
         departamentoId
       ).subscribe((data) => {
-        this.reportes = data; // <--- ¡asigna directo!
+        this.reportes = data;
         this.buscando = false;
       });
     } else if (this.selectedTipo === 'facultad' && facultadId) {
       this.calculoService.obtenerReportesPorFacultad(
         facultadId
       ).subscribe((data) => {
-        this.reportes = data; // <--- ¡asigna directo!
+        this.reportes = data;
         this.buscando = false;
       });
     } else {

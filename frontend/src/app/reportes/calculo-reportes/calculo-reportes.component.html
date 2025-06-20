@@ -15,7 +15,7 @@
         <br>
         <div class="form-group">
           <label for="facultad">Facultad:</label>
-          <select id="facultad" [(ngModel)]="selectedFacultad" name="facultad" class="gestion-anexos-select" style="width: 200px;">
+          <select id="facultad" [(ngModel)]="selectedFacultad" name="facultad" class="gestion-anexos-select" style="width: 200px;" (change)="onFacultadChange()">
             <option *ngFor="let facultad of facultades" [value]="facultad.id_facultad">
               {{ facultad.nombre_facultad }}
             </option>

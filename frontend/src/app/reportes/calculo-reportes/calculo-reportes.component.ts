@@ -48,9 +48,25 @@ export class CalculoReportesComponent implements OnInit {
   cargarDepartamentos() {
     this.deptoService.obtenerDepartamentos().subscribe((data) => {
       this.unidades = data;
+      this.filtrarUnidadesPorFacultad();
     });
   }
   
+  // Nuevo método para filtrar unidades según la facultad seleccionada
+  filtrarUnidadesPorFacultad() {
+    if (this.selectedFacultad) {
+      this.unidades = this.unidades.filter(
+        (unidad) => String(unidad.id_facultad) === String(this.selectedFacultad)
+      );
+    }
+  }
+
+  // Llama a filtrarUnidadesPorFacultad cuando cambie la facultad
+  onFacultadChange() {
+    this.cargarDepartamentos(); // Recarga todas las unidades y luego filtra
+    this.selectedDepartamento = '';
+  }
+
   cargarReportes() {
     const facultadId = this.selectedFacultad;
     const unidadId = this.selectedTipo === 'unidad' ? this.selectedDepartamento : null;
@@ -84,13 +100,19 @@ descargarURL(id: number): string {
 
 generarReporte() {
   if (this.selectedTipo === 'unidad' && this.selectedFacultad && this.selectedDepartamento) {
-    const unidad = this.unidades.find(u => u.id_unidad === Number(this.selectedDepartamento))?.nombre_depto || '';
+    // Validar que la unidad pertenezca a la facultad seleccionada
+    const unidad = this.unidades.find(u => u.id_unidad === Number(this.selectedDepartamento));
+    if (!unidad || String(unidad.id_facultad) !== String(this.selectedFacultad)) {
+      this.mensaje = 'La unidad seleccionada no pertenece a la facultad elegida o no existe.';
+      this.mostrarModal = true;
+      return;
+    }
     const fecha = new Date();
     const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
                    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
     const mes = meses[fecha.getMonth()];
     const anio = fecha.getFullYear();
-    const nombre_calculo = `Cálculo por Unidad - ${unidad} - ${mes} ${anio}`;
+    const nombre_calculo = `Cálculo por Unidad - ${unidad.nombre_depto} - ${mes} ${anio}`;
     this.calculoService.calculoPorUnidad(
       Number(this.selectedFacultad),
       Number(this.selectedDepartamento),

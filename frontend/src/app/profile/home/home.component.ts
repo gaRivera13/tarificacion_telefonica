@@ -50,6 +50,9 @@ export class HomeComponent implements AfterViewInit, OnInit {
   mostrarModalAgregarUsuario = false;
   modoEdicion: boolean = false;
 
+  modalEliminarVisible: boolean = false;
+  idUsuarioAEliminar: number | null = null;
+
   @ViewChild(MatSort) sort: any;
   @ViewChild(MatPaginator) paginator: any;
 
@@ -201,6 +204,25 @@ export class HomeComponent implements AfterViewInit, OnInit {
         this.cargarPerfiles();
       });
     }
+  }
+
+  eliminarUsuario(id: number) {
+    this.idUsuarioAEliminar = id;
+    this.modalEliminarVisible = true;
+  }
+
+  confirmarEliminarUsuario() {
+    if (this.idUsuarioAEliminar !== null) {
+      this.profileService.deleteProfile(this.idUsuarioAEliminar).subscribe(() => {
+        this.cargarPerfiles();
+        this.cerrarModalEliminar();
+      });
+    }
+  }
+
+  cerrarModalEliminar() {
+    this.modalEliminarVisible = false;
+    this.idUsuarioAEliminar = null;
   }
 
   setProfile(profile: Profile) {

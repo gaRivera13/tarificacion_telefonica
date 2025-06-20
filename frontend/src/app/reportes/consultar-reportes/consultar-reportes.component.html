@@ -15,11 +15,8 @@
         <br>
         <div class="form-group">
           <label for="facultad">Facultad:</label>
-          <select id="facultad" [(ngModel)]="selectedFacultad" name="facultad" class="gestion-anexos-select"  style="width: 200px;">
-            <option 
-              *ngFor="let facultad of facultades" 
-              [value]="facultad.id_facultad"
-            >
+          <select id="facultad" [(ngModel)]="selectedFacultad" name="facultad" class="gestion-anexos-select" style="width: 200px;" (change)="onFacultadChange()">
+            <option *ngFor="let facultad of facultades" [value]="facultad.id_facultad">
               {{ facultad.nombre_facultad }}
             </option>
           </select>
@@ -27,12 +24,8 @@
 
         <div class="form-group" *ngIf="selectedTipo === 'unidad'">
           <label for="unidad">Unidad:</label>
-          <select id="unidad" [(ngModel)]="selectedDepartamento" name="unidad" class="gestion-anexos-select"  style="width: 200px;">
-            <option 
-              *ngFor="let unidad of unidades" 
-              [value]="unidad.id_unidad"
-              [hidden]="unidad.id_facultad != selectedFacultad"
-            >
+          <select id="unidad" [(ngModel)]="selectedDepartamento" name="unidad" class="gestion-anexos-select" style="width: 200px;">
+            <option *ngFor="let unidad of filteredUnidades" [value]="unidad.id_unidad">
               {{ unidad.nombre_depto }}
             </option>
           </select>

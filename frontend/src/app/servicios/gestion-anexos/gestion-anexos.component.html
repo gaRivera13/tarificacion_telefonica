@@ -88,9 +88,20 @@
       </div>
     </div>
 
+    <div *ngIf="modalEliminarVisible" class="gestion-anexos-modal" style="display: flex;">
+      <div class="gestion-anexos-modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title-eliminar">
+        <h2 id="modal-title-eliminar">Confirmar eliminación</h2>
+        <p>¿Estás seguro de que quieres eliminar este anexo?</p>
+        <div class="gestion-anexos-modal-buttons">
+          <button class="gestion-anexos-add-btn cancel" (click)="confirmarEliminarAnexo()">Eliminar</button>
+          <button class="gestion-anexos-add-btn" (click)="cerrarModalEliminar()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+
     <section class="search-section" style="margin: 2rem 0 1rem 0;">
       <h5>Buscar por Unidad</h5>
-      <div class="search-input-wrapper">
+      <div class="search-input-wrapper" style="max-width: 300px;">
         <span class="search-icon"></span>
         <input
           type="text"

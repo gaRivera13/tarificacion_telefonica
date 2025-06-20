@@ -30,6 +30,8 @@ export class GestionAnexosComponent implements OnInit {
   fileError: string = '';
   mostrarModalAnexo = false;
   archivoAnterior: string | null = null;
+  modalEliminarVisible: boolean = false;
+  idAnexoAEliminar: number | null = null;
 
   constructor(
     private anexoService: AnexoService,
@@ -122,11 +124,29 @@ subirAnexo(): void {
 }
 
 
-  eliminarAnexo(id: number): void {
-    this.anexoService.deleteAnexo(id).subscribe({
-      next: () => this.cargarAnexos(),
-      error: (err) => console.error('Error al eliminar anexo:', err)
-    });
+  eliminarAnexo(id: number) {
+    this.idAnexoAEliminar = id;
+    this.modalEliminarVisible = true;
+  }
+
+  confirmarEliminarAnexo() {
+    if (this.idAnexoAEliminar !== null) {
+      this.anexoService.deleteAnexo(this.idAnexoAEliminar).subscribe({
+        next: () => {
+          this.cargarAnexos(); // Refresca la lista desde el backend
+          this.cerrarModalEliminar();
+        },
+        error: (err) => {
+          console.error('Error al eliminar anexo', err);
+          this.cerrarModalEliminar();
+        }
+      });
+    }
+  }
+
+  cerrarModalEliminar() {
+    this.modalEliminarVisible = false;
+    this.idAnexoAEliminar = null;
   }
 
   buscarAnexosPorUnidad(): void {

@@ -26,6 +26,9 @@ export class GestionFacultadComponent implements OnInit {
   nuevasSiglasFacultad = '';
   mostrarModalAgregarFacultad = false;
 
+  modalEliminarVisible: boolean = false;
+  idFacultadAEliminar: number | null = null;
+
   ngOnInit(): void {
     this.cargarFacultades(); 
     this.cargarProveedores();
@@ -128,14 +131,22 @@ export class GestionFacultadComponent implements OnInit {
   }
 
   eliminarFacultad(id: number) {
-      if (confirm('¿Estás seguro de que deseas eliminar esta facultad?')) {
-          this.deptoService.eliminarFacultad(id).subscribe(() => {
-              console.log(`Facultad ${id} eliminada correctamente`);
-              this.cargarFacultades(); 
-          }, error => {
-              console.error('Error al eliminar la facultad', error);
-          });
-      }
+      this.idFacultadAEliminar = id;
+      this.modalEliminarVisible = true;
+  }
+
+  confirmarEliminarFacultad() {
+    if (this.idFacultadAEliminar !== null) {
+      this.deptoService.eliminarFacultad(this.idFacultadAEliminar).subscribe(() => {
+        this.cargarFacultades(); // O el método que refresca la lista
+        this.cerrarModalEliminar();
+      });
+    }
+  }
+
+  cerrarModalEliminar() {
+    this.modalEliminarVisible = false;
+    this.idFacultadAEliminar = null;
   }
 
   cancelarEdicionFacultad() {

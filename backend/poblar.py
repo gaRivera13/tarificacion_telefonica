@@ -4,26 +4,43 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.settings")
 django.setup()
 
-from core.models import ProveedorTelefono, Facultad, Departamento, Profile
+from core.models import (
+    ProveedorTelefono,
+    Facultad,
+    Departamento,
+    Profile,
+    Anexo,
+    RegistroLlamadas,
+    CalculoMensualDepto,
+    CalculoMensualGeneral,
+    Notificacion,
+    ReporteGenerado,
+)
 
 ProveedorTelefono.objects.all().delete()
 Facultad.objects.all().delete()
 Departamento.objects.all().delete()
 Profile.objects.all().delete()
+Anexo.objects.all().delete()
+RegistroLlamadas.objects.all().delete()
+CalculoMensualDepto.objects.all().delete()
+CalculoMensualGeneral.objects.all().delete()
+Notificacion.objects.all().delete()
+ReporteGenerado.objects.all().delete()
 
 entel = ProveedorTelefono.objects.create(
     siglas_proveedor="CEL",
     nombre_proveedor="Entel",
-    costo_seg_cel=1.20,
-    costo_seg_slm=0.80,
-    costo_seg_ldi=2.50,
+    costo_seg_cel=100,
+    costo_seg_slm=200,
+    costo_seg_ldi=300,
 )
 movistar = ProveedorTelefono.objects.create(
     siglas_proveedor="SLM",
     nombre_proveedor="Movistar",
-    costo_seg_cel=1.10,
-    costo_seg_slm=0.75,
-    costo_seg_ldi=2.30,
+    costo_seg_cel=400,
+    costo_seg_slm=300,
+    costo_seg_ldi=600,
 )
 
 facu1 = Facultad.objects.create(
@@ -59,8 +76,8 @@ Profile.objects.create(
     apellido_p="Pérez",
     apellido_m="Soto",
     correo="mariaperez@gmail.com",
-    id_facultad=facu2,
-    id_unidad=dep2,
+    id_facultad=facu1,
+    id_unidad=dep1,
     username="mperez",
     password="clave5678",
     rol="encargado",
